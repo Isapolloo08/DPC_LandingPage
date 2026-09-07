@@ -1,0 +1,144 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+  
+  body {
+    background-color: #060d17;
+    color: #f1f5f9;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, .font-serif {
+    font-family: 'Cinzel', 'Georgia', serif;
+  }
+
+  .font-display {
+    font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #060d17;
+}
+::-webkit-scrollbar-thumb {
+  background: #1d3557;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #d4af37;
+}
+
+/* Glassmorphism Classes */
+.glass-panel {
+  background: rgba(10, 25, 47, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+}
+
+.glass-panel-gold {
+  background: rgba(17, 34, 64, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 0 20px -5px rgba(212, 175, 55, 0.15);
+}
+
+.glass-nav {
+  background: rgba(6, 13, 23, 0.85);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+/* Subtle Animated Shimmer & Radial Light */
+.gold-shimmer {
+  background: linear-gradient(90deg, #d4af37 0%, #fff3cd 50%, #d4af37 100%);
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shine 4s linear infinite;
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.radial-cross-glow {
+  background: radial-gradient(circle at 50% 30%, rgba(212, 175, 55, 0.18) 0%, rgba(10, 25, 47, 0) 70%);
+}
+
+.radial-blue-glow {
+  background: radial-gradient(circle at 80% 20%, rgba(29, 53, 87, 0.4) 0%, rgba(6, 13, 23, 0) 70%);
+}
+
+/* Church Cross Motif Pattern */
+.bg-church-grid {
+  background-image: radial-gradient(rgba(212, 175, 55, 0.12) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* Image frame glow & decorative elements */
+.hero-image-glow {
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 40px -10px rgba(212, 175, 55, 0.35);
+}
+
+@keyframes floatBadge {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.animate-float-badge {
+  animation: floatBadge 4s ease-in-out infinite;
+}
+
+.animate-float-badge-delayed {
+  animation: floatBadge 4.5s ease-in-out infinite 1.5s;
+}
+
+/* Custom Leaflet Dark & Gold Popup Styles */
+.leaflet-popup-content-wrapper {
+  background: #ffffff !important;
+  color: #0c131f !important;
+  border-radius: 16px !important;
+  box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.6), 0 0 15px rgba(212, 175, 55, 0.3) !important;
+  border: 1px solid rgba(212, 175, 55, 0.4) !important;
+  padding: 4px !important;
+}
+
+.leaflet-popup-tip {
+  background: #ffffff !important;
+  border: 1px solid rgba(212, 175, 55, 0.4) !important;
+}
+
+.leaflet-container {
+  font-family: inherit !important;
+  background-color: #0c131f !important;
+}
+
