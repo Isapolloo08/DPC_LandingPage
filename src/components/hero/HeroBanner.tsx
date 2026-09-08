@@ -1,7 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { Sparkles, ShieldCheck, BookOpen, Clock } from 'lucide-react';
+import { Sparkles, ShieldCheck, BookOpen, Clock, MapPin, Compass, Phone, Users } from 'lucide-react';
 import { CHURCH_INFO } from '../../data/churchInfo';
+import { MINISTRIES_DATA } from '../../data/ministriesData';
+import { Ministry } from '../../types/church';
+import { fetchMinistries } from '../../services/api';
 
 interface HeroBannerProps {
   onPlanVisitClick: () => void;
@@ -52,11 +55,30 @@ const AnimatedCounter: React.FC<{
 };
 
 export const HeroBanner: React.FC<HeroBannerProps> = ({ onPlanVisitClick }) => {
-  // 3D Tilt & Mouse Tracking State for the Hero Image
+  // 3D Tilt, Flip & Mouse Tracking State for the Hero Image
   const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0, glareX: 50, glareY: 50 });
   const [isHovered, setIsHovered] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  // Live Ministries from Backend Database (with graceful local fallback)
+  const [ministries, setMinistries] = useState<Ministry[]>(MINISTRIES_DATA);
+  const [isLiveMinistries, setIsLiveMinistries] = useState<boolean>(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadMinistries() {
+      const res = await fetchMinistries();
+      if (isMounted && res.data && res.data.length > 0) {
+        setMinistries(res.data);
+        setIsLiveMinistries(res.isLive);
+      }
+    }
+    loadMinistries();
+    return () => { isMounted = false; };
+  }, []);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (isFlipped) return; // Keep level when reading the back side
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -75,6 +97,10 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onPlanVisitClick }) => {
   const handleMouseLeave = () => {
     setIsHovered(false);
     setTilt({ rotateX: 0, rotateY: 0, glareX: 50, glareY: 50 });
+  };
+
+  const toggleFlip = () => {
+    setIsFlipped((prev) => !prev);
   };
 
   // Animation variants for Staggered Entrance
@@ -212,45 +238,230 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onPlanVisitClick }) => {
             </motion.div>
           </motion.div>
 
-          {/* RIGHT SIDE: Church Building Image with Interactive 3D Tilt & Lighting */}
+          {/* RIGHT SIDE: Church Building Image with Interactive 3D Flip Card */}
           <motion.div
             variants={imageVariants}
             initial="hidden"
             animate="visible"
             className="lg:col-span-6 relative w-full flex items-center justify-center mt-6 lg:mt-0"
+            style={{ perspective: 1200 }}
           >
             {/* Ambient Multi-layer Backlight Glow */}
             <div className="absolute -inset-3 sm:-inset-5 bg-gradient-to-tr from-dpc-gold-500/20 via-blue-600/15 to-dpc-gold-400/20 rounded-[2.5rem] blur-2xl -z-10 pointer-events-none animate-pulse"></div>
 
-            {/* 3D Perspective Tilt Card */}
-            <motion.div
-              animate={{
-                rotateX: tilt.rotateX,
-                rotateY: tilt.rotateY,
-                scale: isHovered ? 1.015 : 1,
-              }}
-              transition={{ type: 'spring', stiffness: 280, damping: 22 }}
-              style={{ transformPerspective: 1000, transformStyle: 'preserve-3d' }}
+            {/* 3D Perspective Flip Card Container */}
+            <div
+              onClick={toggleFlip}
               onMouseMove={handleMouseMove}
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={handleMouseLeave}
-              className="relative w-full h-[380px] sm:h-[480px] lg:h-[540px] xl:h-[580px] rounded-3xl overflow-hidden shadow-2xl group cursor-pointer border border-white/10 hover:border-dpc-gold-400/50 transition-colors duration-500 bg-dpc-navy-950"
+              className="relative w-full h-[520px] sm:h-[520px] lg:h-[540px] xl:h-[580px] rounded-3xl group cursor-pointer"
+              style={{ perspective: 1200 }}
             >
-              {/* Church Building Image */}
-              <img
-                src="/images/church-building.jpg"
-                alt="Daet Presbyterian Church & Camarines Norte Youth Center Building"
-                className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700 ease-out"
-              />
-
-              {/* Interactive Dynamic Glare / Light Reflection */}
-              <div
-                className="absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
-                style={{
-                  background: `radial-gradient(circle 350px at ${tilt.glareX}% ${tilt.glareY}%, rgba(255, 255, 255, 0.15), transparent 70%)`,
+              {/* FRONT SIDE: Sanctuary & Youth Center Photo */}
+              <motion.div
+                animate={{
+                  rotateY: isFlipped ? 180 : tilt.rotateY,
+                  rotateX: isFlipped ? 0 : tilt.rotateX,
+                  scale: isHovered && !isFlipped ? 1.015 : 1,
+                  opacity: isFlipped ? 0 : 1,
+                  pointerEvents: isFlipped ? 'none' : 'auto',
                 }}
-              />
-            </motion.div>
+                transition={{
+                  rotateY: { duration: 0.65, ease: [0.25, 1, 0.5, 1] },
+                  rotateX: { type: 'spring', stiffness: 280, damping: 22 },
+                  opacity: { duration: 0.3 },
+                }}
+                style={{
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
+                }}
+                className="absolute inset-0 w-full h-full rounded-3xl overflow-hidden bg-dpc-navy-950 border border-white/10 hover:border-dpc-gold-400/60 shadow-2xl transition-colors duration-300"
+              >
+                <img
+                  src="/images/church-building.jpg"
+                  alt="Daet Presbyterian Church & Camarines Norte Youth Center Building"
+                  className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+
+                {/* Subtle bottom shadow vignette */}
+                <div className="absolute inset-0 bg-gradient-to-t from-dpc-navy-950/95 via-dpc-navy-950/20 to-transparent pointer-events-none" />
+
+                {/* Interactive Dynamic Glare */}
+                <div
+                  className="absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+                  style={{
+                    background: `radial-gradient(circle 350px at ${tilt.glareX}% ${tilt.glareY}%, rgba(255, 255, 255, 0.15), transparent 70%)`,
+                  }}
+                />
+              </motion.div>
+
+              {/* BACK SIDE: Church Information & Quick Facts (100% Razor Sharp Vector Text) */}
+              <motion.div
+                initial={{ rotateY: -180, opacity: 0 }}
+                animate={{
+                  rotateY: isFlipped ? 0 : -180,
+                  opacity: isFlipped ? 1 : 0,
+                  pointerEvents: isFlipped ? 'auto' : 'none',
+                }}
+                transition={{
+                  rotateY: { duration: 0.65, ease: [0.25, 1, 0.5, 1] },
+                  opacity: { duration: 0.3 },
+                }}
+                style={{
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
+                  WebkitFontSmoothing: 'antialiased',
+                  MozOsxFontSmoothing: 'grayscale',
+                }}
+                className="absolute inset-0 w-full h-full rounded-3xl overflow-y-auto no-scrollbar p-4 sm:p-6 bg-[#071324] border border-dpc-gold-500/60 flex flex-col justify-between shadow-2xl text-left"
+              >
+                {/* Back Top Header */}
+                <div>
+                  <div className="flex items-center justify-between border-b border-white/15 pb-2.5 mb-3">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-lg bg-dpc-gold-500/20 border border-dpc-gold-500/40 flex items-center justify-center text-dpc-gold-400 shrink-0">
+                        <BookOpen className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm sm:text-base font-serif font-bold text-white tracking-wide">
+                          Church Quick Facts
+                        </h3>
+                        <p className="text-[10px] sm:text-[11px] text-dpc-gold-300 font-semibold">
+                          Established in {CHURCH_INFO.foundedYear} • Daet, Camarines Norte
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-dpc-gold-500/20 border border-dpc-gold-400/40 text-[11px] font-bold text-dpc-gold-300">
+                      <span>Flip Back</span>
+                      <span>↺</span>
+                    </div>
+                  </div>
+
+                  {/* Information Cards Grid */}
+                  <div className="space-y-2.5 text-xs sm:text-sm">
+                    {/* Location & Landmark */}
+                    <div className="p-2.5 sm:p-3 rounded-xl bg-[#0c1a2e] border border-white/10 space-y-1">
+                      <p className="text-dpc-gold-400 font-bold text-[11px] uppercase tracking-wider flex items-center gap-1.5">
+                        <MapPin className="w-3.5 h-3.5 text-dpc-gold-400 shrink-0" />
+                        <span>Location & Landmark</span>
+                      </p>
+                      <p className="text-white text-xs leading-relaxed font-medium">
+                        {CHURCH_INFO.address.street}, {CHURCH_INFO.address.barangay}, {CHURCH_INFO.address.municipality}
+                      </p>
+                      <p className="text-[11px] text-slate-300 italic">
+                        Landmark: {CHURCH_INFO.address.landmark}
+                      </p>
+                    </div>
+
+                    {/* Worship Schedule Summary */}
+                    <div className="p-2.5 sm:p-3 rounded-xl bg-[#0c1a2e] border border-white/10 space-y-2">
+                      <p className="text-dpc-gold-400 font-bold text-[11px] uppercase tracking-wider flex items-center gap-1.5">
+                        <Clock className="w-3.5 h-3.5 text-dpc-gold-400 shrink-0" />
+                        <span>Lord's Day & Weekly Gatherings</span>
+                      </p>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
+                        <div className="bg-[#081220] p-2 rounded-lg border border-dpc-gold-500/40 shadow-sm">
+                          <p className="font-bold text-white text-[11px]">Main Worship</p>
+                          <p className="text-[11px] text-dpc-gold-300 font-bold">9:40 AM – 11:30 AM</p>
+                          <p className="text-[10px] text-slate-300">All Ages / Adults</p>
+                        </div>
+                        <div className="bg-[#081220] p-2 rounded-lg border border-white/10">
+                          <p className="font-bold text-white text-[11px]">Adult Bible Study</p>
+                          <p className="text-[11px] text-dpc-gold-300 font-bold">8:00 AM – 9:30 AM</p>
+                          <p className="text-[10px] text-slate-300">Junior & Old Adults</p>
+                        </div>
+                        <div className="bg-[#081220] p-2 rounded-lg border border-white/10">
+                          <p className="font-bold text-white text-[11px]">High School Service</p>
+                          <p className="text-[11px] text-dpc-gold-300 font-bold">8:00 AM – 11:30 AM</p>
+                          <p className="text-[10px] text-slate-300">Worship + Study</p>
+                        </div>
+                        <div className="bg-[#081220] p-2 rounded-lg border border-white/10">
+                          <p className="font-bold text-white text-[11px]">Kids Sunday School</p>
+                          <p className="text-[11px] text-dpc-gold-300 font-bold">8:00 AM – 11:30 AM</p>
+                          <p className="text-[10px] text-slate-300">Study + Play/Movie</p>
+                        </div>
+                        <div className="bg-[#081220] p-2 rounded-lg border border-white/10">
+                          <p className="font-bold text-white text-[11px]">Prayer Meeting</p>
+                          <p className="text-[11px] text-dpc-gold-300 font-bold">Wed • 5:30 PM</p>
+                          <p className="text-[10px] text-slate-300">Corporate Prayer</p>
+                        </div>
+                        <div className="bg-[#081220] p-2 rounded-lg border border-white/10">
+                          <p className="font-bold text-white text-[11px]">Youth Discipleship</p>
+                          <p className="text-[11px] text-dpc-gold-300 font-bold">Weekly Groups</p>
+                          <p className="text-[10px] text-slate-300">Campus / YP Circles</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Generational Ministries Showcase (From Live Database) */}
+                    <div className="p-2.5 sm:p-3 rounded-xl bg-[#0c1a2e] border border-white/10 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1.5">
+                          <p className="text-dpc-gold-400 font-bold text-[11px] uppercase tracking-wider flex items-center gap-1.5">
+                            <Users className="w-3.5 h-3.5 text-dpc-gold-400 shrink-0" />
+                            <span>{ministries.length} Generational Ministries</span>
+                          </p>
+                        </div>
+                        <a
+                          href="#ministries"
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-[11px] text-dpc-gold-300 hover:text-dpc-gold-200 font-bold underline underline-offset-2 transition-colors"
+                        >
+                          Explore all →
+                        </a>
+                      </div>
+
+                      <div className="flex flex-wrap gap-1.5 max-h-[85px] overflow-y-auto no-scrollbar">
+                        {ministries.map((m, idx) => {
+                          const tagColors = [
+                            'bg-amber-500/20 border-amber-500/40 text-amber-200',
+                            'bg-emerald-500/20 border-emerald-500/40 text-emerald-200',
+                            'bg-sky-500/20 border-sky-500/40 text-sky-200',
+                            'bg-indigo-500/20 border-indigo-500/40 text-indigo-200',
+                            'bg-blue-500/20 border-blue-500/40 text-blue-200',
+                            'bg-rose-500/20 border-rose-500/40 text-rose-200',
+                            'bg-purple-500/20 border-purple-500/40 text-purple-200',
+                          ];
+                          const colorClass = tagColors[idx % tagColors.length];
+
+                          return (
+                            <span
+                              key={m.id || idx}
+                              className={`px-2 py-0.5 rounded-md border text-[10px] font-semibold tracking-wide ${colorClass}`}
+                            >
+                              {m.name}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Back Footer In-Page Quick Navigation */}
+                <div className="pt-2.5 mt-2 border-t border-white/15 flex items-center gap-2">
+                  <a
+                    href="#location"
+                    onClick={(e) => e.stopPropagation()}
+                    className="flex-1 py-2.5 px-3 rounded-xl bg-gradient-to-r from-dpc-gold-400 via-dpc-gold-300 to-dpc-gold-400 hover:from-dpc-gold-300 hover:to-dpc-gold-200 text-dpc-navy-950 font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-gold-glow cursor-pointer"
+                  >
+                    <MapPin className="w-3.5 h-3.5" />
+                    <span>View Interactive Map ↓</span>
+                  </a>
+
+                  <a
+                    href="#what-to-expect"
+                    onClick={(e) => e.stopPropagation()}
+                    className="py-2.5 px-3.5 rounded-xl bg-white/15 hover:bg-white/25 text-white font-bold text-xs flex items-center justify-center gap-1.5 border border-white/20 transition-all cursor-pointer"
+                  >
+                    <Compass className="w-3.5 h-3.5 text-dpc-gold-300" />
+                    <span>What to Expect ↓</span>
+                  </a>
+                </div>
+              </motion.div>
+            </div>
           </motion.div>
         </div>
 
@@ -264,9 +475,9 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onPlanVisitClick }) => {
         >
           <div className="glass-panel rounded-2xl p-4 text-center border-white/5 hover:border-dpc-gold-500/40 hover:bg-white/[0.04] transition-all hover:-translate-y-1 duration-300 group shadow-lg">
             <p className="text-2xl sm:text-3xl font-bold font-serif text-dpc-gold-300 group-hover:text-dpc-gold-200 transition-colors">
-              <AnimatedCounter target={40} suffix="+ Yrs" />
+              <AnimatedCounter target={19} suffix="+ Yrs" />
             </p>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1 font-medium">Faithful Gospel Witness</p>
+            <p className="text-xs sm:text-sm text-slate-400 mt-1 font-medium">Years of Gospel Ministry</p>
           </div>
 
           <div className="glass-panel rounded-2xl p-4 text-center border-white/5 hover:border-dpc-gold-500/40 hover:bg-white/[0.04] transition-all hover:-translate-y-1 duration-300 group shadow-lg">
@@ -278,17 +489,17 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onPlanVisitClick }) => {
 
           <div className="glass-panel rounded-2xl p-4 text-center border-white/5 hover:border-dpc-gold-500/40 hover:bg-white/[0.04] transition-all hover:-translate-y-1 duration-300 group shadow-lg">
             <p className="text-2xl sm:text-3xl font-bold font-serif text-dpc-gold-300 group-hover:text-dpc-gold-200 transition-colors">
-              <AnimatedCounter target={100} suffix="%" />
+              <AnimatedCounter target={3} />
             </p>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1 font-medium">Christ-Centered Fellowship</p>
+            <p className="text-xs sm:text-sm text-slate-400 mt-1 font-medium">Weekly Gatherings</p>
           </div>
 
           <div className="glass-panel rounded-2xl p-4 text-center border-white/5 hover:border-dpc-gold-500/40 hover:bg-white/[0.04] transition-all hover:-translate-y-1 duration-300 group shadow-lg">
             <div className="flex items-center justify-center gap-1.5 text-2xl sm:text-3xl font-bold font-serif text-dpc-gold-300 group-hover:text-dpc-gold-200 transition-colors">
               <Clock className="w-5 h-5 text-dpc-gold-400 animate-pulse" />
-              <span>9:00 AM</span>
+              <span>9:40 AM</span>
             </div>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1 font-medium">Sunday Divine Worship</p>
+            <p className="text-xs sm:text-sm text-slate-400 mt-1 font-medium">Sunday Worship Service</p>
           </div>
         </motion.div>
       </div>

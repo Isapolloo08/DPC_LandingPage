@@ -52,16 +52,16 @@ export const PlanVisitModal: React.FC<PlanVisitModalProps> = ({ isOpen, onClose 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-xl glass-panel-gold rounded-3xl p-6 sm:p-8 shadow-2xl border-dpc-gold-500/50 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="relative w-full max-w-xl bg-[#0c192c] rounded-3xl p-6 sm:p-8 shadow-2xl border border-dpc-gold-500/50 max-h-[90vh] overflow-y-auto">
         
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+          className="absolute top-5 right-5 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
           aria-label="Close modal"
         >
-          <X className="w-5 h-5" />
+          <X className="w-4 h-4" />
         </button>
 
         {isSubmitted ? (
@@ -96,7 +96,7 @@ export const PlanVisitModal: React.FC<PlanVisitModalProps> = ({ isOpen, onClose 
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Location:</span>
-                <span className="font-semibold text-white">F. Pimentel Ave., Daet, CamNorte</span>
+                <span className="font-semibold text-white">Purok 2, Cobangbang, Daet</span>
               </div>
             </div>
 
@@ -180,11 +180,11 @@ export const PlanVisitModal: React.FC<PlanVisitModalProps> = ({ isOpen, onClose 
                     onChange={(e) => setFormData({ ...formData, visitDate: e.target.value })}
                     className="w-full px-4 py-2.5 rounded-xl bg-dpc-navy-950/90 border border-white/10 text-white text-sm focus:outline-none focus:border-dpc-gold-400"
                   >
-                    <option value="This Coming Sunday (9:00 AM)">This Coming Sunday (9:00 AM Worship)</option>
-                    <option value="Next Sunday (9:00 AM)">Next Sunday (9:00 AM Worship)</option>
-                    <option value="Sunday School (8:00 AM)">Sunday School (8:00 AM)</option>
-                    <option value="Saturday Youth Fellowship (3:00 PM)">Saturday CNYC Youth (3:00 PM)</option>
-                    <option value="Wednesday Midweek Prayer (6:30 PM)">Wednesday Midweek (6:30 PM)</option>
+                    <option value="This Coming Sunday (9:40 AM)">This Coming Sunday (9:40 AM Worship)</option>
+                    <option value="Next Sunday (9:40 AM)">Next Sunday (9:40 AM Worship)</option>
+                    <option value="Sunday School / Bible Study (8:00 AM)">Sunday School / Bible Study (8:00 AM)</option>
+                    <option value="High School Worship (8:00 AM)">High School Worship (8:00 AM)</option>
+                    <option value="Wednesday Prayer Meeting (5:30 PM)">Wednesday Prayer Meeting (5:30 PM)</option>
                   </select>
                 </div>
 

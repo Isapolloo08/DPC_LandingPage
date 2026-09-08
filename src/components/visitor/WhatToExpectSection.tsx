@@ -13,12 +13,12 @@ export const WhatToExpectSection: React.FC<WhatToExpectSectionProps> = ({ onPlan
       id: 'parking',
       icon: Car,
       title: 'Dedicated Parking & Arrival',
-      tagline: 'Stress-free arrival in downtown Daet',
-      summary: 'Convenient on-site parking at CNYC premises and safe street parking along F. Pimentel Avenue.',
+      tagline: 'Stress-free arrival in Daet, Camarines Norte',
+      summary: 'Convenient on-site parking at DPC premises in Purok 2, Brgy. Cobangbang.',
       details: [
         'Friendly volunteer parking marshals will guide you safely to open slots upon arrival.',
         'Designated accessible spots for senior saints and families with small infants right in front of the main entrance.',
-        'We recommend arriving 15 minutes before 9:00 AM to settle in, grab a worship bulletin, and meet our welcoming greeters.'
+        'Arrive at 8:00 AM for Adult Bible Study / High School Worship / Kids Sunday School, or by 9:30 AM for the 9:40 AM Main Worship Service.'
       ],
       badge: 'Arrival Guide'
     },
@@ -38,13 +38,13 @@ export const WhatToExpectSection: React.FC<WhatToExpectSectionProps> = ({ onPlan
     {
       id: 'kids',
       icon: ShieldCheck,
-      title: 'Safe Child Check-In (DPC Kids)',
+      title: 'Children’s Sunday School & Care (DPC Kids)',
       tagline: 'Clean, secure, and Christ-centered care',
-      summary: 'Dedicated age-tailored Bible classes for toddlers and elementary children led by trained, background-checked teachers.',
+      summary: 'Dedicated Bible classes from 8:00 AM to 9:30 AM, followed by supervised fun playtime, crafts, and Christian movies.',
       details: [
-        'Safe parent-pager check-in ensures your children are safe and accounted for throughout the morning.',
-        'Kids join the initial praise & worship with families before transitioning to Seeds of Grace or Covenant Kids for age-graded lessons.',
-        'Sanitized play areas and private nursing room available for nursing mothers with audio relay of the sermon.'
+        'Safe parent check-in ensures your children are safe and well-cared for by loving, background-checked teachers.',
+        'Age-tailored Bible story lessons, crafts, and memory verses from 8:00 AM to 9:30 AM.',
+        'After 9:30 AM (while adults attend Main Worship), kids enjoy supervised playtime, interactive games, and inspiring Christian animations in our kids hall.'
       ],
       badge: 'Family & Children'
     },

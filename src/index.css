@@ -51,6 +51,20 @@
   scrollbar-width: none;
 }
 
+/* 3D Transform and Crisp Text Rendering Fixes for Mobile/Desktop */
+.preserve-3d {
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transform: translateZ(1px);
+}
+
 /* Glassmorphism Classes */
 .glass-panel {
   background: rgba(10, 25, 47, 0.7);
