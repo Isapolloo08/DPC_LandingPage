@@ -106,39 +106,39 @@ export const ServiceCountdown: React.FC = () => {
           </div>
 
           {/* Time Digits Ticker */}
-          <div className="grid grid-cols-4 gap-2 sm:gap-4 max-w-xl mx-auto">
-            <div className="flex flex-col items-center justify-center p-3 sm:p-4 rounded-2xl bg-dpc-navy-950/90 border border-dpc-gold-500/30 shadow-inner">
-              <span className="text-2xl sm:text-4xl md:text-5xl font-extrabold font-serif text-dpc-gold-300 tracking-wider">
+          <div className="grid grid-cols-4 gap-1.5 xs:gap-2.5 sm:gap-4 max-w-xl mx-auto">
+            <div className="flex flex-col items-center justify-center p-2.5 xs:p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-dpc-navy-950/90 border border-dpc-gold-500/30 shadow-inner">
+              <span className="text-xl xs:text-2xl sm:text-4xl md:text-5xl font-extrabold font-serif text-dpc-gold-300 tracking-wider">
                 {String(timeLeft.days).padStart(2, '0')}
               </span>
-              <span className="text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-widest mt-1">
+              <span className="text-[9px] xs:text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-widest mt-0.5 sm:mt-1">
                 Days
               </span>
             </div>
 
-            <div className="flex flex-col items-center justify-center p-3 sm:p-4 rounded-2xl bg-dpc-navy-950/90 border border-dpc-gold-500/30 shadow-inner">
-              <span className="text-2xl sm:text-4xl md:text-5xl font-extrabold font-serif text-dpc-gold-300 tracking-wider">
+            <div className="flex flex-col items-center justify-center p-2.5 xs:p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-dpc-navy-950/90 border border-dpc-gold-500/30 shadow-inner">
+              <span className="text-xl xs:text-2xl sm:text-4xl md:text-5xl font-extrabold font-serif text-dpc-gold-300 tracking-wider">
                 {String(timeLeft.hours).padStart(2, '0')}
               </span>
-              <span className="text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-widest mt-1">
+              <span className="text-[9px] xs:text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-widest mt-0.5 sm:mt-1">
                 Hours
               </span>
             </div>
 
-            <div className="flex flex-col items-center justify-center p-3 sm:p-4 rounded-2xl bg-dpc-navy-950/90 border border-dpc-gold-500/30 shadow-inner">
-              <span className="text-2xl sm:text-4xl md:text-5xl font-extrabold font-serif text-dpc-gold-300 tracking-wider">
+            <div className="flex flex-col items-center justify-center p-2.5 xs:p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-dpc-navy-950/90 border border-dpc-gold-500/30 shadow-inner">
+              <span className="text-xl xs:text-2xl sm:text-4xl md:text-5xl font-extrabold font-serif text-dpc-gold-300 tracking-wider">
                 {String(timeLeft.minutes).padStart(2, '0')}
               </span>
-              <span className="text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-widest mt-1">
+              <span className="text-[9px] xs:text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-widest mt-0.5 sm:mt-1">
                 Minutes
               </span>
             </div>
 
-            <div className="flex flex-col items-center justify-center p-3 sm:p-4 rounded-2xl bg-dpc-navy-950/90 border border-dpc-gold-500/30 shadow-inner">
-              <span className="text-2xl sm:text-4xl md:text-5xl font-extrabold font-serif text-dpc-gold-300 tracking-wider">
+            <div className="flex flex-col items-center justify-center p-2.5 xs:p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-dpc-navy-950/90 border border-dpc-gold-500/30 shadow-inner">
+              <span className="text-xl xs:text-2xl sm:text-4xl md:text-5xl font-extrabold font-serif text-dpc-gold-300 tracking-wider">
                 {String(timeLeft.seconds).padStart(2, '0')}
               </span>
-              <span className="text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-widest mt-1">
+              <span className="text-[9px] xs:text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-widest mt-0.5 sm:mt-1">
                 Seconds
               </span>
             </div>

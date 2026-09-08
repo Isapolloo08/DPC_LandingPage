@@ -154,37 +154,37 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onPlanVisitClick }) => {
           >
             {/* Top Badges */}
             <motion.div variants={itemVariants} className="inline-flex flex-wrap items-center gap-2">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-dpc-navy-800/90 border border-dpc-gold-500/40 text-xs sm:text-sm font-medium text-dpc-gold-300 shadow-gold-glow">
+              <div className="inline-flex items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-full bg-dpc-navy-800/90 border border-dpc-gold-500/40 text-[11px] sm:text-xs md:text-sm font-medium text-dpc-gold-300 shadow-gold-glow">
                 <span className="w-2 h-2 rounded-full bg-dpc-gold-400 animate-ping"></span>
                 <span>Daet, Camarines Norte, Philippines</span>
               </div>
 
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs sm:text-sm text-slate-300">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
+              <div className="inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-[11px] sm:text-xs md:text-sm text-slate-300">
+                <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400 shrink-0" />
                 <span>Reformed • Presbyterian • Evangelical</span>
               </div>
             </motion.div>
 
             {/* Main Title Heading */}
             <motion.div variants={itemVariants}>
-              <h1 className="text-3xl sm:text-5xl lg:text-5xl xl:text-6xl font-bold font-serif tracking-tight text-white leading-tight">
+              <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-bold font-serif tracking-tight text-white leading-tight">
                 Daet Presbyterian Church
               </h1>
 
               {/* Secondary Subheading */}
-              <div className="flex items-center gap-3 mt-3">
-                <span className="h-px w-8 sm:w-14 bg-gradient-to-r from-dpc-gold-400 to-transparent"></span>
-                <p className="text-sm sm:text-lg md:text-xl font-display font-semibold gold-shimmer uppercase tracking-widest">
+              <div className="flex items-center gap-2 sm:gap-3 mt-2 sm:mt-3">
+                <span className="h-px w-6 sm:w-14 bg-gradient-to-r from-dpc-gold-400 to-transparent"></span>
+                <p className="text-xs sm:text-base md:text-lg lg:text-xl font-display font-semibold gold-shimmer uppercase tracking-wider sm:tracking-widest">
                   {CHURCH_INFO.centerName}
                 </p>
-                <span className="h-px w-8 sm:w-14 bg-gradient-to-l from-dpc-gold-400 to-transparent"></span>
+                <span className="h-px w-6 sm:w-14 bg-gradient-to-l from-dpc-gold-400 to-transparent"></span>
               </div>
             </motion.div>
 
             {/* Description */}
             <motion.p
               variants={itemVariants}
-              className="text-sm sm:text-base lg:text-lg text-slate-300 font-light leading-relaxed max-w-xl"
+              className="text-xs sm:text-base lg:text-lg text-slate-300 font-light leading-relaxed max-w-xl"
             >
               A loving gospel-centered family in Bicol dedicated to the glory of God, the expository proclamation of Scripture, vibrant youth discipleship, and Christ-like community.
             </motion.p>
@@ -192,20 +192,20 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onPlanVisitClick }) => {
             {/* Featured Scripture Card with Word-by-Word Reveal (Romans 12:5) */}
             <motion.div
               variants={itemVariants}
-              className="w-full max-w-xl glass-panel-gold rounded-2xl p-4 sm:p-5 text-left relative overflow-hidden group border-dpc-gold-500/30 hover:border-dpc-gold-400/60 transition-all duration-300"
+              className="w-full max-w-xl glass-panel-gold rounded-2xl p-3.5 sm:p-5 text-left relative overflow-hidden group border-dpc-gold-500/30 hover:border-dpc-gold-400/60 transition-all duration-300"
             >
               <div className="absolute top-0 right-0 w-28 h-28 bg-dpc-gold-500/5 rounded-full blur-xl group-hover:bg-dpc-gold-500/15 transition-all pointer-events-none"></div>
 
-              <div className="flex items-start gap-3.5">
-                <div className="w-9 h-9 rounded-xl bg-dpc-gold-500/10 border border-dpc-gold-500/30 flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-105 transition-transform">
+              <div className="flex items-start gap-3 sm:gap-3.5">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-dpc-gold-500/10 border border-dpc-gold-500/30 flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-105 transition-transform">
                   <BookOpen className="w-4 h-4 text-dpc-gold-400" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-2 mb-1.5">
-                    <p className="text-[11px] font-bold uppercase tracking-wider text-dpc-gold-400">
+                  <div className="flex items-center justify-between gap-2 mb-1.5 flex-wrap">
+                    <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-dpc-gold-400">
                       Our Uniting Theme Verse
                     </p>
-                    <span className="inline-block px-2.5 py-0.5 rounded bg-dpc-navy-950/90 border border-dpc-gold-500/40 text-[11px] font-bold font-serif text-dpc-gold-300 shrink-0">
+                    <span className="inline-block px-2 sm:px-2.5 py-0.5 rounded bg-dpc-navy-950/90 border border-dpc-gold-500/40 text-[10px] sm:text-[11px] font-bold font-serif text-dpc-gold-300 shrink-0">
                       {CHURCH_INFO.verseRef}
                     </span>
                   </div>
@@ -226,21 +226,21 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onPlanVisitClick }) => {
             {/* Primary Action Buttons */}
             <motion.div
               variants={itemVariants}
-              className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 w-full sm:w-auto pt-2"
+              className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-3.5 w-full sm:w-auto pt-2"
             >
               <button
                 onClick={onPlanVisitClick}
-                className="inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl text-xs sm:text-sm font-bold text-dpc-navy-950 bg-gradient-to-r from-dpc-gold-400 via-dpc-gold-300 to-dpc-gold-400 hover:from-dpc-gold-300 hover:to-dpc-gold-200 shadow-gold-glow hover:shadow-gold-glow-lg transition-all transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+                className="inline-flex items-center justify-center gap-2.5 px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl text-xs sm:text-sm font-bold text-dpc-navy-950 bg-gradient-to-r from-dpc-gold-400 via-dpc-gold-300 to-dpc-gold-400 hover:from-dpc-gold-300 hover:to-dpc-gold-200 shadow-gold-glow hover:shadow-gold-glow-lg transition-all transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
               >
-                <Sparkles className="w-4 h-4 text-dpc-navy-950" />
+                <Sparkles className="w-4 h-4 text-dpc-navy-950 shrink-0" />
                 <span>Plan Your First Visit</span>
               </button>
 
               <a
                 href="#services"
-                className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-100 bg-dpc-navy-900/90 hover:bg-dpc-navy-800 border border-dpc-gold-500/40 hover:border-dpc-gold-400 shadow-lg shadow-black/40 transition-all transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+                className="inline-flex items-center justify-center gap-2.5 px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-100 bg-dpc-navy-900/90 hover:bg-dpc-navy-800 border border-dpc-gold-500/40 hover:border-dpc-gold-400 shadow-lg shadow-black/40 transition-all transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer text-center"
               >
-                <Clock className="w-4 h-4 text-dpc-gold-400" />
+                <Clock className="w-4 h-4 text-dpc-gold-400 shrink-0" />
                 <span>Worship Times & Schedule</span>
               </a>
             </motion.div>
@@ -263,7 +263,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onPlanVisitClick }) => {
               onMouseMove={handleMouseMove}
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={handleMouseLeave}
-              className="relative w-full h-[520px] sm:h-[520px] lg:h-[540px] xl:h-[580px] rounded-3xl group cursor-pointer"
+              className="relative w-full h-[460px] xs:h-[500px] sm:h-[520px] lg:h-[540px] xl:h-[580px] rounded-3xl group cursor-pointer"
               style={{ perspective: 1200 }}
             >
               {/* FRONT SIDE: Sanctuary & Youth Center Photo */}
@@ -449,22 +449,22 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onPlanVisitClick }) => {
                 </div>
 
                 {/* Back Footer In-Page Quick Navigation */}
-                <div className="pt-2.5 mt-2 border-t border-white/15 flex items-center gap-2">
+                <div className="pt-2.5 mt-2 border-t border-white/15 flex flex-col xs:flex-row items-stretch xs:items-center gap-2">
                   <a
                     href="#location"
                     onClick={(e) => e.stopPropagation()}
-                    className="flex-1 py-2.5 px-3 rounded-xl bg-gradient-to-r from-dpc-gold-400 via-dpc-gold-300 to-dpc-gold-400 hover:from-dpc-gold-300 hover:to-dpc-gold-200 text-dpc-navy-950 font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-gold-glow cursor-pointer"
+                    className="flex-1 py-2.5 px-3 rounded-xl bg-gradient-to-r from-dpc-gold-400 via-dpc-gold-300 to-dpc-gold-400 hover:from-dpc-gold-300 hover:to-dpc-gold-200 text-dpc-navy-950 font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-gold-glow cursor-pointer text-center"
                   >
-                    <MapPin className="w-3.5 h-3.5" />
+                    <MapPin className="w-3.5 h-3.5 shrink-0" />
                     <span>View Interactive Map ↓</span>
                   </a>
 
                   <a
                     href="#what-to-expect"
                     onClick={(e) => e.stopPropagation()}
-                    className="py-2.5 px-3.5 rounded-xl bg-white/15 hover:bg-white/25 text-white font-bold text-xs flex items-center justify-center gap-1.5 border border-white/20 transition-all cursor-pointer"
+                    className="py-2.5 px-3.5 rounded-xl bg-white/15 hover:bg-white/25 text-white font-bold text-xs flex items-center justify-center gap-1.5 border border-white/20 transition-all cursor-pointer text-center"
                   >
-                    <Compass className="w-3.5 h-3.5 text-dpc-gold-300" />
+                    <Compass className="w-3.5 h-3.5 text-dpc-gold-300 shrink-0" />
                     <span>What to Expect ↓</span>
                   </a>
                 </div>
@@ -479,35 +479,35 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onPlanVisitClick }) => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-30px' }}
           transition={{ duration: 0.7, delay: 0.2 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 w-full mt-12 sm:mt-16"
+          className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4 md:gap-6 w-full mt-10 sm:mt-16"
         >
-          <div className="glass-panel rounded-2xl p-4 text-center border-white/5 hover:border-dpc-gold-500/40 hover:bg-white/[0.04] transition-all hover:-translate-y-1 duration-300 group shadow-lg">
-            <p className="text-2xl sm:text-3xl font-bold font-serif text-dpc-gold-300 group-hover:text-dpc-gold-200 transition-colors">
+          <div className="glass-panel rounded-2xl p-3 sm:p-4 text-center border-white/5 hover:border-dpc-gold-500/40 hover:bg-white/[0.04] transition-all hover:-translate-y-1 duration-300 group shadow-lg">
+            <p className="text-xl sm:text-2xl md:text-3xl font-bold font-serif text-dpc-gold-300 group-hover:text-dpc-gold-200 transition-colors">
               <AnimatedCounter target={19} suffix="+ Yrs" />
             </p>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1 font-medium">Years of Gospel Ministry</p>
+            <p className="text-[11px] sm:text-xs md:text-sm text-slate-400 mt-1 font-medium">Years of Gospel Ministry</p>
           </div>
 
-          <div className="glass-panel rounded-2xl p-4 text-center border-white/5 hover:border-dpc-gold-500/40 hover:bg-white/[0.04] transition-all hover:-translate-y-1 duration-300 group shadow-lg">
-            <p className="text-2xl sm:text-3xl font-bold font-serif text-dpc-gold-300 group-hover:text-dpc-gold-200 transition-colors">
+          <div className="glass-panel rounded-2xl p-3 sm:p-4 text-center border-white/5 hover:border-dpc-gold-500/40 hover:bg-white/[0.04] transition-all hover:-translate-y-1 duration-300 group shadow-lg">
+            <p className="text-xl sm:text-2xl md:text-3xl font-bold font-serif text-dpc-gold-300 group-hover:text-dpc-gold-200 transition-colors">
               <AnimatedCounter target={7} />
             </p>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1 font-medium">Generational Ministries</p>
+            <p className="text-[11px] sm:text-xs md:text-sm text-slate-400 mt-1 font-medium">Generational Ministries</p>
           </div>
 
-          <div className="glass-panel rounded-2xl p-4 text-center border-white/5 hover:border-dpc-gold-500/40 hover:bg-white/[0.04] transition-all hover:-translate-y-1 duration-300 group shadow-lg">
-            <p className="text-2xl sm:text-3xl font-bold font-serif text-dpc-gold-300 group-hover:text-dpc-gold-200 transition-colors">
+          <div className="glass-panel rounded-2xl p-3 sm:p-4 text-center border-white/5 hover:border-dpc-gold-500/40 hover:bg-white/[0.04] transition-all hover:-translate-y-1 duration-300 group shadow-lg">
+            <p className="text-xl sm:text-2xl md:text-3xl font-bold font-serif text-dpc-gold-300 group-hover:text-dpc-gold-200 transition-colors">
               <AnimatedCounter target={3} />
             </p>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1 font-medium">Weekly Gatherings</p>
+            <p className="text-[11px] sm:text-xs md:text-sm text-slate-400 mt-1 font-medium">Weekly Gatherings</p>
           </div>
 
-          <div className="glass-panel rounded-2xl p-4 text-center border-white/5 hover:border-dpc-gold-500/40 hover:bg-white/[0.04] transition-all hover:-translate-y-1 duration-300 group shadow-lg">
-            <div className="flex items-center justify-center gap-1.5 text-2xl sm:text-3xl font-bold font-serif text-dpc-gold-300 group-hover:text-dpc-gold-200 transition-colors">
-              <Clock className="w-5 h-5 text-dpc-gold-400 animate-pulse" />
+          <div className="glass-panel rounded-2xl p-3 sm:p-4 text-center border-white/5 hover:border-dpc-gold-500/40 hover:bg-white/[0.04] transition-all hover:-translate-y-1 duration-300 group shadow-lg">
+            <div className="flex items-center justify-center gap-1.5 text-xl sm:text-2xl md:text-3xl font-bold font-serif text-dpc-gold-300 group-hover:text-dpc-gold-200 transition-colors">
+              <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-dpc-gold-400 animate-pulse shrink-0" />
               <span>9:40 AM</span>
             </div>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1 font-medium">Sunday Worship Service</p>
+            <p className="text-[11px] sm:text-xs md:text-sm text-slate-400 mt-1 font-medium">Sunday Worship Service</p>
           </div>
         </motion.div>
       </div>

@@ -49,12 +49,12 @@ export const MinistryDetailModal: React.FC<MinistryDetailModalProps> = ({
     : [];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-3xl bg-[#0c192c] rounded-3xl shadow-2xl border border-dpc-gold-500/50 max-h-[90vh] flex flex-col overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 md:p-6 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="relative w-full max-w-3xl bg-[#0c192c] rounded-2xl sm:rounded-3xl shadow-2xl border border-dpc-gold-500/50 max-h-[94vh] sm:max-h-[90vh] flex flex-col overflow-hidden">
 
         {/* Sticky Modal Header with Smooth Scroll Transition */}
         <div
-          className={`sticky top-0 z-30 px-5 py-4 sm:px-8 sm:py-5 flex items-start justify-between gap-4 transition-all duration-300 ${
+          className={`sticky top-0 z-30 px-4 py-3.5 sm:px-8 sm:py-5 flex items-start justify-between gap-3 transition-all duration-300 ${
             isScrolled
               ? 'bg-[#0c192c]/95 backdrop-blur-md border-b border-white/15 shadow-lg shadow-black/40'
               : 'bg-[#0c192c] border-b border-transparent shadow-none'

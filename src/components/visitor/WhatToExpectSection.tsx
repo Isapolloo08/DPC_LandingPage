@@ -110,10 +110,10 @@ export const WhatToExpectSection: React.FC<WhatToExpectSectionProps> = ({ onPlan
         </div>
 
         {/* Interactive Step Navigator */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
           
           {/* Left Navigation Buttons */}
-          <div className="lg:col-span-5 space-y-3">
+          <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2.5 sm:gap-3">
             {guideItems.map((item, index) => {
               const Icon = item.icon;
               const isActive = activeTab === index;
@@ -121,36 +121,36 @@ export const WhatToExpectSection: React.FC<WhatToExpectSectionProps> = ({ onPlan
                 <button
                   key={item.id}
                   onClick={() => setActiveTab(index)}
-                  className={`w-full text-left p-4 sm:p-5 rounded-2xl transition-all duration-300 flex items-start gap-4 border cursor-pointer ${
+                  className={`w-full text-left p-3.5 sm:p-4 md:p-5 rounded-2xl transition-all duration-300 flex items-start gap-3.5 sm:gap-4 border cursor-pointer ${
                     isActive
-                      ? 'glass-panel-gold border-dpc-gold-500/60 shadow-gold-glow scale-[1.02]'
+                      ? 'glass-panel-gold border-dpc-gold-500/60 shadow-gold-glow sm:scale-[1.02]'
                       : 'glass-panel border-white/5 hover:border-dpc-gold-500/30 hover:bg-white/5 opacity-80 hover:opacity-100'
                   }`}
                 >
                   <div
-                    className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
+                    className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
                       isActive
                         ? 'bg-dpc-gold-500 text-dpc-navy-950 shadow-md shadow-dpc-gold-500/30'
                         : 'bg-dpc-navy-800 text-dpc-gold-400 border border-dpc-gold-500/20'
                     }`}
                   >
-                    <Icon className="w-5 h-5" />
+                    <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between gap-2 mb-1">
+                    <div className="flex items-center justify-between gap-1.5 mb-1">
                       <h3
-                        className={`text-sm sm:text-base font-bold font-serif truncate ${
+                        className={`text-xs sm:text-sm md:text-base font-bold font-serif truncate ${
                           isActive ? 'text-dpc-gold-300' : 'text-white'
                         }`}
                       >
                         {item.title}
                       </h3>
-                      <span className="text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-white/10 text-slate-300 shrink-0">
+                      <span className="text-[9px] sm:text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-white/10 text-slate-300 shrink-0">
                         {item.badge}
                       </span>
                     </div>
-                    <p className="text-xs text-slate-400 line-clamp-1 font-light">
+                    <p className="text-[11px] sm:text-xs text-slate-400 line-clamp-1 font-light">
                       {item.tagline}
                     </p>
                   </div>
@@ -161,40 +161,40 @@ export const WhatToExpectSection: React.FC<WhatToExpectSectionProps> = ({ onPlan
 
           {/* Right Active Details Panel */}
           <div className="lg:col-span-7">
-            <div className="glass-panel-gold rounded-3xl p-6 sm:p-10 relative overflow-hidden border-dpc-gold-500/40 shadow-2xl animate-in fade-in duration-300">
+            <div className="glass-panel-gold rounded-3xl p-5 sm:p-8 md:p-10 relative overflow-hidden border-dpc-gold-500/40 shadow-2xl animate-in fade-in duration-300">
               
               {/* Top Accent Icon & Title */}
-              <div className="flex items-center justify-between gap-4 mb-6 pb-6 border-b border-white/10">
-                <div className="flex items-center gap-3.5">
+              <div className="flex items-center justify-between gap-4 mb-5 sm:mb-6 pb-5 sm:pb-6 border-b border-white/10">
+                <div className="flex items-center gap-3 sm:gap-3.5">
                   {React.createElement(guideItems[activeTab].icon, {
-                    className: "w-8 h-8 text-dpc-gold-400"
+                    className: "w-7 h-7 sm:w-8 sm:h-8 text-dpc-gold-400 shrink-0"
                   })}
                   <div>
-                    <span className="text-xs font-bold uppercase tracking-wider text-dpc-gold-400">
+                    <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-dpc-gold-400">
                       Step {activeTab + 1} of {guideItems.length}
                     </span>
-                    <h3 className="text-xl sm:text-2xl font-bold text-white font-serif">
+                    <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white font-serif">
                       {guideItems[activeTab].title}
                     </h3>
                   </div>
                 </div>
 
-                <span className="hidden sm:inline-flex items-center gap-1 text-xs text-slate-400">
+                <span className="hidden sm:inline-flex items-center gap-1 text-xs text-slate-400 shrink-0">
                   <Heart className="w-3.5 h-3.5 text-red-400 fill-red-400" />
                   <span>Visitor Friendly</span>
                 </span>
               </div>
 
               {/* Summary Statement */}
-              <p className="text-base sm:text-lg text-slate-200 font-medium mb-6 leading-relaxed">
+              <p className="text-sm sm:text-base md:text-lg text-slate-200 font-medium mb-5 sm:mb-6 leading-relaxed">
                 {guideItems[activeTab].summary}
               </p>
 
               {/* Bulleted Insights */}
-              <div className="space-y-4 mb-8">
+              <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
                 {guideItems[activeTab].details.map((detail, idx) => (
-                  <div key={idx} className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-dpc-gold-500/20 border border-dpc-gold-500/40 flex items-center justify-center shrink-0 mt-0.5 text-dpc-gold-300 text-xs font-bold">
+                  <div key={idx} className="flex items-start gap-2.5 sm:gap-3">
+                    <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-dpc-gold-500/20 border border-dpc-gold-500/40 flex items-center justify-center shrink-0 mt-0.5 text-dpc-gold-300 text-[10px] sm:text-xs font-bold">
                       ✓
                     </div>
                     <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-light">
@@ -205,22 +205,22 @@ export const WhatToExpectSection: React.FC<WhatToExpectSectionProps> = ({ onPlan
               </div>
 
               {/* Prompt CTA Card */}
-              <div className="bg-dpc-navy-950/80 rounded-2xl p-4 sm:p-5 border border-dpc-gold-500/20 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="bg-dpc-navy-950/80 rounded-2xl p-4 sm:p-5 border border-dpc-gold-500/20 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
                 <div>
                   <p className="text-xs font-bold text-white uppercase tracking-wider">
                     Ready to visit us this coming Sunday?
                   </p>
-                  <p className="text-xs text-slate-400 font-light">
+                  <p className="text-[11px] sm:text-xs text-slate-400 font-light mt-0.5">
                     We would love to reserve a seat and prepare a welcome gift for you.
                   </p>
                 </div>
                 <button
                   onClick={onPlanVisitClick}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-dpc-navy-950 bg-gradient-to-r from-dpc-gold-400 to-dpc-gold-300 hover:from-dpc-gold-300 hover:to-dpc-gold-200 shadow-gold-glow shrink-0 transition-all cursor-pointer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-dpc-navy-950 bg-gradient-to-r from-dpc-gold-400 to-dpc-gold-300 hover:from-dpc-gold-300 hover:to-dpc-gold-200 shadow-gold-glow shrink-0 transition-all cursor-pointer text-center"
                 >
-                  <Sparkles className="w-4 h-4" />
+                  <Sparkles className="w-4 h-4 shrink-0" />
                   <span>Plan a Visit Now</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <ArrowRight className="w-3.5 h-3.5 shrink-0" />
                 </button>
               </div>
 

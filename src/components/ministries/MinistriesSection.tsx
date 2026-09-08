@@ -89,10 +89,10 @@ export const MinistriesSection: React.FC<MinistriesSectionProps> = ({ onSelectMi
         </div>
 
         {/* Filter Pills */}
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 mb-10">
+        <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2.5 mb-8 sm:mb-10">
           <button
             onClick={() => setSelectedTab('all')}
-            className={`px-4 py-2 rounded-full text-xs font-bold transition-all shrink-0 cursor-pointer ${selectedTab === 'all'
+            className={`px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs font-bold transition-all shrink-0 cursor-pointer ${selectedTab === 'all'
               ? 'bg-dpc-gold-400 text-dpc-navy-950 shadow-gold-glow'
               : 'bg-dpc-navy-800 text-slate-300 hover:text-white hover:bg-dpc-navy-700 border border-white/10'
               }`}
@@ -103,7 +103,7 @@ export const MinistriesSection: React.FC<MinistriesSectionProps> = ({ onSelectMi
             <button
               key={m.id}
               onClick={() => setSelectedTab(m.id)}
-              className={`px-4 py-2 rounded-full text-xs font-semibold transition-all shrink-0 cursor-pointer ${selectedTab === m.id
+              className={`px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs font-semibold transition-all shrink-0 cursor-pointer ${selectedTab === m.id
                 ? 'bg-dpc-gold-400 text-dpc-navy-950 shadow-gold-glow font-bold'
                 : 'bg-dpc-navy-800 text-slate-300 hover:text-white hover:bg-dpc-navy-700 border border-white/10'
                 }`}
@@ -114,13 +114,13 @@ export const MinistriesSection: React.FC<MinistriesSectionProps> = ({ onSelectMi
         </div>
 
         {/* Ministry Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {filteredMinistries.map((ministry) => {
             const Icon = getMinistryIcon(ministry.iconName);
             return (
               <div
                 key={ministry.id}
-                className="glass-panel rounded-3xl p-6 sm:p-7 border-white/10 hover:border-dpc-gold-500/50 hover:shadow-gold-glow transition-all duration-300 flex flex-col justify-between group relative overflow-hidden"
+                className="glass-panel rounded-3xl p-5 sm:p-6 md:p-7 border-white/10 hover:border-dpc-gold-500/50 hover:shadow-gold-glow transition-all duration-300 flex flex-col justify-between group relative overflow-hidden"
               >
                 {/* Top Subtle Gradient Light */}
                 <div className={`absolute -top-12 -right-12 w-32 h-32 bg-gradient-to-br ${ministry.color} opacity-10 rounded-full blur-xl group-hover:opacity-25 transition-opacity`}></div>

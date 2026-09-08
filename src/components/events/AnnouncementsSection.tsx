@@ -239,24 +239,24 @@ export const AnnouncementsSection: React.FC<AnnouncementsSectionProps> = ({
         )}
 
         {/* Events Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {filteredEvents.map((event) => (
             <div
               key={event.id}
-              className={`rounded-3xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 relative group overflow-hidden ${event.featured
+              className={`rounded-3xl p-5 sm:p-6 md:p-7 flex flex-col justify-between transition-all duration-300 relative group overflow-hidden ${event.featured
                   ? 'glass-panel-gold border-dpc-gold-500/50 shadow-gold-glow'
                   : 'glass-panel border-white/10 hover:border-dpc-gold-500/40 hover:-translate-y-1'
                 }`}
             >
               <div>
                 {/* Meta Top Bar */}
-                <div className="flex items-center justify-between gap-2 mb-4">
-                  <span className="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-dpc-navy-800 text-dpc-gold-300 border border-dpc-gold-500/30">
+                <div className="flex items-center justify-between gap-2 mb-3 sm:mb-4">
+                  <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-dpc-navy-800 text-dpc-gold-300 border border-dpc-gold-500/30">
                     {event.category}
                   </span>
 
                   {event.badge && (
-                    <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-dpc-gold-500/20 text-dpc-gold-300 border border-dpc-gold-500/40">
+                    <span className="text-[10px] sm:text-[11px] font-bold px-2 py-0.5 rounded bg-dpc-gold-500/20 text-dpc-gold-300 border border-dpc-gold-500/40">
                       {event.badge}
                     </span>
                   )}

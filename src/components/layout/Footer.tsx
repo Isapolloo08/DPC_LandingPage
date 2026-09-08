@@ -18,16 +18,16 @@ export const Footer: React.FC<FooterProps> = ({
       <div className="max-w-7xl mx-auto">
 
         {/* Top Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-10 mb-12">
 
           {/* Brand Column */}
-          <div className="lg:col-span-2 space-y-4">
+          <div className="sm:col-span-2 lg:col-span-2 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-dpc-navy-800 border border-dpc-gold-500/40 flex items-center justify-center text-dpc-gold-400 shadow-gold-glow">
+              <div className="w-10 h-10 rounded-xl bg-dpc-navy-800 border border-dpc-gold-500/40 flex items-center justify-center text-dpc-gold-400 shadow-gold-glow shrink-0">
                 <Church className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-white font-serif tracking-wide">
+                <h3 className="text-base sm:text-lg font-bold text-white font-serif tracking-wide">
                   {CHURCH_INFO.name}
                 </h3>
                 <p className="text-xs text-dpc-gold-400 font-semibold uppercase tracking-wider">
@@ -49,12 +49,12 @@ export const Footer: React.FC<FooterProps> = ({
 
           {/* Quick Links Column */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-white mb-4">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-white mb-3 sm:mb-4">
               Gatherings & Life
             </h4>
-            <ul className="space-y-2.5 text-xs">
+            <ul className="space-y-2 text-xs">
               <li>
-                <a href="#services" className="hover:text-dpc-gold-300 transition-colors">Sunday Worship (9:00 AM)</a>
+                <a href="#services" className="hover:text-dpc-gold-300 transition-colors">Sunday Worship (9:40 AM)</a>
               </li>
               <li>
                 <a href="#services" className="hover:text-dpc-gold-300 transition-colors">Sunday School (8:00 AM)</a>
@@ -79,10 +79,10 @@ export const Footer: React.FC<FooterProps> = ({
 
           {/* Ministries & Fellowship */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-white mb-4">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-white mb-3 sm:mb-4">
               Ministries
             </h4>
-            <ul className="space-y-2.5 text-xs text-slate-400">
+            <ul className="space-y-2 text-xs text-slate-400">
               <li>Seeds of Grace (Kinder 3–5)</li>
               <li>Covenant Kids (Elem 6–12)</li>
               <li>Ignite Teens (High School 13–16)</li>
@@ -95,7 +95,7 @@ export const Footer: React.FC<FooterProps> = ({
 
           {/* Welcome & Contact Column */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-white mb-4">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-white mb-3 sm:mb-4">
               First Time Here?
             </h4>
             <div className="space-y-3">
@@ -104,7 +104,7 @@ export const Footer: React.FC<FooterProps> = ({
               </p>
               <button
                 onClick={onPlanVisitClick}
-                className="w-full py-2.5 px-3 text-xs font-bold text-dpc-navy-950 bg-dpc-gold-400 hover:bg-dpc-gold-300 rounded-lg transition-colors text-center cursor-pointer"
+                className="w-full py-2.5 px-3 text-xs font-bold text-dpc-navy-950 bg-dpc-gold-400 hover:bg-dpc-gold-300 rounded-lg transition-colors text-center cursor-pointer shadow-gold-glow"
               >
                 Plan a Visit
               </button>
@@ -114,15 +114,13 @@ export const Footer: React.FC<FooterProps> = ({
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+        <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400 text-center sm:text-left">
           <p>© {new Date().getFullYear()} {CHURCH_INFO.name} & {CHURCH_INFO.centerName}. All rights reserved.</p>
 
           <div className="flex items-center gap-6">
-
-
             <button
               onClick={scrollToTop}
-              className="inline-flex items-center gap-1 text-dpc-gold-400 hover:text-dpc-gold-300 transition-colors"
+              className="inline-flex items-center gap-1.5 text-dpc-gold-400 hover:text-dpc-gold-300 transition-colors cursor-pointer"
               aria-label="Back to top"
             >
               <span>Back to Top</span>

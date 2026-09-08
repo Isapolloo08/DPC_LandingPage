@@ -44,13 +44,13 @@ export const EventRsvpModal: React.FC<EventRsvpModalProps> = ({ event, isOpen, o
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-xl bg-[#0c192c] rounded-3xl p-6 sm:p-8 shadow-2xl border border-dpc-gold-500/50 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="relative w-full max-w-xl bg-[#0c192c] rounded-2xl sm:rounded-3xl p-5 sm:p-7 md:p-8 shadow-2xl border border-dpc-gold-500/50 max-h-[92vh] sm:max-h-[90vh] overflow-y-auto">
         
         {/* Close Button */}
         <button
           onClick={handleReset}
-          className="absolute top-5 right-5 p-2 rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+          className="absolute top-4 right-4 sm:top-5 sm:right-5 p-2 rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-colors shrink-0 cursor-pointer"
           aria-label="Close modal"
         >
           <X className="w-5 h-5" />

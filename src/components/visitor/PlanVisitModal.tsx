@@ -52,13 +52,13 @@ export const PlanVisitModal: React.FC<PlanVisitModalProps> = ({ isOpen, onClose 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-xl bg-[#0c192c] rounded-3xl p-6 sm:p-8 shadow-2xl border border-dpc-gold-500/50 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="relative w-full max-w-xl bg-[#0c192c] rounded-2xl sm:rounded-3xl p-5 sm:p-7 md:p-8 shadow-2xl border border-dpc-gold-500/50 max-h-[92vh] sm:max-h-[90vh] overflow-y-auto">
         
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+          className="absolute top-4 right-4 sm:top-5 sm:right-5 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer shrink-0"
           aria-label="Close modal"
         >
           <X className="w-4 h-4" />
