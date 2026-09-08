@@ -44,7 +44,6 @@ export const App: React.FC = () => {
         '#services',
         '#what-to-expect',
         '#ministries',
-        '#videos',
         '#events',
         '#location',
       ];

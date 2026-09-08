@@ -48,21 +48,19 @@ export const ScriptureReveal: React.FC<ScriptureRevealProps> = ({
     },
   };
 
-  // Individual word animation
+  // Individual word animation (100% GPU-accelerated: opacity, translateY, scale)
   const wordVariants: Variants = {
     hidden: {
       opacity: 0,
-      y: 14,
-      filter: 'blur(4px)',
-      scale: 0.96,
+      y: 10,
+      scale: 0.97,
     },
     visible: {
       opacity: 1,
       y: 0,
-      filter: 'blur(0px)',
       scale: 1,
       transition: {
-        duration: 0.5,
+        duration: 0.4,
         ease: [0.22, 1, 0.36, 1],
       },
     },
@@ -131,9 +129,10 @@ export const ScriptureReveal: React.FC<ScriptureRevealProps> = ({
               >
                 <motion.span
                   variants={wordVariants}
+                  style={{ willChange: 'transform, opacity' }}
                   className={`inline-block ${
                     isHighlighted
-                      ? 'text-dpc-gold-300 font-medium drop-shadow-[0_0_8px_rgba(234,179,8,0.3)]'
+                      ? 'text-dpc-gold-300 font-medium'
                       : ''
                   }`}
                 >

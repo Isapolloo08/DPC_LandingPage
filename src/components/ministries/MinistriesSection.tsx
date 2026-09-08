@@ -6,6 +6,7 @@ import {
 import { MINISTRIES_DATA } from '../../data/ministriesData';
 import { Ministry } from '../../types/church';
 import { fetchMinistries } from '../../services/api';
+import { ScriptureReveal } from '../ui/ScriptureReveal';
 
 interface MinistriesSectionProps {
   onSelectMinistry: (ministry: Ministry) => void;
@@ -72,16 +73,18 @@ export const MinistriesSection: React.FC<MinistriesSectionProps> = ({ onSelectMi
             The 7 Ministries
           </h2>
           <div className="max-w-2xl mx-auto mt-3">
-            <p className="text-sm sm:text-base text-slate-200 font-serif italic leading-relaxed">
-              “One generation shall commend Your works to another, and shall declare Your mighty acts.”
-            </p>
-            <div className="flex items-center justify-center gap-2 mt-1.5">
-              <span className="h-px w-6 bg-gradient-to-r from-transparent via-dpc-gold-400 to-transparent" />
-              <span className="text-[11px] font-bold tracking-widest text-dpc-gold-400 uppercase font-serif">
-                Psalm 145:4
-              </span>
-              <span className="h-px w-6 bg-gradient-to-r from-transparent via-dpc-gold-400 to-transparent" />
-            </div>
+            <ScriptureReveal
+              quote="One generation shall commend Your works to another, and shall declare Your mighty acts."
+              reference="Psalm 145:4"
+              version="ESV"
+              showQuoteMarks={false}
+              highlightWords={['generation', 'works', 'mighty', 'acts']}
+              quoteClassName="text-sm sm:text-base text-slate-200 font-serif italic leading-relaxed"
+              referenceClassName="!mt-1.5"
+              align="center"
+              staggerDelay={0.04}
+              initialDelay={0.15}
+            />
           </div>
         </div>
 

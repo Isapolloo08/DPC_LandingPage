@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Car, Shirt, ShieldCheck, UtensilsCrossed, Music, Heart, HelpCircle, ArrowRight, Sparkles } from 'lucide-react';
+import { ScriptureReveal } from '../ui/ScriptureReveal';
 
 interface WhatToExpectSectionProps {
   onPlanVisitClick: () => void;
@@ -93,16 +94,18 @@ export const WhatToExpectSection: React.FC<WhatToExpectSectionProps> = ({ onPlan
             What to Expect at DPC
           </h2>
           <div className="max-w-2xl mx-auto mt-3">
-            <p className="text-sm sm:text-base text-slate-200 font-serif italic leading-relaxed">
-              “Therefore welcome one another as Christ has welcomed you, for the glory of God.”
-            </p>
-            <div className="flex items-center justify-center gap-2 mt-1.5">
-              <span className="h-px w-6 bg-gradient-to-r from-transparent via-dpc-gold-400 to-transparent" />
-              <span className="text-[11px] font-bold tracking-widest text-dpc-gold-400 uppercase font-serif">
-                Romans 15:7
-              </span>
-              <span className="h-px w-6 bg-gradient-to-r from-transparent via-dpc-gold-400 to-transparent" />
-            </div>
+            <ScriptureReveal
+              quote="Therefore welcome one another as Christ has welcomed you, for the glory of God."
+              reference="Romans 15:7"
+              version="ESV"
+              showQuoteMarks={false}
+              highlightWords={['welcome', 'Christ', 'glory', 'God']}
+              quoteClassName="text-sm sm:text-base text-slate-200 font-serif italic leading-relaxed"
+              referenceClassName="!mt-1.5"
+              align="center"
+              staggerDelay={0.04}
+              initialDelay={0.15}
+            />
           </div>
         </div>
 

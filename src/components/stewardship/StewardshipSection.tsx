@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { HeartHandshake, QrCode, Building2, Copy, Check, BookOpen } from 'lucide-react';
 import { CHURCH_INFO } from '../../data/churchInfo';
+import { ScriptureReveal } from '../ui/ScriptureReveal';
 
 interface StewardshipSectionProps {
   onOpenGCashModal: () => void;
@@ -39,13 +40,18 @@ export const StewardshipSection: React.FC<StewardshipSectionProps> = ({ onOpenGC
             <BookOpen className="w-5 h-5" />
           </div>
 
-          <blockquote className="text-sm sm:text-lg italic text-white font-serif leading-relaxed max-w-2xl mx-auto">
-            “{CHURCH_INFO.stewardshipVerse}”
-          </blockquote>
-          
-          <span className="inline-block mt-3 px-3 py-1 rounded-md bg-dpc-navy-950/80 border border-dpc-gold-500/30 text-xs font-bold font-serif text-dpc-gold-300">
-            {CHURCH_INFO.stewardshipRef}
-          </span>
+          <ScriptureReveal
+            quote={CHURCH_INFO.stewardshipVerse}
+            reference={CHURCH_INFO.stewardshipRef}
+            version="ESV"
+            showQuoteMarks={true}
+            highlightWords={['heart', 'cheerful', 'giver', 'God', 'loves']}
+            quoteClassName="text-sm sm:text-base md:text-lg italic text-white font-serif leading-relaxed max-w-2xl mx-auto"
+            referenceClassName="!mt-2"
+            align="center"
+            staggerDelay={0.035}
+            initialDelay={0.15}
+          />
         </div>
 
         {/* Giving Channels Grid */}

@@ -113,7 +113,7 @@ export const AnnouncementsSection: React.FC<AnnouncementsSectionProps> = ({
           {/* Centered Floating Overlay Content - No Box */}
           <div className="relative z-10 flex h-full flex-col items-center justify-center py-6 sm:py-10 text-center px-4 sm:px-6 max-w-4xl mx-auto pointer-events-none">
             <div className="space-y-3 sm:space-y-4">
-              <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold font-serif text-white tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.95)]">
+              <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold font-serif text-white tracking-tight [text-shadow:_0_4px_20px_rgb(0_0_0_/_95%)]">
                 Witness God’s Faithfulness <br className="hidden sm:inline" />
                 <span className="gold-shimmer">In Motion</span>
               </h2>
@@ -126,7 +126,7 @@ export const AnnouncementsSection: React.FC<AnnouncementsSectionProps> = ({
                   version="ESV"
                   showQuoteMarks={true}
                   highlightWords={['Spirit', 'truth', 'worship']}
-                  quoteClassName="text-sm sm:text-base md:text-lg text-white font-serif italic leading-relaxed tracking-wide drop-shadow-[0_3px_12px_rgba(0,0,0,1)]"
+                  quoteClassName="text-sm sm:text-base md:text-lg text-white font-serif italic leading-relaxed tracking-wide [text-shadow:_0_2px_12px_rgb(0_0_0_/_95%)]"
                   referenceClassName="!mt-2"
                   align="center"
                   staggerDelay={0.04}

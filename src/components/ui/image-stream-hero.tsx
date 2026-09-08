@@ -219,6 +219,9 @@ export function ImageStreamHero({
                     // corridor is already full on the first frame.
                     animationDelay: `${-(i * speed) / cards}s`,
                     backfaceVisibility: "hidden",
+                    WebkitBackfaceVisibility: "hidden",
+                    willChange: "transform",
+                    transform: "translate3d(0, 0, 0)",
                   }}
                 >
                   {img ? (

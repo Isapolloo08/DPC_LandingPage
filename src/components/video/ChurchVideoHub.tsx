@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { VIDEO_ORIENTATIONS_DATA } from '../../data/videoOrientationsData';
 import { VideoOrientation, VideoChapter } from '../../types/church';
+import { ScriptureReveal } from '../ui/ScriptureReveal';
 
 interface ChurchVideoHubProps {
   onPlanVisitClick: () => void;
@@ -119,16 +120,18 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
           </h2>
 
           <div className="max-w-2xl mx-auto mt-3">
-            <p className="text-sm sm:text-base text-slate-200 font-serif italic leading-relaxed">
-              “Come and see what God has done: He is awesome in His deeds toward the children of man.”
-            </p>
-            <div className="flex items-center justify-center gap-2 mt-1.5">
-              <span className="h-px w-6 bg-gradient-to-r from-transparent via-dpc-gold-400 to-transparent" />
-              <span className="text-[11px] font-bold tracking-widest text-dpc-gold-400 uppercase font-serif">
-                Psalm 66:5
-              </span>
-              <span className="h-px w-6 bg-gradient-to-r from-transparent via-dpc-gold-400 to-transparent" />
-            </div>
+            <ScriptureReveal
+              quote="Come and see what God has done: He is awesome in His deeds toward the children of man."
+              reference="Psalm 66:5"
+              version="ESV"
+              showQuoteMarks={false}
+              highlightWords={['Come', 'see', 'awesome', 'deeds']}
+              quoteClassName="text-sm sm:text-base text-slate-200 font-serif italic leading-relaxed"
+              referenceClassName="!mt-1.5"
+              align="center"
+              staggerDelay={0.04}
+              initialDelay={0.15}
+            />
           </div>
         </div>
 
