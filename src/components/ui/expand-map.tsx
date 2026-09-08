@@ -88,7 +88,7 @@ function estimateTravelTime(distanceKm: number): { drive: string; mode: string }
 export function ExpandMap({
   label = "CURRENT LOCATION",
   title = "Daet Presbyterian Church",
-  subtitle = "Camarines Norte Youth Center Bldg.",
+  subtitle = "Purok 2, Cobangbang, Daet",
   location = "Daet, Camarines Norte",
   address = "Purok 2, Brgy. Cobangbang, Daet, Camarines Norte, Philippines 4600",
   landmark = "Purok 2, Cobangbang (In front of Bicol CATV / Near Mary's Bright Montessori)",
@@ -98,7 +98,7 @@ export function ExpandMap({
   googleMapsUrl,
   className,
 }: ExpandMapProps) {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [copied, setCopied] = useState(false);
   const [activeLayer, setActiveLayer] = useState<"dark" | "satellite" | "standard">("dark");
   const [viewMode, setViewMode] = useState<"route" | "pin">("route");
@@ -372,7 +372,7 @@ export function ExpandMap({
                     ♿ Ground Floor Access
                   </span>
                   <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-[9px] font-medium text-slate-300">
-                    ☕ CNYC Study & Youth Hub
+                    ☕ Fellowship & Coffee Lounge
                   </span>
                 </div>
               </div>

@@ -28,6 +28,14 @@ export const App: React.FC = () => {
 
   const mainRef = useRef<HTMLDivElement>(null);
 
+  // Ensure fresh page reload always starts at the top
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, []);
+
   // GSAP Animations with Clean Lifecycle & Compositor Performance
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -36,6 +44,7 @@ export const App: React.FC = () => {
         '#services',
         '#what-to-expect',
         '#ministries',
+        '#videos',
         '#events',
         '#location',
       ];
@@ -89,8 +98,11 @@ export const App: React.FC = () => {
         {/* 6. The 7 Age-Bracket Ministries Showcase */}
         <MinistriesSection onSelectMinistry={(m) => setSelectedMinistry(m)} />
 
-        {/* 7. Live Announcements & Upcoming Events */}
-        <AnnouncementsSection onSelectEvent={(e) => setSelectedEvent(e)} />
+        {/* 7. Unified Media, Virtual Cinema Hub & Live Events Calendar */}
+        <AnnouncementsSection
+          onSelectEvent={(e) => setSelectedEvent(e)}
+          onPlanVisitClick={() => setIsPlanVisitOpen(true)}
+        />
 
         {/* 8. Location, Directions, Map & Socials */}
         <LocationMapSection

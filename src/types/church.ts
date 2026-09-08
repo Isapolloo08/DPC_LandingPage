@@ -79,6 +79,31 @@ export interface ServiceSchedule {
   isMainWorship?: boolean;
 }
 
+export interface VideoChapter {
+  timeSeconds: number;
+  timeLabel: string;
+  title: string;
+}
+
+export interface VideoOrientation {
+  id: string;
+  title: string;
+  subtitle: string;
+  category: 'general' | 'ministry' | 'facilities' | 'camp';
+  categoryLabel: string;
+  ministryId?: string;
+  duration: string;
+  thumbnail: string;
+  videoUrl?: string;
+  youtubeId?: string;
+  featured?: boolean;
+  targetAudience?: string;
+  leader?: string;
+  description: string;
+  keyHighlights: string[];
+  chapters?: VideoChapter[];
+}
+
 export interface PrayerRequest {
   id: string;
   name: string;

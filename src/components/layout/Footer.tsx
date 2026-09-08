@@ -66,6 +66,9 @@ export const Footer: React.FC<FooterProps> = ({
                 <a href="#ministries" className="hover:text-dpc-gold-300 transition-colors">The 7 Age Ministries</a>
               </li>
               <li>
+                <a href="#videos" className="hover:text-dpc-gold-300 transition-colors">Video Orientations & Reels</a>
+              </li>
+              <li>
                 <a href="#events" className="hover:text-dpc-gold-300 transition-colors">Events & Youth Camps</a>
               </li>
               <li>
@@ -83,7 +86,7 @@ export const Footer: React.FC<FooterProps> = ({
               <li>Seeds of Grace (Kinder 3–5)</li>
               <li>Covenant Kids (Elem 6–12)</li>
               <li>Ignite Teens (High School 13–16)</li>
-              <li>CNYC Youth (Collegiate 17–21)</li>
+              <li>College & Campus Youth (17–21)</li>
               <li>Ambassadors (Young Adults 22–35)</li>
               <li>Pillars of Faith (Couples 36–55)</li>
               <li>Golden Heritage (Seniors 56+)</li>

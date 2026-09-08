@@ -55,7 +55,7 @@ export const WhatToExpectSection: React.FC<WhatToExpectSectionProps> = ({ onPlan
       tagline: 'Free hearty lunch for all first-time guests',
       summary: 'Every Sunday after the 11:30 AM benediction, our church family gathers for a warm community meal.',
       details: [
-        'Enjoy local Bicolano dishes and refreshments at the CNYC Fellowship Courtyard.',
+        'Enjoy local Bicolano dishes and refreshments at the DPC Fellowship Courtyard.',
         'As our first-time guest, lunch is completely on us! No need to bring anything.',
         'An easy, no-pressure opportunity to chat with our pastoral team, elders, and young adults.'
       ],
@@ -79,7 +79,7 @@ export const WhatToExpectSection: React.FC<WhatToExpectSectionProps> = ({ onPlan
   return (
     <section id="what-to-expect" className="py-20 bg-dpc-navy-950 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Background accents */}
-      <div className="absolute top-1/2 -left-20 w-80 h-80 radial-cross-glow opacity-30 blur-3xl pointer-events-none"></div>
+      <div className="absolute top-1/2 -left-20 w-80 h-80 radial-cross-glow opacity-30 blur-3xl pointer-events-none -z-10"></div>
 
       <div className="max-w-7xl mx-auto relative z-10">
         
@@ -92,9 +92,18 @@ export const WhatToExpectSection: React.FC<WhatToExpectSectionProps> = ({ onPlan
           <h2 className="text-2xl sm:text-4xl font-bold font-serif text-white tracking-tight">
             What to Expect at DPC
           </h2>
-          <p className="text-sm sm:text-base text-slate-300 mt-3 font-light">
-            Visiting a church for the first time can be intimidating. Here is everything you need to know before walking through our doors.
-          </p>
+          <div className="max-w-2xl mx-auto mt-3">
+            <p className="text-sm sm:text-base text-slate-200 font-serif italic leading-relaxed">
+              “Therefore welcome one another as Christ has welcomed you, for the glory of God.”
+            </p>
+            <div className="flex items-center justify-center gap-2 mt-1.5">
+              <span className="h-px w-6 bg-gradient-to-r from-transparent via-dpc-gold-400 to-transparent" />
+              <span className="text-[11px] font-bold tracking-widest text-dpc-gold-400 uppercase font-serif">
+                Romans 15:7
+              </span>
+              <span className="h-px w-6 bg-gradient-to-r from-transparent via-dpc-gold-400 to-transparent" />
+            </div>
+          </div>
         </div>
 
         {/* Interactive Step Navigator */}

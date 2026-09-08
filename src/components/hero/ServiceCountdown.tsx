@@ -61,9 +61,18 @@ export const ServiceCountdown: React.FC = () => {
           <h2 className="text-2xl sm:text-4xl font-bold font-serif text-white tracking-tight">
             Service Times & Live Countdown
           </h2>
-          <p className="text-sm sm:text-base text-slate-300 mt-3 font-light">
-            We warmly invite you, your family, and friends to worship with us in the heart of Daet, Camarines Norte.
-          </p>
+          <div className="max-w-2xl mx-auto mt-3">
+            <p className="text-sm sm:text-base text-slate-200 font-serif italic leading-relaxed">
+              “I was glad when they said to me, ‘Let us go to the house of the LORD!’”
+            </p>
+            <div className="flex items-center justify-center gap-2 mt-1.5">
+              <span className="h-px w-6 bg-gradient-to-r from-transparent via-dpc-gold-400 to-transparent" />
+              <span className="text-[11px] font-bold tracking-widest text-dpc-gold-400 uppercase font-serif">
+                Psalm 122:1
+              </span>
+              <span className="h-px w-6 bg-gradient-to-r from-transparent via-dpc-gold-400 to-transparent" />
+            </div>
+          </div>
         </div>
 
         {/* Live Countdown Clock Banner */}

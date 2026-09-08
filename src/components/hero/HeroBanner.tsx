@@ -5,6 +5,7 @@ import { CHURCH_INFO } from '../../data/churchInfo';
 import { MINISTRIES_DATA } from '../../data/ministriesData';
 import { Ministry } from '../../types/church';
 import { fetchMinistries } from '../../services/api';
+import { ScriptureReveal } from '../ui/ScriptureReveal';
 
 interface HeroBannerProps {
   onPlanVisitClick: () => void;
@@ -188,19 +189,19 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onPlanVisitClick }) => {
               A loving gospel-centered family in Bicol dedicated to the glory of God, the expository proclamation of Scripture, vibrant youth discipleship, and Christ-like community.
             </motion.p>
 
-            {/* Featured Scripture Card (Romans 12:5) */}
+            {/* Featured Scripture Card with Word-by-Word Reveal (Romans 12:5) */}
             <motion.div
               variants={itemVariants}
               className="w-full max-w-xl glass-panel-gold rounded-2xl p-4 sm:p-5 text-left relative overflow-hidden group border-dpc-gold-500/30 hover:border-dpc-gold-400/60 transition-all duration-300"
             >
-              <div className="absolute top-0 right-0 w-28 h-28 bg-dpc-gold-500/5 rounded-full blur-xl group-hover:bg-dpc-gold-500/15 transition-all"></div>
+              <div className="absolute top-0 right-0 w-28 h-28 bg-dpc-gold-500/5 rounded-full blur-xl group-hover:bg-dpc-gold-500/15 transition-all pointer-events-none"></div>
 
               <div className="flex items-start gap-3.5">
                 <div className="w-9 h-9 rounded-xl bg-dpc-gold-500/10 border border-dpc-gold-500/30 flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-105 transition-transform">
                   <BookOpen className="w-4 h-4 text-dpc-gold-400" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-2 mb-1">
+                  <div className="flex items-center justify-between gap-2 mb-1.5">
                     <p className="text-[11px] font-bold uppercase tracking-wider text-dpc-gold-400">
                       Our Uniting Theme Verse
                     </p>
@@ -208,9 +209,16 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onPlanVisitClick }) => {
                       {CHURCH_INFO.verseRef}
                     </span>
                   </div>
-                  <blockquote className="text-xs sm:text-sm italic text-slate-100 font-serif leading-relaxed">
-                    “{CHURCH_INFO.verseText}”
-                  </blockquote>
+                  
+                  {/* Storytelling Word-by-Word Scripture Reveal */}
+                  <ScriptureReveal
+                    quote={CHURCH_INFO.verseText}
+                    showQuoteMarks={false}
+                    highlightWords={['body', 'Christ', 'one', 'members']}
+                    quoteClassName="text-xs sm:text-sm italic text-slate-100 font-serif leading-relaxed"
+                    staggerDelay={0.035}
+                    initialDelay={0.25}
+                  />
                 </div>
               </div>
             </motion.div>

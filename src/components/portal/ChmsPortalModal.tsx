@@ -79,7 +79,7 @@ export const ChmsPortalModal: React.FC<ChmsPortalModalProps> = ({ isOpen, onClos
 
               <div className="p-4 rounded-2xl bg-dpc-navy-950/90 border border-dpc-gold-500/30 text-center">
                 <p className="text-xs text-slate-400 font-medium">Ministry Assignment</p>
-                <p className="text-sm font-bold text-white font-serif mt-0.5">Ushering & CNYC Tech</p>
+                <p className="text-sm font-bold text-white font-serif mt-0.5">Ushering & Media Tech</p>
                 <span className="inline-block mt-2 text-[10px] text-dpc-gold-300 bg-dpc-navy-800 px-2 py-0.5 rounded">Serving This Sun</span>
               </div>
 

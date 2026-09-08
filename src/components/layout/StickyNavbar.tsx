@@ -25,7 +25,7 @@ export const StickyNavbar: React.FC<StickyNavbarProps> = ({
     { label: 'Worship Times', href: '#services' },
     { label: 'What to Expect', href: '#what-to-expect' },
     { label: '7 Ministries', href: '#ministries' },
-    { label: 'Events & News', href: '#events' },
+    { label: 'Media & Events', href: '#events' },
     { label: 'Find Us', href: '#location' },
   ];
 
@@ -40,7 +40,15 @@ export const StickyNavbar: React.FC<StickyNavbarProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Brand Logo & Title */}
-          <a href="#" className="flex items-center gap-3 group">
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+              window.history.pushState(null, '', window.location.pathname);
+            }}
+            className="flex items-center gap-3 group"
+          >
             {/* Custom Styled Celtic Reformed Cross Emblem */}
             <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-dpc-navy-800 to-dpc-navy-950 border border-dpc-gold-500/50 p-2 flex items-center justify-center shadow-gold-glow group-hover:scale-105 transition-transform duration-300">
               <div className="absolute inset-0 rounded-xl bg-dpc-gold-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -50,15 +58,15 @@ export const StickyNavbar: React.FC<StickyNavbarProps> = ({
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
                 <span className="font-serif font-bold text-base sm:text-lg tracking-wide text-white group-hover:text-dpc-gold-300 transition-colors">
-                  {CHURCH_INFO.shortName}
+                  {CHURCH_INFO.name}
                 </span>
                 <span className="hidden sm:inline-block w-1.5 h-1.5 rounded-full bg-dpc-gold-500"></span>
                 <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-dpc-gold-400 bg-dpc-gold-500/10 px-2 py-0.5 rounded border border-dpc-gold-500/30">
-                  {CHURCH_INFO.centerShort}
+                  Reformed
                 </span>
               </div>
               <span className="text-[11px] sm:text-xs text-slate-300 font-medium tracking-tight">
-                Daet Presbyterian Church & Youth Center
+                Daet, Camarines Norte, Philippines
               </span>
             </div>
           </a>

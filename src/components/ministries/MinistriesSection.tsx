@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Baby, Sparkles, Flame, Zap, Compass, Shield, Crown, 
+import {
+  Sprout, BookOpen, Flame, GraduationCap, Compass, Shield, Award,
   ArrowRight, Users, CheckCircle2, Database, RefreshCw
 } from 'lucide-react';
 import { MINISTRIES_DATA } from '../../data/ministriesData';
@@ -34,54 +34,65 @@ export const MinistriesSection: React.FC<MinistriesSectionProps> = ({ onSelectMi
 
   const getMinistryIcon = (iconName: string) => {
     switch (iconName) {
-      case 'Baby': return Baby;
-      case 'Sparkles': return Sparkles;
-      case 'Flame': return Flame;
-      case 'Zap': return Zap;
-      case 'Compass': return Compass;
-      case 'Shield': return Shield;
-      case 'Crown': return Crown;
-      default: return Users;
+      case 'Sprout':
+      case 'Baby':
+        return Sprout;
+      case 'BookOpen':
+      case 'Sparkles':
+        return BookOpen;
+      case 'Flame':
+        return Flame;
+      case 'GraduationCap':
+      case 'Zap':
+        return GraduationCap;
+      case 'Compass':
+        return Compass;
+      case 'Shield':
+        return Shield;
+      case 'Award':
+      case 'Crown':
+        return Award;
+      default:
+        return Users;
     }
   };
 
-  const filteredMinistries = selectedTab === 'all' 
-    ? ministries 
+  const filteredMinistries = selectedTab === 'all'
+    ? ministries
     : ministries.filter(m => m.id === selectedTab || m.ageBracket.toLowerCase() === selectedTab.toLowerCase());
 
   return (
     <section id="ministries" className="py-20 bg-gradient-to-b from-dpc-navy-950 via-dpc-navy-900 to-dpc-navy-950 px-4 sm:px-6 lg:px-8 relative">
       <div className="max-w-7xl mx-auto">
-        
+
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-dpc-gold-500/10 border border-dpc-gold-500/30 text-xs font-semibold uppercase tracking-wider text-dpc-gold-400 mb-3">
-            <Users className="w-3.5 h-3.5" />
-            <span>Generational Discipleship</span>
-            {isLive && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-500/40 ml-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                Live Database
-              </span>
-            )}
-          </div>
+
           <h2 className="text-2xl sm:text-4xl font-bold font-serif text-white tracking-tight">
-            The 7 Age-Bracket Ministries
+            The 7 Ministries
           </h2>
-          <p className="text-sm sm:text-base text-slate-300 mt-3 font-light">
-            From our covenant toddlers to venerable senior saints, every generation in Camarines Norte has a gospel home and tailored discipleship pathway at DPC.
-          </p>
+          <div className="max-w-2xl mx-auto mt-3">
+            <p className="text-sm sm:text-base text-slate-200 font-serif italic leading-relaxed">
+              “One generation shall commend Your works to another, and shall declare Your mighty acts.”
+            </p>
+            <div className="flex items-center justify-center gap-2 mt-1.5">
+              <span className="h-px w-6 bg-gradient-to-r from-transparent via-dpc-gold-400 to-transparent" />
+              <span className="text-[11px] font-bold tracking-widest text-dpc-gold-400 uppercase font-serif">
+                Psalm 145:4
+              </span>
+              <span className="h-px w-6 bg-gradient-to-r from-transparent via-dpc-gold-400 to-transparent" />
+            </div>
+          </div>
         </div>
 
         {/* Filter Pills */}
         <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 mb-10">
           <button
             onClick={() => setSelectedTab('all')}
-            className={`px-4 py-2 rounded-full text-xs font-bold transition-all shrink-0 cursor-pointer ${
-              selectedTab === 'all'
-                ? 'bg-dpc-gold-400 text-dpc-navy-950 shadow-gold-glow'
-                : 'bg-dpc-navy-800 text-slate-300 hover:text-white hover:bg-dpc-navy-700 border border-white/10'
-            }`}
+            className={`px-4 py-2 rounded-full text-xs font-bold transition-all shrink-0 cursor-pointer ${selectedTab === 'all'
+              ? 'bg-dpc-gold-400 text-dpc-navy-950 shadow-gold-glow'
+              : 'bg-dpc-navy-800 text-slate-300 hover:text-white hover:bg-dpc-navy-700 border border-white/10'
+              }`}
           >
             All {ministries.length} Ministries
           </button>
@@ -89,11 +100,10 @@ export const MinistriesSection: React.FC<MinistriesSectionProps> = ({ onSelectMi
             <button
               key={m.id}
               onClick={() => setSelectedTab(m.id)}
-              className={`px-4 py-2 rounded-full text-xs font-semibold transition-all shrink-0 cursor-pointer ${
-                selectedTab === m.id
-                  ? 'bg-dpc-gold-400 text-dpc-navy-950 shadow-gold-glow font-bold'
-                  : 'bg-dpc-navy-800 text-slate-300 hover:text-white hover:bg-dpc-navy-700 border border-white/10'
-              }`}
+              className={`px-4 py-2 rounded-full text-xs font-semibold transition-all shrink-0 cursor-pointer ${selectedTab === m.id
+                ? 'bg-dpc-gold-400 text-dpc-navy-950 shadow-gold-glow font-bold'
+                : 'bg-dpc-navy-800 text-slate-300 hover:text-white hover:bg-dpc-navy-700 border border-white/10'
+                }`}
             >
               {m.ageBracket}
             </button>

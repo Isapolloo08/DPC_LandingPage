@@ -3,8 +3,8 @@ import { ServiceSchedule } from '../types/church';
 export const CHURCH_INFO = {
   name: 'Daet Presbyterian Church',
   shortName: 'DPC',
-  centerName: 'Camarines Norte Youth Center',
-  centerShort: 'CNYC',
+  centerName: 'Rooted in Grace • United in Christ',
+  centerShort: 'Reformed',
   tagline: 'Rooted in Grace, Growing in Faith, United in Christ',
   verseText: 'So in Christ we, though many, form one body, and each member belongs to all the others.',
   verseRef: 'Romans 12:5',
@@ -32,7 +32,7 @@ export const CHURCH_INFO = {
     pastoralHotline: '+63 928 554 9920',
     email: 'info@daetpresbyterian.org',
     officeHours: 'Tuesday to Saturday: 8:30 AM – 5:00 PM | Sunday: 7:30 AM – 3:00 PM',
-    facebook: 'https://facebook.com/DaetPresbyterianChurchCNYC',
+    facebook: 'https://facebook.com/DaetPresbyterianChurch',
     youtube: 'https://youtube.com/@DaetPresbyterianLive',
   },
   giving: {
@@ -54,8 +54,8 @@ export const CHURCH_INFO = {
     },
     funds: [
       { id: 'general', name: 'General Church & Pastoral Fund', desc: 'Daily operations, pulpit ministry, utilities, and staffing.' },
-      { id: 'youth', name: 'Camarines Norte Youth Center (CNYC)', desc: 'Campus ministry, student feeding, youth camps, and study center facilities.' },
-      { id: 'building', name: 'Sanctuary & Youth Center Building Fund', desc: 'Facility maintenance, audio-visual gear, and classroom expansions.' },
+      { id: 'youth', name: 'Youth & Campus Discipleship Fund', desc: 'Campus ministry, student fellowship, youth camps, and study center facilities.' },
+      { id: 'building', name: 'Sanctuary & Church Building Fund', desc: 'Facility maintenance, audio-visual gear, and classroom expansions.' },
       { id: 'missions', name: 'Missions & Bicol Outreach (Benevolence)', desc: 'Church planting in Basud, Talisay, Vinzons, and community food drives.' },
     ]
   },

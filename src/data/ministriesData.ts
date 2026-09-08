@@ -7,11 +7,11 @@ export const MINISTRIES_DATA: Ministry[] = [
     tagline: 'Little Hearts Treasuring Jesus',
     ageBracket: 'Kindergarten',
     ageRange: 'Ages 3 – 5',
-    iconName: 'Baby',
+    iconName: 'Sprout',
     color: 'from-amber-400 to-yellow-500',
     description: 'Nurturing our youngest covenant children with hands-on Gospel storytelling, scripture memory songs, gentle crafts, and caring safety supervision during worship services.',
     schedule: 'Sundays: 8:00 AM – 9:30 AM (Sunday School) & 9:30 AM+ (Supervised Playtime & Christian Animations)',
-    location: 'Seeds of Grace Room, Ground Floor CNYC Annex',
+    location: 'Seeds of Grace Room, Ground Floor Church Annex',
     leader: 'Teacher Mary Grace Villamater',
     leaderTitle: 'Children’s Ministry Coordinator',
     activities: [
@@ -50,7 +50,7 @@ export const MINISTRIES_DATA: Ministry[] = [
     tagline: 'Building Strong Biblical Foundations',
     ageBracket: 'Elementary',
     ageRange: 'Ages 6 – 12',
-    iconName: 'Sparkles',
+    iconName: 'BookOpen',
     color: 'from-emerald-400 to-teal-500',
     description: 'Empowering grade-schoolers to discover God’s redemptive story from Genesis to Revelation. Features children’s catechism, biblical worldview lessons, and exciting Vacation Bible Schools.',
     schedule: 'Sundays: 8:00 AM – 9:30 AM (Sunday School) & 9:30 AM+ (Supervised Playtime & Christian Movies)',
@@ -97,7 +97,7 @@ export const MINISTRIES_DATA: Ministry[] = [
     color: 'from-orange-500 to-red-600',
     description: 'Guiding teenagers through high school challenges, peer pressure, identity questions, and digital culture with unwavering Biblical truth, authentic mentors, and lively fellowship.',
     schedule: 'Sundays: 8:00 AM – 9:30 AM (Youth Worship) & 9:30 AM – 11:30 AM (Bible Study Circles)',
-    location: 'Ignite Lounge, CNYC 2nd Floor',
+    location: 'Ignite Lounge, DPC 2nd Floor',
     leader: 'Bro. Joshua Pimentel & Sis. Christine Tan',
     leaderTitle: 'High School Ministry Directors',
     activities: [
@@ -114,9 +114,9 @@ export const MINISTRIES_DATA: Ministry[] = [
     },
     eventPhotos: [
       {
-        url: 'https://images.unsplash.com/photo-1526976668912-1a811878dd37?q=80&w=900&auto=format&fit=crop',
-        caption: 'Ignite Teen Camp breakout sessions and outdoor team building',
-        tag: 'Annual Camp'
+        url: 'https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=900&auto=format&fit=crop',
+        caption: 'Saturday high school study circle and Bible discussion group',
+        tag: 'Youth Bible Study'
       },
       {
         url: 'https://images.unsplash.com/photo-1517649763962-0c623266ddc0?q=80&w=900&auto=format&fit=crop',
@@ -132,15 +132,15 @@ export const MINISTRIES_DATA: Ministry[] = [
   },
   {
     id: 'youth',
-    name: 'CNYC Youth Fellowship',
-    tagline: 'Camarines Norte Youth Center & Campus Outreach',
+    name: 'College & Campus Fellowship',
+    tagline: 'Collegiate Discipleship & Campus Light',
     ageBracket: 'Senior High & College Youth',
     ageRange: 'Ages 17 – 21',
-    iconName: 'Zap',
+    iconName: 'GraduationCap',
     color: 'from-blue-500 to-indigo-600',
-    description: 'The core student engine of CNYC! Equipping senior high and collegiate students across CNSC, Mabini Colleges, and local campuses to stand firm in grace and lead as campus lights.',
+    description: 'Equipping senior high and collegiate students across CNSC, Mabini Colleges, and local campuses to stand firm in grace, grow in reformed theology, and lead as campus lights.',
     schedule: 'Sundays: 9:40 AM – 11:30 AM (Main Worship) & Weekly Scheduled Small Group Discipleship',
-    location: 'CNYC Main Multi-Purpose Hall, Daet',
+    location: 'DPC Multi-Purpose Fellowship Hall, Daet',
     leader: 'Pastor Mark Arvin Lopez & Youth Council',
     leaderTitle: 'Youth Pastor & Student Council',
     activities: [
@@ -163,7 +163,7 @@ export const MINISTRIES_DATA: Ministry[] = [
       },
       {
         url: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=900&auto=format&fit=crop',
-        caption: 'CNYC Free Campus Study Lounge & collegiate discipleship study group',
+        caption: 'Free Student Study Lounge & collegiate discipleship study group',
         tag: 'Campus Outreach'
       },
       {
@@ -183,7 +183,7 @@ export const MINISTRIES_DATA: Ministry[] = [
     color: 'from-cyan-500 to-blue-600',
     description: 'Navigating career launches, singles, dating, courtship, finances, and early marriage with gospel clarity. We integrate faith with daily professional callings across Daet and Bicol.',
     schedule: 'Sundays: 9:40 AM – 11:30 AM (Main Worship) & Weekly Scheduled Discipleship Groups',
-    location: 'CNYC Upper Conference Room & Local Cafes',
+    location: 'DPC Conference Room & Local Cafes',
     leader: 'Engr. Daniel Alcantara & Dr. Alyssa Reyes',
     leaderTitle: 'Young Adult Ministry Coordinators',
     activities: [
@@ -265,7 +265,7 @@ export const MINISTRIES_DATA: Ministry[] = [
     tagline: 'Finishing Well, Rich in Wisdom and Prayer',
     ageBracket: 'Senior Saints',
     ageRange: 'Ages 56 and Above',
-    iconName: 'Crown',
+    iconName: 'Award',
     color: 'from-purple-500 to-indigo-700',
     description: 'Honoring our venerable seniors who anchor the church in ceaseless intercessory prayer, legacy mentorship, and joyful fellowship in the golden years of life.',
     schedule: 'Sundays: 8:00 AM – 9:30 AM (Senior Bible Study) & 9:40 AM – 11:30 AM (Main Worship)',
