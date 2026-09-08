@@ -1,17 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Baby, Sparkles, Flame, Zap, Compass, Shield, Crown, 
-  ArrowRight, Users, CheckCircle2 
+  ArrowRight, Users, CheckCircle2, Database, RefreshCw
 } from 'lucide-react';
 import { MINISTRIES_DATA } from '../../data/ministriesData';
 import { Ministry } from '../../types/church';
+import { fetchMinistries } from '../../services/api';
 
 interface MinistriesSectionProps {
   onSelectMinistry: (ministry: Ministry) => void;
 }
 
 export const MinistriesSection: React.FC<MinistriesSectionProps> = ({ onSelectMinistry }) => {
+  const [ministries, setMinistries] = useState<Ministry[]>(MINISTRIES_DATA);
   const [selectedTab, setSelectedTab] = useState<string>('all');
+  const [isLive, setIsLive] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadData() {
+      setLoading(true);
+      const res = await fetchMinistries();
+      if (isMounted) {
+        setMinistries(res.data);
+        setIsLive(res.isLive);
+        setLoading(false);
+      }
+    }
+    loadData();
+    return () => { isMounted = false; };
+  }, []);
 
   const getMinistryIcon = (iconName: string) => {
     switch (iconName) {
@@ -27,8 +46,8 @@ export const MinistriesSection: React.FC<MinistriesSectionProps> = ({ onSelectMi
   };
 
   const filteredMinistries = selectedTab === 'all' 
-    ? MINISTRIES_DATA 
-    : MINISTRIES_DATA.filter(m => m.id === selectedTab);
+    ? ministries 
+    : ministries.filter(m => m.id === selectedTab || m.ageBracket.toLowerCase() === selectedTab.toLowerCase());
 
   return (
     <section id="ministries" className="py-20 bg-gradient-to-b from-dpc-navy-950 via-dpc-navy-900 to-dpc-navy-950 px-4 sm:px-6 lg:px-8 relative">
@@ -39,6 +58,12 @@ export const MinistriesSection: React.FC<MinistriesSectionProps> = ({ onSelectMi
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-dpc-gold-500/10 border border-dpc-gold-500/30 text-xs font-semibold uppercase tracking-wider text-dpc-gold-400 mb-3">
             <Users className="w-3.5 h-3.5" />
             <span>Generational Discipleship</span>
+            {isLive && (
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-500/40 ml-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                Live Database
+              </span>
+            )}
           </div>
           <h2 className="text-2xl sm:text-4xl font-bold font-serif text-white tracking-tight">
             The 7 Age-Bracket Ministries
@@ -49,7 +74,7 @@ export const MinistriesSection: React.FC<MinistriesSectionProps> = ({ onSelectMi
         </div>
 
         {/* Filter Pills */}
-        <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto pb-4 mb-10 no-scrollbar">
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 mb-10">
           <button
             onClick={() => setSelectedTab('all')}
             className={`px-4 py-2 rounded-full text-xs font-bold transition-all shrink-0 cursor-pointer ${
@@ -58,9 +83,9 @@ export const MinistriesSection: React.FC<MinistriesSectionProps> = ({ onSelectMi
                 : 'bg-dpc-navy-800 text-slate-300 hover:text-white hover:bg-dpc-navy-700 border border-white/10'
             }`}
           >
-            All 7 Ministries
+            All {ministries.length} Ministries
           </button>
-          {MINISTRIES_DATA.map((m) => (
+          {ministries.map((m) => (
             <button
               key={m.id}
               onClick={() => setSelectedTab(m.id)}
@@ -125,7 +150,7 @@ export const MinistriesSection: React.FC<MinistriesSectionProps> = ({ onSelectMi
                 {/* Footer / Trigger */}
                 <div className="pt-4 border-t border-white/10 flex items-center justify-between mt-auto">
                   <div className="text-[11px] text-slate-400">
-                    <span className="font-semibold text-white">{ministry.stats.membersCount}+</span> Members
+                    <span className="font-semibold text-white">{ministry.stats.membersCount}</span> {ministry.stats.membersCount === 1 ? 'Active Member' : 'Active Members'}
                   </div>
 
                   <button

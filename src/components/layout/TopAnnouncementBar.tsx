@@ -7,7 +7,7 @@ interface TopAnnouncementBarProps {
 
 export const TopAnnouncementBar: React.FC<TopAnnouncementBarProps> = ({ onPlanVisitClick }) => {
   return (
-    <div className="bg-gradient-to-r from-dpc-navy-900 via-dpc-navy-800 to-dpc-navy-900 text-xs sm:text-sm text-slate-300 border-b border-dpc-gold-500/20 py-2 px-4 relative z-50">
+    <div className="bg-dpc-navy-950/40 backdrop-blur-md text-xs sm:text-sm text-slate-300 border-b border-white/10 py-2 px-4 relative z-50">
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
         <div className="flex items-center gap-2 justify-center sm:justify-start">
           <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-red-950/80 text-red-400 border border-red-500/40">

@@ -5,6 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:all": "node dev-all.mjs",
+    "start:all": "node dev-all.mjs",
+    "dev:backend": "npm --prefix \"../DPC-ManagementSystem/server\" run dev",
     "dev:mem": "node --max-old-space-size=4096 node_modules/vite/bin/vite.js",
     "build": "tsc && vite build",
     "preview": "vite preview",

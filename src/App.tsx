@@ -6,7 +6,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 // Domain Components
-import { TopAnnouncementBar } from './components/layout/TopAnnouncementBar';
 import { StickyNavbar } from './components/layout/StickyNavbar';
 import { HeroBanner } from './components/hero/HeroBanner';
 import { ServiceCountdown } from './components/hero/ServiceCountdown';
@@ -70,10 +69,7 @@ export const App: React.FC = () => {
   return (
     <div ref={mainRef} className="min-h-screen flex flex-col bg-dpc-navy-950 text-slate-100 selection:bg-dpc-gold-500 selection:text-dpc-navy-950">
       
-      {/* 1. Top Announcement Marquee */}
-      <TopAnnouncementBar onPlanVisitClick={() => setIsPlanVisitOpen(true)} />
-
-      {/* 2. Sticky Header & Navigation */}
+      {/* Sticky Header & Navigation */}
       <StickyNavbar
         onPlanVisitClick={() => setIsPlanVisitOpen(true)}
       />

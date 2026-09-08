@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { Calendar, Clock, MapPin, ArrowRight, BellRing } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Calendar, Clock, MapPin, ArrowRight, BellRing, Pin, Megaphone, CheckCircle2 } from 'lucide-react';
 import { EVENTS_DATA } from '../../data/eventsData';
 import { ChurchEvent } from '../../types/church';
 import { ImageStreamHero, StreamImage } from '@/components/ui/image-stream-hero';
+import { fetchAnnouncements, fetchEvents, BackendAnnouncement } from '../../services/api';
 
 interface AnnouncementsSectionProps {
   onSelectEvent: (event: ChurchEvent) => void;
@@ -54,12 +55,34 @@ const CHURCH_EVENT_STREAM_IMAGES: StreamImage[] = [
 
 export const AnnouncementsSection: React.FC<AnnouncementsSectionProps> = ({ onSelectEvent }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [events, setEvents] = useState<ChurchEvent[]>(EVENTS_DATA);
+  const [announcements, setAnnouncements] = useState<BackendAnnouncement[]>([]);
+  const [isLiveEvents, setIsLiveEvents] = useState(false);
+  const [isLiveAnnouncements, setIsLiveAnnouncements] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadData() {
+      const [eventsRes, annRes] = await Promise.all([
+        fetchEvents(),
+        fetchAnnouncements(),
+      ]);
+      if (isMounted) {
+        setEvents(eventsRes.data);
+        setIsLiveEvents(eventsRes.isLive);
+        setAnnouncements(annRes.data);
+        setIsLiveAnnouncements(annRes.isLive);
+      }
+    }
+    loadData();
+    return () => { isMounted = false; };
+  }, []);
 
   const categories = ['all', 'Youth', 'Worship', 'Discipleship', 'Outreach', 'Fellowship'];
 
   const filteredEvents = selectedCategory === 'all'
-    ? EVENTS_DATA
-    : EVENTS_DATA.filter((e) => e.category.toLowerCase() === selectedCategory.toLowerCase());
+    ? events
+    : events.filter((e) => e.category.toLowerCase() === selectedCategory.toLowerCase());
 
   return (
     <section id="events" className="py-16 sm:py-20 bg-gradient-to-b from-dpc-navy-950 via-dpc-navy-900 to-dpc-navy-950 relative overflow-hidden">
@@ -114,7 +137,7 @@ export const AnnouncementsSection: React.FC<AnnouncementsSectionProps> = ({ onSe
           </div>
 
           {/* Category Filter Pills */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 no-scrollbar">
+          <div className="flex flex-wrap items-center gap-2">
             {categories.map((cat) => (
               <button
                 key={cat}
@@ -130,6 +153,64 @@ export const AnnouncementsSection: React.FC<AnnouncementsSectionProps> = ({ onSe
             ))}
           </div>
         </div>
+
+        {/* Live Church Announcements from Database */}
+        {announcements.length > 0 && (
+          <div className="mb-12">
+            <div className="flex items-center gap-2 mb-4">
+              <Megaphone className="w-4 h-4 text-dpc-gold-400" />
+              <h3 className="text-sm font-bold uppercase tracking-wider text-dpc-gold-300">
+                Official Ministry Bulletins ({announcements.length})
+              </h3>
+              {isLiveAnnouncements && (
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-500/40">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  Connected
+                </span>
+              )}
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {announcements.map((ann) => (
+                <div
+                  key={ann.id}
+                  className="glass-panel rounded-2xl p-5 border-dpc-gold-500/30 hover:border-dpc-gold-400 transition-all flex flex-col justify-between relative overflow-hidden group"
+                >
+                  <div className="flex items-start justify-between gap-3 mb-2">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      {ann.is_pinned && (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-red-950 text-red-400 border border-red-500/40">
+                          <Pin className="w-3 h-3" />
+                          Pinned
+                        </span>
+                      )}
+                      {ann.ministry_name && (
+                        <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-dpc-navy-800 text-dpc-gold-300 border border-dpc-gold-500/30">
+                          {ann.ministry_name}
+                        </span>
+                      )}
+                    </div>
+                    {ann.created_at && (
+                      <span className="text-[11px] text-slate-400">
+                        {new Date(ann.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                      </span>
+                    )}
+                  </div>
+                  <h4 className="text-base font-bold text-white font-serif mb-1 group-hover:text-dpc-gold-300 transition-colors">
+                    {ann.title}
+                  </h4>
+                  <p className="text-xs sm:text-sm text-slate-300 font-light leading-relaxed mb-3">
+                    {ann.body}
+                  </p>
+                  {ann.author_name && (
+                    <div className="text-[11px] text-slate-400 pt-2 border-t border-white/5">
+                      Posted by <span className="text-slate-200 font-medium">{ann.author_name}</span> {ann.author_role ? `(${ann.author_role})` : ''}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Events Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

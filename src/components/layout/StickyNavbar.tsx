@@ -14,8 +14,9 @@ export const StickyNavbar: React.FC<StickyNavbarProps> = ({
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 30);
+      setIsScrolled(window.scrollY > 20);
     };
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -30,10 +31,10 @@ export const StickyNavbar: React.FC<StickyNavbarProps> = ({
 
   return (
     <header
-      className={`sticky top-0 z-40 w-full transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-500 ease-in-out ${
         isScrolled
-          ? 'glass-nav py-3 shadow-lg shadow-black/40'
-          : 'bg-dpc-navy-950/90 backdrop-blur-md py-4 border-b border-white/5'
+          ? 'bg-dpc-navy-950/90 backdrop-blur-xl py-3 border-b border-dpc-gold-500/25 shadow-xl shadow-black/60'
+          : 'bg-transparent backdrop-blur-md py-5 border-b border-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

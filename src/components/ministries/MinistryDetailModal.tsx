@@ -62,7 +62,7 @@ export const MinistryDetailModal: React.FC<MinistryDetailModalProps> = ({
               {ministry.ageBracket} ({ministry.ageRange})
             </span>
             <span className="text-xs text-slate-400">
-              {ministry.stats.membersCount} Active Members • {ministry.stats.activeGroups} Small Groups
+              {ministry.stats.membersCount} {ministry.stats.membersCount === 1 ? 'Active Member' : 'Active Members'} • {ministry.stats.activeGroups} Small Groups
             </span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-bold font-serif text-white">
