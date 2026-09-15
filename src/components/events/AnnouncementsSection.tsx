@@ -158,9 +158,7 @@ export const AnnouncementsSection: React.FC<AnnouncementsSectionProps> = ({
       <ChurchVideoHub
         onPlanVisitClick={onPlanVisitClick || (() => { })}
         onSelectMinistryModal={(ministryId) => {
-          const match = (ministries && ministries.length > 0 ? ministries : MINISTRIES_DATA).find(
-            (m) => m.id === ministryId
-          ) || MINISTRIES_DATA.find((m) => m.id === ministryId);
+          const match = MINISTRIES_DATA.find((m) => m.id === ministryId);
           if (match && onSelectMinistry) {
             onSelectMinistry(match);
           }
