@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Maximize2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export interface TestimonialItem {
@@ -18,6 +18,7 @@ export interface CircularTestimonialsProps {
   autoplay?: boolean;
   autoplayInterval?: number;
   className?: string;
+  onImageClick?: (index: number) => void;
 }
 
 export function CircularTestimonials({
@@ -25,6 +26,7 @@ export function CircularTestimonials({
   autoplay = false,
   autoplayInterval = 6000,
   className,
+  onImageClick,
 }: CircularTestimonialsProps) {
   const [active, setActive] = useState(0);
 
@@ -109,12 +111,23 @@ export function CircularTestimonials({
                         ease: "easeInOut",
                       },
                     }}
-                    className="absolute inset-0 rounded-3xl overflow-hidden shadow-2xl border border-dpc-gold-500/40 bg-dpc-navy-950"
+                    onClick={() => {
+                      if (isActive && onImageClick) {
+                        onImageClick(index);
+                      }
+                    }}
+                    className={cn(
+                      "absolute inset-0 rounded-3xl overflow-hidden shadow-2xl border border-dpc-gold-500/40 bg-dpc-navy-950",
+                      isActive && onImageClick ? "cursor-pointer group/card" : ""
+                    )}
                   >
                     <img
                       src={item.src}
                       alt={item.name}
-                      className="w-full h-full object-cover object-center select-none pointer-events-none"
+                      className={cn(
+                        "w-full h-full object-cover object-center select-none transition-transform duration-500",
+                        isActive && onImageClick ? "group-hover/card:scale-105" : "pointer-events-none"
+                      )}
                     />
 
                     {/* Gradient Overlay */}
@@ -125,6 +138,16 @@ export function CircularTestimonials({
                       <div className="absolute top-3 left-3 z-20">
                         <span className="px-3 py-1 rounded-full text-[11px] font-bold bg-dpc-navy-950/90 text-dpc-gold-300 border border-dpc-gold-500/50 backdrop-blur-md shadow-md">
                           {item.tag}
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Full-screen indicator on hover */}
+                    {isActive && onImageClick && (
+                      <div className="absolute bottom-3 right-3 z-20 opacity-0 group-hover/card:opacity-100 transition-opacity duration-200">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-black/80 text-white border border-white/30 backdrop-blur-md shadow-lg">
+                          <Maximize2 className="w-3 h-3 text-dpc-gold-400" />
+                          <span>View Full</span>
                         </span>
                       </div>
                     )}

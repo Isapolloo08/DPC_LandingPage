@@ -126,26 +126,49 @@ export const MinistriesSection: React.FC<MinistriesSectionProps> = ({ onSelectMi
                 <div className={`absolute -top-12 -right-12 w-32 h-32 bg-gradient-to-br ${ministry.color} opacity-10 rounded-full blur-xl group-hover:opacity-25 transition-opacity`}></div>
 
                 <div>
+                  {/* Ministry Live Photo Preview */}
+                  {ministry.eventPhotos && ministry.eventPhotos.length > 0 && (
+                    <div
+                      onClick={() => onSelectMinistry(ministry)}
+                      className="relative w-full h-40 sm:h-44 mb-4 rounded-2xl overflow-hidden group/img cursor-pointer border border-white/10 shadow-md"
+                    >
+                      <img
+                        src={ministry.eventPhotos[0].url}
+                        alt={ministry.name}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                      <span className="absolute top-2.5 right-2.5 text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-black/75 text-dpc-gold-300 border border-dpc-gold-500/30 backdrop-blur-sm shadow-sm">
+                        {ministry.ageRange}
+                      </span>
+                      <span className="absolute bottom-2 left-2.5 text-[10px] font-medium text-slate-200 truncate max-w-[90%] drop-shadow-md">
+                        📸 {ministry.eventPhotos[0].caption}
+                      </span>
+                    </div>
+                  )}
+
                   {/* Top Meta Header */}
-                  <div className="flex items-center justify-between gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-2xl bg-dpc-navy-800 border border-dpc-gold-500/30 flex items-center justify-center text-dpc-gold-400 shadow-md group-hover:scale-105 group-hover:text-dpc-gold-300 transition-all">
-                      <Icon className="w-6 h-6" />
+                  <div className="flex items-center justify-between gap-3 mb-3">
+                    <div className="w-11 h-11 rounded-xl bg-dpc-navy-800 border border-dpc-gold-500/30 flex items-center justify-center text-dpc-gold-400 shadow-md group-hover:scale-105 group-hover:text-dpc-gold-300 transition-all">
+                      <Icon className="w-5 h-5" />
                     </div>
 
-                    <span className="text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-dpc-gold-500/10 text-dpc-gold-300 border border-dpc-gold-500/30">
-                      {ministry.ageRange}
+                    <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-dpc-gold-500/10 text-dpc-gold-300 border border-dpc-gold-500/30">
+                      {ministry.ageBracket}
                     </span>
                   </div>
 
                   {/* Title & Tagline */}
-                  <h3 className="text-xl font-bold text-white font-serif group-hover:text-dpc-gold-300 transition-colors mb-1">
+                  <h3 className="text-lg sm:text-xl font-bold text-white font-serif group-hover:text-dpc-gold-300 transition-colors mb-1">
                     {ministry.name}
                   </h3>
                   <p className="text-xs font-medium text-dpc-gold-400/90 mb-3">
                     {ministry.tagline}
                   </p>
 
-                  <p className="text-xs sm:text-sm text-slate-300 font-light leading-relaxed mb-5 line-clamp-3">
+                  <p className="text-xs sm:text-sm text-slate-300 font-light leading-relaxed mb-4 line-clamp-2 sm:line-clamp-3">
                     {ministry.description}
                   </p>
 

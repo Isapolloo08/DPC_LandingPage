@@ -1,59 +1,73 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, MapPin, ArrowRight, BellRing, Pin, Megaphone, CheckCircle2, Tv, } from 'lucide-react';
 import { EVENTS_DATA } from '../../data/eventsData';
-import { ChurchEvent } from '../../types/church';
+import { ChurchEvent, Ministry } from '../../types/church';
+import { MINISTRIES_DATA } from '../../data/ministriesData';
 import { ImageStreamHero, StreamImage } from '@/components/ui/image-stream-hero';
 import { fetchAnnouncements, fetchEvents, BackendAnnouncement } from '../../services/api';
-import { ChurchVideoHub, } from '../video/ChurchVideoHub';
+import { ChurchVideoHub } from '../video/ChurchVideoHub';
 import { ScriptureReveal } from '../ui/ScriptureReveal';
 
 
 interface AnnouncementsSectionProps {
   onSelectEvent: (event: ChurchEvent) => void;
   onPlanVisitClick?: () => void;
+  onSelectMinistry?: (ministry: Ministry) => void;
 }
 
-// Curated church event and ministry gathering photographs (Optimized web sizes for smooth 60fps rendering)
+// Import real authentic photos from each ministry folder in src/assets
+import streamKinder from '@/assets/Kinder Ministry/516368798_4004060663255125_3940156298598136062_n.jpg';
+import streamElem from '@/assets/Elementary Ministry/480577141_481392148377786_6333824624822562519_n.jpg';
+import streamHs from '@/assets/High School Ministry/680044493_935616212628115_2898471636377619378_n.jpg';
+import streamYouthCamp from '@/assets/Youth Ministry/656680392_958771106489110_8611197159791022889_n.jpg';
+import streamYouthPraise from '@/assets/Youth Ministry/714759264_1015627274136826_7581065074620186600_n.jpg';
+import streamYA from '@/assets/Young Adult Ministry/505320113_661118810260117_450252600683907860_n.jpg';
+import streamYAMission from '@/assets/Young Adult Ministry/690603367_927892950249367_8826331412381259866_n.jpg';
+import streamCouples from '@/assets/Junior Adult Minitry/615576920_889621683718381_8998977265371590367_n.jpg';
+import streamSeniors from '@/assets/Old Adult Ministry/722769534_122172250904944863_7045558778597727105_n.jpg';
+import streamSeniorsAgape from '@/assets/Old Adult Ministry/724408784_122172253130944863_6588021141249655795_n.jpg';
+
+// Curated church event and ministry gathering photographs from real DPC community
 const CHURCH_EVENT_STREAM_IMAGES: StreamImage[] = [
   {
-    src: 'https://images.unsplash.com/photo-1544427920-c49ccfb85579?q=75&w=600&auto=format&fit=crop',
-    alt: 'Young Adults Theology Roundtable & Sola Scriptura Study',
+    src: streamYouthCamp,
+    alt: 'Camarines Norte Youth Camp & Retreat Gathering',
   },
   {
-    src: 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=75&w=600&auto=format&fit=crop',
-    alt: 'Grace Kids Sunday School & Children Catechism Class',
+    src: streamKinder,
+    alt: 'Seeds of Grace Sunday School & Children Bible Storytelling',
   },
   {
-    src: 'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?q=75&w=600&auto=format&fit=crop',
-    alt: 'Reformation Theological Symposium & Expository Teaching',
+    src: streamHs,
+    alt: 'Ignite Teens High School Fellowship & Discipleship',
   },
   {
-    src: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?q=75&w=600&auto=format&fit=crop',
-    alt: 'Daet Community Medical & Dental Gospel Mission Outreach',
+    src: streamElem,
+    alt: 'Covenant Kids Elementary Sunday School & Vacation Bible School',
   },
   {
-    src: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=75&w=600&auto=format&fit=crop',
-    alt: 'Couples & Family Covenant Retreat in Camarines Norte',
+    src: streamYouthPraise,
+    alt: 'DPC Sanctuary Acoustic Praise & Band Exaltation Team',
   },
   {
-    src: 'https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=75&w=600&auto=format&fit=crop',
-    alt: 'Resurrection Worship & Churchwide Agape Fellowship Feast',
+    src: streamYA,
+    alt: 'Ambassadors for Christ Young Adults Roundtable & Fellowship',
   },
   {
-    src: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=75&w=600&auto=format&fit=crop',
-    alt: 'DPC Sanctuary Choir & Acoustic Exaltation Team',
+    src: streamCouples,
+    alt: 'Pillars of Faith Couples & Family Covenant Retreat',
   },
   {
-    src: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?q=75&w=600&auto=format&fit=crop',
-    alt: 'DPC Sunday School & Youth Discipleship Classrooms',
+    src: streamYAMission,
+    alt: 'Daet Community Gospel Outreach & Medical Mission',
   },
   {
-    src: 'https://images.unsplash.com/photo-1470240731273-7821a6eeb6bd?q=75&w=600&auto=format&fit=crop',
-    alt: 'Bagasbas Eco-Campfire Praise & Testimonies Night',
+    src: streamSeniors,
+    alt: 'Golden Heritage Senior Saints Morning Devotions & Prayer',
   },
   {
-    src: 'https://images.unsplash.com/photo-1499209974431-9dddcece7f88?q=75&w=600&auto=format&fit=crop',
-    alt: 'Wednesday Evening Corporate Prayer & Fasting Assembly',
+    src: streamSeniorsAgape,
+    alt: 'Churchwide Thanksgiving & Agape Fellowship Gathering',
   },
 ];
 
@@ -141,7 +155,17 @@ export const AnnouncementsSection: React.FC<AnnouncementsSectionProps> = ({
       {/* ========================================================= */}
       {/* --- 2. VIRTUAL CINEMA & MINISTRY VIDEO ORIENTATION HUB --- */}
       {/* ========================================================= */}
-      <ChurchVideoHub onPlanVisitClick={onPlanVisitClick || (() => { })} />
+      <ChurchVideoHub
+        onPlanVisitClick={onPlanVisitClick || (() => { })}
+        onSelectMinistryModal={(ministryId) => {
+          const match = (ministries && ministries.length > 0 ? ministries : MINISTRIES_DATA).find(
+            (m) => m.id === ministryId
+          ) || MINISTRIES_DATA.find((m) => m.id === ministryId);
+          if (match && onSelectMinistry) {
+            onSelectMinistry(match);
+          }
+        }}
+      />
 
       {/* ========================================================= */}
       {/* --- 3. LIVE ANNOUNCEMENTS & UPCOMING EVENTS CALENDAR --- */}

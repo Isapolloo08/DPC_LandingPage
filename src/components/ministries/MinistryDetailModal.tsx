@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { X, Calendar, MapPin, User, BookOpen, CheckCircle2, Send, Sparkles, Camera } from 'lucide-react';
+import { X, Calendar, MapPin, User, BookOpen, CheckCircle2, Send, Sparkles, Camera, Maximize2 } from 'lucide-react';
 import { Ministry } from '../../types/church';
 import { CircularTestimonials, TestimonialItem } from '@/components/ui/circular-testimonials';
+import { ImageLightboxModal, LightboxImage } from '@/components/ui/ImageLightboxModal';
 
 interface MinistryDetailModalProps {
   ministry: Ministry | null;
@@ -18,6 +19,7 @@ export const MinistryDetailModal: React.FC<MinistryDetailModalProps> = ({
   const [contact, setContact] = useState('');
   const [joinedSuccess, setJoinedSuccess] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   if (!isOpen || !ministry) return null;
 
@@ -48,17 +50,25 @@ export const MinistryDetailModal: React.FC<MinistryDetailModalProps> = ({
     }))
     : [];
 
+  const lightboxImages: LightboxImage[] = ministry.eventPhotos
+    ? ministry.eventPhotos.map((photo) => ({
+      url: photo.url,
+      caption: photo.caption,
+      tag: photo.tag || `${ministry.name}`,
+      title: `${ministry.name} • ${photo.tag || 'Ministry Event'}`,
+    }))
+    : [];
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 md:p-6 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="relative w-full max-w-3xl bg-[#0c192c] rounded-2xl sm:rounded-3xl shadow-2xl border border-dpc-gold-500/50 max-h-[94vh] sm:max-h-[90vh] flex flex-col overflow-hidden">
 
         {/* Sticky Modal Header with Smooth Scroll Transition */}
         <div
-          className={`sticky top-0 z-30 px-4 py-3.5 sm:px-8 sm:py-5 flex items-start justify-between gap-3 transition-all duration-300 ${
-            isScrolled
+          className={`sticky top-0 z-30 px-4 py-3.5 sm:px-8 sm:py-5 flex items-start justify-between gap-3 transition-all duration-300 ${isScrolled
               ? 'bg-[#0c192c]/95 backdrop-blur-md border-b border-white/15 shadow-lg shadow-black/40'
               : 'bg-[#0c192c] border-b border-transparent shadow-none'
-          }`}
+            }`}
         >
           <div>
             <div className="flex items-center gap-2 mb-1.5 flex-wrap">
@@ -104,7 +114,7 @@ export const MinistryDetailModal: React.FC<MinistryDetailModalProps> = ({
                   <span>Ministry Events & Live Moments</span>
                 </h4>
                 <span className="text-[11px] text-slate-400 font-light">
-                  Click arrows to browse stories
+                  Click photo to view full screen
                 </span>
               </div>
 
@@ -112,6 +122,7 @@ export const MinistryDetailModal: React.FC<MinistryDetailModalProps> = ({
                 testimonials={ministryStories}
                 autoplay={true}
                 autoplayInterval={5000}
+                onImageClick={(idx) => setLightboxIndex(idx)}
               />
             </div>
           )}
@@ -180,6 +191,48 @@ export const MinistryDetailModal: React.FC<MinistryDetailModalProps> = ({
             </div>
           </div>
 
+          {/* Full Ministry Event Photos Gallery Grid */}
+          {ministry.eventPhotos && ministry.eventPhotos.length > 0 && (
+            <div className="mb-6 pt-4 border-t border-white/10">
+              <div className="flex items-center justify-between gap-2 mb-3">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-dpc-gold-400 flex items-center gap-1.5">
+                  <Camera className="w-3.5 h-3.5" />
+                  <span>All {ministry.name} Photos ({ministry.eventPhotos.length})</span>
+                </h4>
+                <span className="text-[11px] text-slate-400 font-light">
+                  Click to enlarge
+                </span>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                {ministry.eventPhotos.map((photo, pIdx) => (
+                  <div
+                    key={pIdx}
+                    onClick={() => setLightboxIndex(pIdx)}
+                    className="relative aspect-video rounded-xl overflow-hidden group border border-white/10 hover:border-dpc-gold-400/60 shadow-sm bg-black/40 cursor-pointer transition-all hover:scale-[1.02]"
+                  >
+                    <img
+                      src={photo.url}
+                      alt={photo.caption}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-between p-2">
+                      <div className="flex justify-end">
+                        <span className="p-1 rounded-full bg-black/70 text-dpc-gold-300 border border-white/20 shadow-md">
+                          <Maximize2 className="w-3 h-3" />
+                        </span>
+                      </div>
+                      <p className="text-[10px] text-white font-medium line-clamp-2 leading-tight">
+                        {photo.caption}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Join / Connect Form */}
           <div className="pt-6 border-t border-white/10">
             {joinedSuccess ? (
@@ -226,6 +279,15 @@ export const MinistryDetailModal: React.FC<MinistryDetailModalProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Full-screen Image Lightbox Modal */}
+      <ImageLightboxModal
+        images={lightboxImages}
+        currentIndex={lightboxIndex ?? 0}
+        isOpen={lightboxIndex !== null}
+        onClose={() => setLightboxIndex(null)}
+        onNavigate={(newIdx) => setLightboxIndex(newIdx)}
+      />
     </div>
   );
 };

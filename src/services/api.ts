@@ -2,7 +2,7 @@ import { Ministry, ChurchEvent } from '../types/church';
 import { MINISTRIES_DATA } from '../data/ministriesData';
 import { EVENTS_DATA } from '../data/eventsData';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
 export interface BackendMinistry {
   id: number | string;
@@ -71,6 +71,41 @@ const getMinistryGradient = (color: string | null, index: number): string => {
   return defaultGradients[index % defaultGradients.length];
 };
 
+// Reliable matcher to link backend ministry records with rich local photos & metadata
+const getLocalMinistryMatch = (backendName: string, id: number | string, index: number): Ministry => {
+  const bName = String(backendName || '').toLowerCase().trim();
+  const bId = String(id || '').toLowerCase().trim();
+
+  // 1. Direct ID matches
+  const byId = MINISTRIES_DATA.find(m => m.id.toLowerCase() === bId);
+  if (byId) return byId;
+
+  // 2. Department keyword matches
+  if (bName.includes('kinder') || bName.includes('seed') || bName.includes('toddler') || bName.includes('nursery')) {
+    return MINISTRIES_DATA.find(m => m.id === 'kinder') || MINISTRIES_DATA[0];
+  }
+  if (bName.includes('elem') || bName.includes('covenant') || bName.includes('kid') || bName.includes('grade') || bName.includes('children')) {
+    return MINISTRIES_DATA.find(m => m.id === 'elementary') || MINISTRIES_DATA[1];
+  }
+  if (bName.includes('high') || bName.includes('teen') || bName.includes('ignite') || bName.includes('cyc')) {
+    return MINISTRIES_DATA.find(m => m.id === 'high-school') || MINISTRIES_DATA[2];
+  }
+  if (bName.includes('college') || bName.includes('campus') || (bName.includes('youth') && !bName.includes('high'))) {
+    return MINISTRIES_DATA.find(m => m.id === 'youth') || MINISTRIES_DATA[3];
+  }
+  if (bName.includes('young') || bName.includes('ambassador') || bName.includes('pro') || bName.includes('koinonia') || bName.includes('single')) {
+    return MINISTRIES_DATA.find(m => m.id === 'young-adult') || MINISTRIES_DATA[4];
+  }
+  if (bName.includes('junior') || bName.includes('pillar') || bName.includes('parent') || bName.includes('couple') || bName.includes('men') || bName.includes('women') || bName.includes('family')) {
+    return MINISTRIES_DATA.find(m => m.id === 'junior-adult') || MINISTRIES_DATA[5];
+  }
+  if (bName.includes('old') || bName.includes('senior') || bName.includes('golden') || bName.includes('heritage') || bName.includes('caleb') || bName.includes('simeon') || bName.includes('anna')) {
+    return MINISTRIES_DATA.find(m => m.id === 'old-adult') || MINISTRIES_DATA[6];
+  }
+
+  return MINISTRIES_DATA[index % MINISTRIES_DATA.length];
+};
+
 /**
  * Fetch Ministries from Backend API with fallback to local static data
  */
@@ -93,22 +128,16 @@ export async function fetchMinistries(): Promise<{ data: Ministry[]; isLive: boo
       return { data: MINISTRIES_DATA, isLive: false };
     }
 
-    // Merge backend data with rich landing page metadata
+    // Merge backend data with rich landing page metadata and real photos
     const mergedMinistries: Ministry[] = rawMinistries.map((bm, idx) => {
-      // Find matching local preset for additional rich fields (verse, photos, etc.)
-      const localMatch = MINISTRIES_DATA.find(
-        (m) =>
-          m.name.toLowerCase().includes(bm.name.toLowerCase()) ||
-          m.ageBracket.toLowerCase().includes(bm.name.toLowerCase()) ||
-          m.id.toLowerCase() === String(bm.id).toLowerCase()
-      ) || MINISTRIES_DATA[idx % MINISTRIES_DATA.length];
+      const localMatch = getLocalMinistryMatch(bm.name, bm.id, idx);
 
       const ageRange =
         bm.min_age !== null && bm.max_age !== null
           ? `Ages ${bm.min_age} – ${bm.max_age}`
           : bm.min_age !== null
-          ? `Ages ${bm.min_age}+`
-          : localMatch.ageRange;
+            ? `Ages ${bm.min_age}+`
+            : localMatch.ageRange;
 
       const coordinator = bm.coordinators && bm.coordinators.length > 0
         ? bm.coordinators[0].name
@@ -116,9 +145,9 @@ export async function fetchMinistries(): Promise<{ data: Ministry[]; isLive: boo
 
       return {
         id: String(bm.id),
-        name: bm.name,
+        name: localMatch.name || bm.name,
         tagline: localMatch.tagline || `${bm.name} Discipleship Ministry`,
-        ageBracket: bm.name,
+        ageBracket: localMatch.ageBracket || bm.name,
         ageRange,
         iconName: getMinistryIconName(bm.name),
         color: getMinistryGradient(bm.color, idx),
@@ -135,8 +164,8 @@ export async function fetchMinistries(): Promise<{ data: Ministry[]; isLive: boo
             typeof bm.active_members_count === 'number'
               ? bm.active_members_count
               : typeof bm.active_members_count === 'string'
-              ? parseInt(bm.active_members_count, 10) || 0
-              : localMatch.stats.membersCount,
+                ? parseInt(bm.active_members_count, 10) || 0
+                : localMatch.stats.membersCount,
           activeGroups: localMatch.stats.activeGroups,
         },
         eventPhotos: localMatch.eventPhotos,
@@ -201,27 +230,27 @@ export async function fetchEvents(): Promise<{ data: ChurchEvent[]; isLive: bool
       const formattedDate = isNaN(startDate.getTime())
         ? be.start_time
         : startDate.toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric',
-          });
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+        });
 
       const formattedTime = isNaN(startDate.getTime())
         ? '9:00 AM'
         : startDate.toLocaleTimeString('en-US', {
-            hour: 'numeric',
-            minute: '2-digit',
-            hour12: true,
-          });
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true,
+        });
 
       // Category derivation
       const category: ChurchEvent['category'] = be.ministry_name?.toLowerCase().includes('youth')
         ? 'Youth'
         : idx % 3 === 0
-        ? 'Worship'
-        : idx % 3 === 1
-        ? 'Discipleship'
-        : 'Fellowship';
+          ? 'Worship'
+          : idx % 3 === 1
+            ? 'Discipleship'
+            : 'Fellowship';
 
       return {
         id: String(be.id),

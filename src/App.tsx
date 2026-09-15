@@ -111,6 +111,7 @@ export const App: React.FC = () => {
         <AnnouncementsSection
           onSelectEvent={(e) => setSelectedEvent(e)}
           onPlanVisitClick={() => setIsPlanVisitOpen(true)}
+          onSelectMinistry={(m) => setSelectedMinistry(m)}
         />
 
         {/* 8. Location, Directions, Map & Socials */}

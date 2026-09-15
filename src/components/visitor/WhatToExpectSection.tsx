@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import { Car, Shirt, ShieldCheck, UtensilsCrossed, Music, Heart, HelpCircle, ArrowRight, Sparkles } from 'lucide-react';
 import { ScriptureReveal } from '../ui/ScriptureReveal';
 
+import kidsImg from '@/assets/Kinder Ministry/516368798_4004060663255125_3940156298598136062_n.jpg';
+import attireImg from '@/assets/Young Adult Ministry/505320113_661118810260117_450252600683907860_n.jpg';
+import lunchImg from '@/assets/Old Adult Ministry/724408784_122172253130944863_6588021141249655795_n.jpg';
+import worshipImg from '@/assets/Youth Ministry/714759264_1015627274136826_7581065074620186600_n.jpg';
+
 interface WhatToExpectSectionProps {
   onPlanVisitClick: () => void;
 }
@@ -21,7 +26,8 @@ export const WhatToExpectSection: React.FC<WhatToExpectSectionProps> = ({ onPlan
         'Designated accessible spots for senior saints and families with small infants right in front of the main entrance.',
         'Arrive at 8:00 AM for Adult Bible Study / High School Worship / Kids Sunday School, or by 9:30 AM for the 9:40 AM Main Worship Service.'
       ],
-      badge: 'Arrival Guide'
+      badge: 'Arrival Guide',
+      image: '/images/church-building.jpg'
     },
     {
       id: 'attire',
@@ -34,7 +40,8 @@ export const WhatToExpectSection: React.FC<WhatToExpectSectionProps> = ({ onPlan
         'Most members and college youth wear smart-casual, denim, or Sunday semi-formal.',
         'Our sanctuary and youth hall are well-ventilated and air-conditioned for your comfort.'
       ],
-      badge: 'Attire'
+      badge: 'Attire',
+      image: attireImg
     },
     {
       id: 'kids',
@@ -47,7 +54,8 @@ export const WhatToExpectSection: React.FC<WhatToExpectSectionProps> = ({ onPlan
         'Age-tailored Bible story lessons, crafts, and memory verses from 8:00 AM to 9:30 AM.',
         'After 9:30 AM (while adults attend Main Worship), kids enjoy supervised playtime, interactive games, and inspiring Christian animations in our kids hall.'
       ],
-      badge: 'Family & Children'
+      badge: 'Family & Children',
+      image: kidsImg
     },
     {
       id: 'lunch',
@@ -60,7 +68,8 @@ export const WhatToExpectSection: React.FC<WhatToExpectSectionProps> = ({ onPlan
         'As our first-time guest, lunch is completely on us! No need to bring anything.',
         'An easy, no-pressure opportunity to chat with our pastoral team, elders, and young adults.'
       ],
-      badge: 'Community Meal'
+      badge: 'Community Meal',
+      image: lunchImg
     },
     {
       id: 'worship',
@@ -73,7 +82,8 @@ export const WhatToExpectSection: React.FC<WhatToExpectSectionProps> = ({ onPlan
         'Congregational singing blending majestic hymns with contemporary praise songs led by our youth and music teams.',
         'Celebration of the Lord’s Supper (Holy Communion) on designated Lord’s Days for all baptized believers in good standing.'
       ],
-      badge: 'Sunday Liturgy'
+      badge: 'Sunday Liturgy',
+      image: worshipImg
     }
   ];
 
@@ -184,6 +194,24 @@ export const WhatToExpectSection: React.FC<WhatToExpectSectionProps> = ({ onPlan
                   <span>Visitor Friendly</span>
                 </span>
               </div>
+
+              {/* Step Photo Feature */}
+              {guideItems[activeTab].image && (
+                <div className="relative w-full h-44 sm:h-52 rounded-2xl overflow-hidden mb-5 border border-white/10 shadow-lg">
+                  <img
+                    src={guideItems[activeTab].image}
+                    alt={guideItems[activeTab].title}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover animate-in fade-in zoom-in-95 duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-3">
+                    <span className="text-[11px] font-semibold text-white drop-shadow">
+                      {guideItems[activeTab].tagline}
+                    </span>
+                  </div>
+                </div>
+              )}
 
               {/* Summary Statement */}
               <p className="text-sm sm:text-base md:text-lg text-slate-200 font-medium mb-5 sm:mb-6 leading-relaxed">

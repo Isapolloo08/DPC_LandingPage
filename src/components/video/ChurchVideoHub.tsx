@@ -1,14 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Play,
-  Pause,
   Film,
-  Sparkles,
   Clock,
   Users,
   CheckCircle2,
-  Maximize2,
-  Volume2,
   Compass,
   ArrowRight,
   Tv,
@@ -17,10 +13,15 @@ import {
   RotateCcw,
   Church,
   GraduationCap,
+  Sparkles,
+  Calendar,
+  ExternalLink,
 } from 'lucide-react';
 import { VIDEO_ORIENTATIONS_DATA } from '../../data/videoOrientationsData';
-import { VideoOrientation, VideoChapter } from '../../types/church';
+import { VideoOrientation, VideoChapter, Ministry } from '../../types/church';
 import { ScriptureReveal } from '../ui/ScriptureReveal';
+import { fetchMinistries } from '../../services/api';
+import { MINISTRIES_DATA } from '../../data/ministriesData';
 
 interface ChurchVideoHubProps {
   onPlanVisitClick: () => void;
@@ -29,6 +30,7 @@ interface ChurchVideoHubProps {
 
 export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
   onPlanVisitClick,
+  onSelectMinistryModal,
 }) => {
   const [selectedVideo, setSelectedVideo] = useState<VideoOrientation>(
     VIDEO_ORIENTATIONS_DATA[0]
@@ -37,32 +39,69 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [copiedLink, setCopiedLink] = useState<boolean>(false);
   const [activeChapter, setActiveChapter] = useState<number | null>(null);
+  const [ministriesMap, setMinistriesMap] = useState<Record<string, Ministry>>({});
+  const [isBackendLive, setIsBackendLive] = useState<boolean>(false);
 
   const playerContainerRef = useRef<HTMLDivElement>(null);
+  const videoElementRef = useRef<HTMLVideoElement>(null);
 
-  // Filter videos based on category
+  // Fetch live ministries and coordinators from backend on mount
+  useEffect(() => {
+    let isMounted = true;
+    async function loadMinistryData() {
+      try {
+        const { data, isLive } = await fetchMinistries();
+        if (!isMounted) return;
+        setIsBackendLive(isLive);
+        const map: Record<string, Ministry> = {};
+        (data && data.length > 0 ? data : MINISTRIES_DATA).forEach((m) => {
+          map[m.id] = m;
+        });
+        setMinistriesMap(map);
+      } catch (err) {
+        console.warn('Could not fetch live ministries for Video Hub, using local data:', err);
+        const map: Record<string, Ministry> = {};
+        MINISTRIES_DATA.forEach((m) => {
+          map[m.id] = m;
+        });
+        setMinistriesMap(map);
+      }
+    }
+    loadMinistryData();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // Helper to get enriched live ministry for a video
+  const getLiveMinistry = (ministryId?: string): Ministry | undefined => {
+    if (!ministryId) return undefined;
+    return ministriesMap[ministryId] || MINISTRIES_DATA.find((m) => m.id === ministryId);
+  };
+
+  // Filter categories
   const categories = [
-    { id: 'all', label: 'All Orientations (8)', icon: Film },
-    { id: 'general', label: 'General Sanctuary Tour', icon: Church },
-    { id: 'youth-kids', label: 'Youth & Children (4)', icon: GraduationCap },
+    { id: 'all', label: `All Orientations (${VIDEO_ORIENTATIONS_DATA.length})`, icon: Film },
+    { id: 'general', label: 'General & CNYC Tour (2)', icon: Church },
+    { id: 'children-youth', label: 'Children & Youth (4)', icon: GraduationCap },
     { id: 'adults', label: 'Adults & Seniors (3)', icon: Users },
   ];
 
   const filteredVideos = VIDEO_ORIENTATIONS_DATA.filter((v) => {
     if (selectedCategory === 'all') return true;
-    if (selectedCategory === 'general') return v.category === 'general';
-    if (selectedCategory === 'youth-kids')
+    if (selectedCategory === 'general') return v.category === 'general' || v.category === 'facilities';
+    if (selectedCategory === 'children-youth')
       return (
-        v.id === 'seeds-of-grace' ||
-        v.id === 'covenant-kids' ||
-        v.id === 'cyc-youth' ||
-        v.id === 'koinonia-ya'
+        v.ministryId === 'kinder' ||
+        v.ministryId === 'elementary' ||
+        v.ministryId === 'high-school' ||
+        v.ministryId === 'youth'
       );
     if (selectedCategory === 'adults')
       return (
-        v.id === 'men-of-grace' ||
-        v.id === 'titus-2-women' ||
-        v.id === 'calebs-generation'
+        v.ministryId === 'young-adult' ||
+        v.ministryId === 'junior-adult' ||
+        v.ministryId === 'old-adult'
       );
     return true;
   });
@@ -86,6 +125,10 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
   const handleSeekChapter = (chapter: VideoChapter, index: number) => {
     setActiveChapter(index);
     setIsPlaying(true);
+    if (videoElementRef.current) {
+      videoElementRef.current.currentTime = chapter.timeSeconds;
+      videoElementRef.current.play().catch(() => {});
+    }
   };
 
   // Share / Copy Link
@@ -96,6 +139,8 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
     setCopiedLink(true);
     setTimeout(() => setCopiedLink(false), 2000);
   };
+
+  const activeMinistry = getLiveMinistry(selectedVideo.ministryId);
 
   return (
     <div
@@ -157,7 +202,7 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
         </div>
 
         {/* ========================================================= */}
-        {/* --- MAIN CINEMA THEATER VIEWPORT (Option 1) --- */}
+        {/* --- MAIN CINEMA THEATER VIEWPORT --- */}
         {/* ========================================================= */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-12">
           
@@ -166,19 +211,35 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
             <div className="relative w-full aspect-video rounded-3xl overflow-hidden bg-black border border-dpc-gold-500/30 shadow-2xl group">
               
               {isPlaying ? (
-                /* Active Video Player Iframe */
-                <div className="w-full h-full relative bg-black">
-                  <iframe
-                    src={`https://www.youtube-nocookie.com/embed/${selectedVideo.youtubeId || 'dQw4w9WgXcQ'}?autoplay=1&rel=0&modestbranding=1&showinfo=0`}
-                    title={selectedVideo.title}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                    className="w-full h-full border-0 absolute inset-0"
-                  />
+                /* Active Video Player */
+                <div className="w-full h-full relative bg-black flex items-center justify-center">
+                  {selectedVideo.videoUrl ? (
+                    <video
+                      ref={videoElementRef}
+                      src={selectedVideo.videoUrl}
+                      controls
+                      autoPlay
+                      playsInline
+                      className="w-full h-full object-contain"
+                    />
+                  ) : (
+                    <iframe
+                      src={`https://www.youtube-nocookie.com/embed/${selectedVideo.youtubeId || 'dQw4w9WgXcQ'}?autoplay=1&rel=0&modestbranding=1&showinfo=0`}
+                      title={selectedVideo.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                      className="w-full h-full border-0 absolute inset-0"
+                    />
+                  )}
                   
                   {/* Floating Stop/Reset Button */}
                   <button
-                    onClick={() => setIsPlaying(false)}
+                    onClick={() => {
+                      if (videoElementRef.current) {
+                        videoElementRef.current.pause();
+                      }
+                      setIsPlaying(false);
+                    }}
                     className="absolute top-3 right-3 z-30 p-2 rounded-xl bg-black/70 hover:bg-black text-white/80 hover:text-white border border-white/20 backdrop-blur-md transition-all text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-lg"
                     title="Close Video / Return to Poster"
                   >
@@ -224,7 +285,7 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
                       </span>
                     </span>
                     <span className="px-3 py-1 rounded-full bg-black/80 border border-white/20 text-white text-xs font-bold backdrop-blur-md shadow-md">
-                      Click to Play Orientation
+                      Click to Play Orientation Video
                     </span>
                   </div>
 
@@ -242,7 +303,7 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
 
             </div>
 
-            {/* Video Chapter Timestamps (If present) */}
+            {/* Video Chapter Timestamps */}
             {selectedVideo.chapters && selectedVideo.chapters.length > 0 && (
               <div className="mt-3.5 p-3 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center gap-2 overflow-x-auto scrollbar-none">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-dpc-gold-400 shrink-0 flex items-center gap-1">
@@ -271,7 +332,7 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
             )}
           </div>
 
-          {/* Video Metadata & Connection Panel */}
+          {/* Video Metadata & Live Database Coordinator Card */}
           <div className="lg:col-span-4 flex flex-col justify-between rounded-3xl glass-panel-gold p-6 sm:p-7 border-dpc-gold-500/40 shadow-2xl space-y-6">
             <div className="space-y-4">
               
@@ -297,24 +358,59 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
                 </p>
               </div>
 
-              {/* Target Audience & Ministry Leader */}
-              <div className="space-y-2 pt-3 border-t border-white/10 text-xs text-slate-300">
+              {/* Orientation Description */}
+              <div className="p-3.5 rounded-2xl bg-dpc-navy-950/80 border border-white/10">
+                <p className="text-xs text-slate-300 leading-relaxed font-light">
+                  {selectedVideo.description}
+                </p>
+              </div>
+
+              {/* Live Target Audience & Ministry Coordinator from Backend */}
+              <div className="space-y-2.5 pt-3 border-t border-white/10 text-xs text-slate-300">
                 {selectedVideo.targetAudience && (
                   <div className="flex items-start gap-2.5">
                     <Users className="w-4 h-4 text-dpc-gold-400 shrink-0 mt-0.5" />
                     <div>
-                      <span className="text-slate-400 block text-[10px] uppercase">Target Age / Audience:</span>
-                      <span className="text-white font-medium">{selectedVideo.targetAudience}</span>
+                      <span className="text-slate-400 block text-[10px] uppercase tracking-wider font-bold">Target Demographic / Age:</span>
+                      <span className="text-white font-medium">
+                        {activeMinistry ? `${activeMinistry.ageBracket} (${activeMinistry.ageRange})` : selectedVideo.targetAudience}
+                      </span>
                     </div>
                   </div>
                 )}
 
-                {selectedVideo.leader && (
+                {/* Coordinator / Leader (Fetched dynamically from Database) */}
+                <div className="flex items-start gap-2.5">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-slate-400 block text-[10px] uppercase tracking-wider font-bold">
+                        Ministry Coordinator / Faculty:
+                      </span>
+                      {isBackendLive && (
+                        <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                          Live DB
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-white font-semibold">
+                      {activeMinistry ? activeMinistry.leader : selectedVideo.leader}
+                      {activeMinistry?.leaderTitle && (
+                        <span className="text-slate-400 font-normal text-[11px] block">
+                          {activeMinistry.leaderTitle}
+                        </span>
+                      )}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Schedule & Location (If mapped to a ministry) */}
+                {activeMinistry?.schedule && (
                   <div className="flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                    <Calendar className="w-4 h-4 text-dpc-gold-400 shrink-0 mt-0.5" />
                     <div>
-                      <span className="text-slate-400 block text-[10px] uppercase">Ministry Faculty / Leadership:</span>
-                      <span className="text-white font-medium">{selectedVideo.leader}</span>
+                      <span className="text-slate-400 block text-[10px] uppercase tracking-wider font-bold">Regular Schedule:</span>
+                      <span className="text-white font-medium">{activeMinistry.schedule}</span>
                     </div>
                   </div>
                 )}
@@ -323,7 +419,7 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
               {/* Key Highlights */}
               <div className="pt-3 border-t border-white/10">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-2">
-                  Key Highlights in This Video:
+                  What You'll Discover in this Orientation:
                 </span>
                 <ul className="space-y-1.5">
                   {selectedVideo.keyHighlights.map((hl, i) => (
@@ -339,6 +435,18 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
 
             {/* Quick Actions */}
             <div className="pt-4 border-t border-white/10 space-y-2.5">
+              {/* If mapped to a ministry, allow opening ministry details modal */}
+              {selectedVideo.ministryId && onSelectMinistryModal && (
+                <button
+                  onClick={() => onSelectMinistryModal(selectedVideo.ministryId!)}
+                  className="w-full py-2.5 px-3 rounded-xl bg-dpc-gold-500/20 hover:bg-dpc-gold-500/30 text-dpc-gold-300 border border-dpc-gold-500/40 text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md hover:scale-[1.01]"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-dpc-gold-400" />
+                  <span>View Full Ministry Gallery & Connect</span>
+                  <ExternalLink className="w-3.5 h-3.5 ml-auto" />
+                </button>
+              )}
+
               <button
                 onClick={onPlanVisitClick}
                 className="w-full py-3 rounded-xl text-xs sm:text-sm font-bold text-dpc-navy-950 bg-gradient-to-r from-dpc-gold-400 via-dpc-gold-300 to-dpc-gold-400 hover:from-dpc-gold-300 hover:to-dpc-gold-200 shadow-gold-glow text-center cursor-pointer transition-all flex items-center justify-center gap-2"
@@ -354,12 +462,12 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
                 {copiedLink ? (
                   <>
                     <Check className="w-3.5 h-3.5 text-emerald-400" />
-                    <span className="text-emerald-400">Video Link Copied!</span>
+                    <span className="text-emerald-400">Orientation Link Copied!</span>
                   </>
                 ) : (
                   <>
                     <Share2 className="w-3.5 h-3.5 text-dpc-gold-400" />
-                    <span>Share This Video Orientation</span>
+                    <span>Share This Orientation Reel</span>
                   </>
                 )}
               </button>
@@ -376,7 +484,7 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
             <div className="flex items-center gap-2">
               <Film className="w-4 h-4 text-dpc-gold-400" />
               <h3 className="text-sm sm:text-base font-bold text-white uppercase tracking-wider">
-                Select a Ministry or Tour Video to Watch
+                Select a Ministry Orientation or Tour Reel to Watch
               </h3>
             </div>
             <span className="text-xs text-slate-400">
@@ -387,6 +495,8 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {filteredVideos.map((video) => {
               const isSelected = selectedVideo.id === video.id;
+              const liveMin = getLiveMinistry(video.ministryId);
+              const coordinator = liveMin ? liveMin.leader : video.leader;
 
               return (
                 <div
@@ -447,7 +557,7 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
 
                     <div className="pt-2.5 mt-2 border-t border-white/10 flex items-center justify-between text-[10px] text-slate-400">
                       <span className="truncate max-w-[140px] font-medium text-slate-300">
-                        {video.leader || 'DPC Ministry'}
+                        👤 {coordinator || 'Ministry Coordinator'}
                       </span>
                       <span className="text-dpc-gold-400 font-semibold group-hover:underline">
                         Watch Reel ↗
