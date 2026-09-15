@@ -74,6 +74,7 @@ const CHURCH_EVENT_STREAM_IMAGES: StreamImage[] = [
 export const AnnouncementsSection: React.FC<AnnouncementsSectionProps> = ({
   onSelectEvent,
   onPlanVisitClick,
+  onSelectMinistry,
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [events, setEvents] = useState<ChurchEvent[]>(EVENTS_DATA);
