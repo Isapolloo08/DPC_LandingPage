@@ -193,8 +193,8 @@ export const AnnouncementsSection: React.FC<AnnouncementsSectionProps> = ({
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
                 className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all shrink-0 cursor-pointer ${selectedCategory === cat
-                    ? 'bg-dpc-gold-400 text-dpc-navy-950 font-bold shadow-gold-glow'
-                    : 'bg-dpc-navy-800 text-slate-300 hover:text-white border border-white/10'
+                  ? 'bg-dpc-gold-400 text-dpc-navy-950 font-bold shadow-gold-glow'
+                  : 'bg-dpc-navy-800 text-slate-300 hover:text-white border border-white/10'
                   }`}
               >
                 {cat === 'all' ? 'All Events' : cat}
@@ -267,8 +267,8 @@ export const AnnouncementsSection: React.FC<AnnouncementsSectionProps> = ({
             <div
               key={event.id}
               className={`rounded-3xl p-5 sm:p-6 md:p-7 flex flex-col justify-between transition-all duration-300 relative group overflow-hidden ${event.featured
-                  ? 'glass-panel-gold border-dpc-gold-500/50 shadow-gold-glow'
-                  : 'glass-panel border-white/10 hover:border-dpc-gold-500/40 hover:-translate-y-1'
+                ? 'glass-panel-gold border-dpc-gold-500/50 shadow-gold-glow'
+                : 'glass-panel border-white/10 hover:border-dpc-gold-500/40 hover:-translate-y-1'
                 }`}
             >
               <div>
