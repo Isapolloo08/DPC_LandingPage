@@ -31,10 +31,10 @@ export const StickyNavbar: React.FC<StickyNavbarProps> = ({
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-500 ease-in-out ${
+      className={`fixed top-0 left-0 right-0 z-50 w-full transform-gpu transition-all duration-300 ease-out ${
         isScrolled
-          ? 'bg-dpc-navy-950/90 backdrop-blur-xl py-3 border-b border-dpc-gold-500/25 shadow-xl shadow-black/60'
-          : 'bg-transparent backdrop-blur-md py-5 border-b border-transparent'
+          ? 'bg-dpc-navy-950/95 md:bg-dpc-navy-950/90 backdrop-blur-md md:backdrop-blur-xl py-3 border-b border-dpc-gold-500/25 shadow-xl shadow-black/60'
+          : 'bg-transparent py-4 sm:py-5 border-b border-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

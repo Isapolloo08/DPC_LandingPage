@@ -3,8 +3,8 @@ import { VideoOrientation } from '../types/church';
 export const VIDEO_ORIENTATIONS_DATA: VideoOrientation[] = [
   {
     id: 'general-orientation',
-    title: 'Welcome to Daet Presbyterian Church: Virtual Tour & Orientation',
-    subtitle: 'Step inside our Sanctuary and discover Christ-centered Lord\'s Day worship in Daet.',
+    title: 'Welcome to DPC & CNYC: Virtual Tour & Orientation',
+    subtitle: 'Step inside our Sanctuary, Youth Center, and discover Christ-centered Lord\'s Day worship in Daet.',
     category: 'general',
     categoryLabel: 'Panglahatan (General Tour)',
     duration: '3:45',
@@ -22,7 +22,7 @@ export const VIDEO_ORIENTATIONS_DATA: VideoOrientation[] = [
     chapters: [
       { timeSeconds: 0, timeLabel: '0:00', title: 'Welcome & Gospel Vision' },
       { timeSeconds: 65, timeLabel: '1:05', title: 'Lord\'s Day Divine Worship' },
-      { timeSeconds: 135, timeLabel: '2:15', title: 'Sunday School & Discipleship' },
+      { timeSeconds: 135, timeLabel: '2:15', title: 'CNYC Youth Center & Hub' },
       { timeSeconds: 195, timeLabel: '3:15', title: 'Plan Your Visit & Directions' },
     ],
   },
@@ -66,12 +66,12 @@ export const VIDEO_ORIENTATIONS_DATA: VideoOrientation[] = [
     keyHighlights: [
       'Weekly thematic small groups studying Systematic Theology & Christian Ethics',
       'Career navigation, workplace ethics, and relationship discipleship',
-      'Supportive Christian community and life group mentorship',
+      'Study hub access at CNYC with high-speed internet for college research',
     ],
     chapters: [
       { timeSeconds: 0, timeLabel: '0:00', title: 'Living for Christ in College & Career' },
       { timeSeconds: 50, timeLabel: '0:50', title: 'Discipleship Circles & Fellowship' },
-      { timeSeconds: 90, timeLabel: '1:30', title: 'Community & Faith Journey' },
+      { timeSeconds: 90, timeLabel: '1:30', title: 'CNYC Study Center & Community' },
     ],
   },
   {
@@ -88,7 +88,7 @@ export const VIDEO_ORIENTATIONS_DATA: VideoOrientation[] = [
     leader: 'Teacher Hannah Perez & Early Childhood Team',
     description: 'A warm, safe, and engaging environment where young toddlers discover God\'s love through cheerful singing, interactive storyboards, and hands-on scripture coloring.',
     keyHighlights: [
-      'Clean, air-conditioned, child-safe nursery classrooms',
+      'Clean, air-conditioned, child-safe nursery classrooms at CNYC',
       'Loving teachers trained in early childhood Christian education',
       'Weekly memory verses and take-home coloring sheets for family devotional time',
     ],
@@ -184,7 +184,7 @@ export const VIDEO_ORIENTATIONS_DATA: VideoOrientation[] = [
     leader: 'Elder Simeon Bautista & Senior Fellowship Committee',
     description: 'Like Caleb of Scripture who declared his strength in God in his advanced years, our seniors serve as the spiritual pillars of DPC through steadfast intercession and generational guidance.',
     keyHighlights: [
-      'Weekly Thursday Morning Devotions and Hymn Sings',
+      'Weekly Thursday Morning Devotions and Hymn Sings at CNYC Lounge',
       'Senior healthcare monitoring, wellness check-ins, and visitation teams',
       'Interceding daily for the youth, church leaders, and town of Daet',
     ],
@@ -192,6 +192,29 @@ export const VIDEO_ORIENTATIONS_DATA: VideoOrientation[] = [
       { timeSeconds: 0, timeLabel: '0:00', title: 'Finishing the Race with Joy' },
       { timeSeconds: 45, timeLabel: '0:45', title: 'Hymn Fellowship & Prayer Vigils' },
       { timeSeconds: 85, timeLabel: '1:25', title: 'Leaving a Legacy of Faith' },
+    ],
+  },
+  {
+    id: 'cnyc-facilities-tour',
+    title: 'Camarines Norte Youth Center (CNYC Facility Tour)',
+    subtitle: 'Explore our multi-purpose youth hall, study classrooms, and fellowship hub.',
+    category: 'facilities',
+    categoryLabel: 'Facility Tour',
+    duration: '2:40',
+    thumbnail: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1200&auto=format&fit=crop',
+    youtubeId: 'dQw4w9WgXcQ',
+    targetAudience: 'Students, Youth Leaders, Community Partners & Visitors',
+    leader: 'CNYC Facilities Management',
+    description: 'Take a close look inside the Camarines Norte Youth Center building located in Cobangbang, Daet. From comfortable study cubicles to air-conditioned seminar halls and our cozy coffee fellowship nook.',
+    keyHighlights: [
+      'Multi-purpose youth auditorium equipped with modern sound and multimedia gear',
+      'Free high-speed WiFi study hall open for high school and college students',
+      'Spacious fellowship grounds and covered activity area',
+    ],
+    chapters: [
+      { timeSeconds: 0, timeLabel: '0:00', title: 'CNYC Exterior & Grounds' },
+      { timeSeconds: 50, timeLabel: '0:50', title: 'Study Hub & Computer Nook' },
+      { timeSeconds: 100, timeLabel: '1:40', title: 'Auditorium & Sound Facilities' },
     ],
   },
 ];

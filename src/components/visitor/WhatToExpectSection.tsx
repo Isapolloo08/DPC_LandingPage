@@ -78,7 +78,7 @@ export const WhatToExpectSection: React.FC<WhatToExpectSectionProps> = ({ onPlan
   ];
 
   return (
-    <section id="what-to-expect" className="py-20 bg-dpc-navy-950 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <section id="what-to-expect" className="py-20 bg-dpc-navy-950 px-4 sm:px-6 lg:px-8 relative overflow-hidden section-render-opt">
       {/* Background accents */}
       <div className="absolute top-1/2 -left-20 w-80 h-80 radial-cross-glow opacity-30 blur-3xl pointer-events-none -z-10"></div>
 

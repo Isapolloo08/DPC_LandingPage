@@ -80,6 +80,9 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onPlanVisitClick }) => {
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isFlipped) return; // Keep level when reading the back side
+    // Skip on touch/mobile devices to save CPU cycles
+    if (typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches) return;
+    
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -110,36 +113,36 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onPlanVisitClick }) => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.12,
+        staggerChildren: 0.1,
         delayChildren: 0.05,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 24 },
+    hidden: { opacity: 0, y: 16 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] as const },
+      transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const },
     },
   };
 
   const imageVariants = {
-    hidden: { opacity: 0, scale: 0.94, y: 25 },
+    hidden: { opacity: 0, scale: 0.96, y: 16 },
     visible: {
       opacity: 1,
       scale: 1,
       y: 0,
-      transition: { duration: 0.85, ease: [0.22, 1, 0.36, 1] as const, delay: 0.2 },
+      transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] as const, delay: 0.15 },
     },
   };
 
   return (
     <section className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-hero-pattern pt-28 sm:pt-36 pb-16 px-4 sm:px-6 lg:px-8">
       {/* Ambient background glows */}
-      <div className="absolute top-10 left-1/4 -translate-x-1/2 w-[500px] sm:w-[700px] h-[400px] radial-cross-glow blur-3xl pointer-events-none -z-10"></div>
-      <div className="absolute top-1/3 right-10 w-[450px] h-[450px] radial-blue-glow blur-3xl pointer-events-none -z-10"></div>
+      <div className="absolute top-10 left-1/4 -translate-x-1/2 w-[500px] sm:w-[700px] h-[400px] radial-cross-glow blur-2xl pointer-events-none -z-10"></div>
+      <div className="absolute top-1/3 right-10 w-[450px] h-[450px] radial-blue-glow blur-2xl pointer-events-none -z-10"></div>
       <div className="absolute inset-0 bg-church-grid opacity-25 pointer-events-none -z-10"></div>
 
       <div className="max-w-7xl mx-auto w-full relative z-10 flex flex-col">
@@ -255,7 +258,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onPlanVisitClick }) => {
             style={{ perspective: 1200 }}
           >
             {/* Ambient Multi-layer Backlight Glow */}
-            <div className="absolute -inset-3 sm:-inset-5 bg-gradient-to-tr from-dpc-gold-500/20 via-blue-600/15 to-dpc-gold-400/20 rounded-[2.5rem] blur-2xl -z-10 pointer-events-none animate-pulse"></div>
+            <div className="absolute -inset-3 sm:-inset-5 bg-gradient-to-tr from-dpc-gold-500/20 via-blue-600/15 to-dpc-gold-400/20 rounded-[2.5rem] blur-xl -z-10 pointer-events-none opacity-40"></div>
 
             {/* 3D Perspective Flip Card Container */}
             <div
@@ -289,6 +292,8 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onPlanVisitClick }) => {
                 <img
                   src="/images/church-building.jpg"
                   alt="Daet Presbyterian Church & Camarines Norte Youth Center Building"
+                  loading="eager"
+                  decoding="async"
                   className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
 

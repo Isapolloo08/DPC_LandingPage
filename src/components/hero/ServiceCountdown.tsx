@@ -50,7 +50,7 @@ export const ServiceCountdown: React.FC = () => {
   }, []);
 
   return (
-    <section id="services" className="relative py-16 bg-gradient-to-b from-dpc-navy-950 via-dpc-navy-900 to-dpc-navy-950 px-4 sm:px-6 lg:px-8 border-y border-dpc-gold-500/10">
+    <section id="services" className="relative py-16 bg-gradient-to-b from-dpc-navy-950 via-dpc-navy-900 to-dpc-navy-950 px-4 sm:px-6 lg:px-8 border-y border-dpc-gold-500/10 section-render-opt">
       <div className="max-w-7xl mx-auto">
 
         {/* Section Header */}

@@ -13,46 +13,46 @@ interface AnnouncementsSectionProps {
   onPlanVisitClick?: () => void;
 }
 
-// Curated church event and ministry gathering photographs
+// Curated church event and ministry gathering photographs (Optimized web sizes for smooth 60fps rendering)
 const CHURCH_EVENT_STREAM_IMAGES: StreamImage[] = [
   {
-    src: 'https://images.unsplash.com/photo-1544427920-c49ccfb85579?q=80&w=1200&auto=format&fit=crop',
+    src: 'https://images.unsplash.com/photo-1544427920-c49ccfb85579?q=75&w=600&auto=format&fit=crop',
     alt: 'Young Adults Theology Roundtable & Sola Scriptura Study',
   },
   {
-    src: 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=80&w=1200&auto=format&fit=crop',
+    src: 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=75&w=600&auto=format&fit=crop',
     alt: 'Grace Kids Sunday School & Children Catechism Class',
   },
   {
-    src: 'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?q=80&w=1200&auto=format&fit=crop',
+    src: 'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?q=75&w=600&auto=format&fit=crop',
     alt: 'Reformation Theological Symposium & Expository Teaching',
   },
   {
-    src: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=1200&auto=format&fit=crop',
+    src: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?q=75&w=600&auto=format&fit=crop',
     alt: 'Daet Community Medical & Dental Gospel Mission Outreach',
   },
   {
-    src: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1200&auto=format&fit=crop',
+    src: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=75&w=600&auto=format&fit=crop',
     alt: 'Couples & Family Covenant Retreat in Camarines Norte',
   },
   {
-    src: 'https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=80&w=1200&auto=format&fit=crop',
+    src: 'https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=75&w=600&auto=format&fit=crop',
     alt: 'Resurrection Worship & Churchwide Agape Fellowship Feast',
   },
   {
-    src: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1200&auto=format&fit=crop',
+    src: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=75&w=600&auto=format&fit=crop',
     alt: 'DPC Sanctuary Choir & Acoustic Exaltation Team',
   },
   {
-    src: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=1200&auto=format&fit=crop',
+    src: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?q=75&w=600&auto=format&fit=crop',
     alt: 'DPC Sunday School & Youth Discipleship Classrooms',
   },
   {
-    src: 'https://images.unsplash.com/photo-1470240731273-7821a6eeb6bd?q=80&w=1200&auto=format&fit=crop',
+    src: 'https://images.unsplash.com/photo-1470240731273-7821a6eeb6bd?q=75&w=600&auto=format&fit=crop',
     alt: 'Bagasbas Eco-Campfire Praise & Testimonies Night',
   },
   {
-    src: 'https://images.unsplash.com/photo-1499209974431-9dddcece7f88?q=80&w=1200&auto=format&fit=crop',
+    src: 'https://images.unsplash.com/photo-1499209974431-9dddcece7f88?q=75&w=600&auto=format&fit=crop',
     alt: 'Wednesday Evening Corporate Prayer & Fasting Assembly',
   },
 ];
@@ -92,7 +92,7 @@ export const AnnouncementsSection: React.FC<AnnouncementsSectionProps> = ({
     : events.filter((e) => e.category.toLowerCase() === selectedCategory.toLowerCase());
 
   return (
-    <section id="events" className="py-16 sm:py-20 bg-gradient-to-b from-dpc-navy-950 via-dpc-navy-900 to-dpc-navy-950 relative overflow-hidden">
+    <section id="events" className="py-16 sm:py-20 bg-gradient-to-b from-dpc-navy-950 via-dpc-navy-900 to-dpc-navy-950 relative overflow-hidden section-render-opt">
 
       {/* ========================================================= */}
       {/* --- FULL-WIDTH EDGE-TO-EDGE 3D IMAGE STREAM CORRIDOR --- */}
@@ -100,10 +100,10 @@ export const AnnouncementsSection: React.FC<AnnouncementsSectionProps> = ({
       <div className="w-full relative overflow-hidden">
         <ImageStreamHero
           images={CHURCH_EVENT_STREAM_IMAGES}
-          speed={20}
-          cards={12}
+          speed={22}
+          cards={8}
           axis={52}
-          className="h-[380px] sm:h-[460px] md:h-[540px] w-full border-0 bg-transparent overflow-hidden relative"
+          className="h-[340px] sm:h-[420px] md:h-[500px] w-full border-0 bg-transparent overflow-hidden relative"
         >
           {/* Subtle Ambient Vignettes & Vertical Fades */}
           <div className="absolute inset-0 bg-gradient-to-t from-dpc-navy-950 via-dpc-navy-950/20 to-dpc-navy-950/50 pointer-events-none z-0"></div>

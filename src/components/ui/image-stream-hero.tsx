@@ -160,6 +160,34 @@ export function ImageStreamHero({
   className,
   ...props
 }: React.ComponentProps<"div"> & ImageStreamHeroProps) {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = React.useState(true);
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile, { passive: true });
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  React.useEffect(() => {
+    const el = containerRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { rootMargin: "150px 0px" }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   const id = React.useId().replace(/[^a-zA-Z0-9]/g, "");
   const right = `ish-r-${id}`;
   const left = `ish-l-${id}`;
@@ -177,8 +205,11 @@ export function ImageStreamHero({
     [right, left, card, p],
   );
 
+  const activeCards = isMobile ? Math.min(cards, 6) : cards;
+
   return (
     <div
+      ref={containerRef}
       className={cn("relative overflow-hidden", className)}
       {...props}
       style={{ containerType: "inline-size", ...props.style }}
@@ -198,14 +229,18 @@ export function ImageStreamHero({
           style={{ transformStyle: "preserve-3d" }}
         >
           {[right, left].map((name) =>
-            Array.from({ length: cards }, (_, i) => {
+            Array.from({ length: activeCards }, (_, i) => {
               // Both rails walk the same sequence, so the left side mirrors
               // the right at every depth.
               const img = images[i % Math.max(images.length, 1)];
               return (
                 <div
                   key={`${name}-${i}`}
-                  className={cn(card, "absolute overflow-hidden shadow-2xl")}
+                  className={cn(
+                    card,
+                    "absolute overflow-hidden shadow-lg",
+                    !isVisible && "invisible"
+                  )}
                   style={{
                     left: "50%",
                     top: `${axis}%`,
@@ -215,12 +250,13 @@ export function ImageStreamHero({
                     marginTop: `${-p.cardHeight / 2}cqw`,
                     borderRadius: `${p.cardRadius}cqw`,
                     animation: `${name} ${speed}s linear infinite`,
+                    animationPlayState: isVisible ? "running" : "paused",
                     // Negative delay drops each card mid-flight, so the
                     // corridor is already full on the first frame.
-                    animationDelay: `${-(i * speed) / cards}s`,
+                    animationDelay: `${-(i * speed) / activeCards}s`,
                     backfaceVisibility: "hidden",
                     WebkitBackfaceVisibility: "hidden",
-                    willChange: "transform",
+                    willChange: isVisible ? "transform" : "auto",
                     transform: "translate3d(0, 0, 0)",
                   }}
                 >

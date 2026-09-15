@@ -129,7 +129,6 @@ export const ScriptureReveal: React.FC<ScriptureRevealProps> = ({
               >
                 <motion.span
                   variants={wordVariants}
-                  style={{ willChange: 'transform, opacity' }}
                   className={`inline-block ${
                     isHighlighted
                       ? 'text-dpc-gold-300 font-medium'

@@ -38,6 +38,9 @@ export const App: React.FC = () => {
 
   // GSAP Animations with Clean Lifecycle & Compositor Performance
   useEffect(() => {
+    const isMobile = window.innerWidth < 768;
+    const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     const ctx = gsap.context(() => {
       // Animate Section Entrances using GPU-accelerated transforms & opacity
       const animatedSections = [
@@ -51,17 +54,24 @@ export const App: React.FC = () => {
       animatedSections.forEach((selector) => {
         const el = document.querySelector(selector);
         if (el) {
+          if (isReducedMotion) {
+            gsap.set(el, { opacity: 1, y: 0 });
+            return;
+          }
+
           gsap.fromTo(
             el,
-            { opacity: 0.85, y: 30 },
+            { opacity: 0.9, y: isMobile ? 12 : 24 },
             {
               opacity: 1,
               y: 0,
-              duration: 0.8,
+              duration: isMobile ? 0.45 : 0.65,
               ease: 'power2.out',
+              force3D: true,
+              clearProps: 'transform,willChange',
               scrollTrigger: {
                 trigger: el,
-                start: 'top 85%',
+                start: isMobile ? 'top 92%' : 'top 85%',
                 toggleActions: 'play none none none',
                 once: true,
               },

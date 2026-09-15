@@ -65,27 +65,72 @@
   transform: translateZ(1px);
 }
 
-/* Glassmorphism Classes */
+/* Glassmorphism Classes (Desktop: Full Glass / Mobile: High-performance GPU-friendly semi-opaque) */
 .glass-panel {
-  background: rgba(10, 25, 47, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(10, 25, 47, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(212, 175, 55, 0.15);
+  transform: translateZ(0);
 }
 
 .glass-panel-gold {
-  background: rgba(17, 34, 64, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(17, 34, 64, 0.9);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(212, 175, 55, 0.35);
   box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 0 20px -5px rgba(212, 175, 55, 0.15);
+  transform: translateZ(0);
 }
 
 .glass-nav {
-  background: rgba(6, 13, 23, 0.85);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  background: rgba(6, 13, 23, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+  transform: translateZ(0);
+}
+
+/* Mobile & Low-Spec Performance Overrides */
+@media (max-width: 768px), (pointer: coarse) {
+  .glass-panel {
+    background: rgba(10, 25, 47, 0.95);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  .glass-panel-gold {
+    background: rgba(14, 28, 52, 0.97);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  .glass-nav {
+    background: rgba(6, 13, 23, 0.97);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  /* Cap expensive large blurs on mobile */
+  .blur-3xl {
+    filter: blur(24px) !important;
+  }
+  .blur-2xl {
+    filter: blur(16px) !important;
+  }
+
+  /* Disable battery-draining continuous pulse on mobile */
+  .animate-pulse {
+    animation: none !important;
+    opacity: 0.35 !important;
+  }
+}
+
+/* Off-screen section rendering optimization for 60fps scrolling */
+.section-render-opt {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 600px;
 }
 
 /* Subtle Animated Shimmer & Radial Light */

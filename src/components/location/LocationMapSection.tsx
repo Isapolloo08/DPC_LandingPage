@@ -9,7 +9,7 @@ interface LocationMapSectionProps {
 
 export const LocationMapSection: React.FC<LocationMapSectionProps> = ({ onPlanVisitClick }) => {
   return (
-    <section id="location" className="py-20 bg-dpc-navy-950 px-4 sm:px-6 lg:px-8 relative border-t border-white/5">
+    <section id="location" className="py-20 bg-dpc-navy-950 px-4 sm:px-6 lg:px-8 relative border-t border-white/5 section-render-opt">
       <div className="max-w-7xl mx-auto">
 
         {/* Header */}

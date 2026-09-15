@@ -63,7 +63,7 @@ export const MinistriesSection: React.FC<MinistriesSectionProps> = ({ onSelectMi
     : ministries.filter(m => m.id === selectedTab || m.ageBracket.toLowerCase() === selectedTab.toLowerCase());
 
   return (
-    <section id="ministries" className="py-20 bg-gradient-to-b from-dpc-navy-950 via-dpc-navy-900 to-dpc-navy-950 px-4 sm:px-6 lg:px-8 relative">
+    <section id="ministries" className="py-20 bg-gradient-to-b from-dpc-navy-950 via-dpc-navy-900 to-dpc-navy-950 px-4 sm:px-6 lg:px-8 relative section-render-opt">
       <div className="max-w-7xl mx-auto">
 
         {/* Header */}

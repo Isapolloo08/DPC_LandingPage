@@ -104,8 +104,8 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
       className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden"
     >
       {/* Background Ambient Glows */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-dpc-gold-500/10 blur-[130px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-10 right-10 w-[400px] h-[300px] bg-cyan-500/5 blur-[100px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[320px] sm:w-[600px] h-[180px] sm:h-[320px] bg-dpc-gold-500/10 blur-2xl sm:blur-3xl rounded-full pointer-events-none" />
+      <div className="absolute bottom-10 right-10 w-[240px] sm:w-[400px] h-[180px] sm:h-[300px] bg-cyan-500/5 blur-2xl sm:blur-3xl rounded-full pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
