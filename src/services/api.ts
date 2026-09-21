@@ -2,7 +2,7 @@ import { Ministry, ChurchEvent } from '../types/church';
 import { MINISTRIES_DATA } from '../data/ministriesData';
 import { EVENTS_DATA } from '../data/eventsData';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://https://dpc-landingpage.onrender.com/api';
 
 export interface BackendMinistry {
   id: number | string;
