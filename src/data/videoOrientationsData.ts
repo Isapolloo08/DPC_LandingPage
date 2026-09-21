@@ -8,7 +8,6 @@ import youthThumb from '../assets/Youth Ministry/714759264_1015627274136826_7581
 import yaThumb from '../assets/Young Adult Ministry/505320113_661118810260117_450252600683907860_n.jpg';
 import jaThumb from '../assets/Junior Adult Minitry/615576920_889621683718381_8998977265371590367_n.jpg';
 import oaThumb from '../assets/Old Adult Ministry/722769534_122172250904944863_7045558778597727105_n.jpg';
-import cnycTourThumb from '../assets/Youth Ministry/656680392_958771106489110_8611197159791022889_n.jpg';
 
 // Import authentic local MP4 video assets
 import elemVideo from '../assets/Elementary Ministry.mp4';
@@ -20,31 +19,6 @@ import yaVideo from '../assets/Young Adult Ministry.mp4';
 import youthVideo from '../assets/youth ministry.mp4';
 
 export const VIDEO_ORIENTATIONS_DATA: VideoOrientation[] = [
-  {
-    id: 'general-orientation',
-    title: 'Welcome to DPC: Virtual Sanctuary & Church Life Orientation',
-    subtitle: 'Step inside our Sanctuary, CNYC Youth Center, and discover Christ-centered Lord\'s Day worship in Daet.',
-    category: 'general',
-    categoryLabel: 'Panglahatan (General Orientation)',
-    duration: '3:45',
-    thumbnail: youthThumb,
-    videoUrl: youthVideo,
-    featured: true,
-    targetAudience: 'First-Time Visitors, Families, Students & All Seekers',
-    leader: 'Pastoral Team & Welcoming Committee',
-    description: 'An overview orientation of Daet Presbyterian Church. Discover our Sunday worship schedule, reformed gospel distinctives, facility layout, and how every age group from toddlers to seniors is nurtured in God\'s Word.',
-    keyHighlights: [
-      'Expository preaching and Christ-centered worship in our Air-Conditioned Sanctuary',
-      'First-time visitor guide: Parking, welcome desk, and Sunday schedule flow',
-      'Inter-generational discipleship across all 7 church ministries',
-    ],
-    chapters: [
-      { timeSeconds: 0, timeLabel: '0:00', title: 'Welcome & Church Vision' },
-      { timeSeconds: 30, timeLabel: '0:30', title: 'Sunday Lord\'s Day Divine Worship' },
-      { timeSeconds: 60, timeLabel: '1:00', title: 'CNYC Youth Center & Facility Flow' },
-      { timeSeconds: 90, timeLabel: '1:30', title: 'How to Connect & Get Involved' },
-    ],
-  },
   {
     id: 'seeds-of-grace',
     title: 'Seeds of Grace: Kinder Ministry Orientation',
@@ -211,29 +185,6 @@ export const VIDEO_ORIENTATIONS_DATA: VideoOrientation[] = [
       { timeSeconds: 0, timeLabel: '0:00', title: 'Honoring our Senior Saints' },
       { timeSeconds: 25, timeLabel: '0:25', title: 'Hymn Fellowship & Prayer Ministry' },
       { timeSeconds: 50, timeLabel: '0:50', title: 'Resort Outings & Community Life' },
-    ],
-  },
-  {
-    id: 'cnyc-facilities-tour',
-    title: 'CNYC Youth Center: Facilities & Study Hub Orientation',
-    subtitle: 'Explore our air-conditioned study classrooms, fellowship hall, and youth facilities.',
-    category: 'facilities',
-    categoryLabel: 'Facility Orientation',
-    duration: '2:40',
-    thumbnail: cnycTourThumb,
-    videoUrl: hsVideo,
-    targetAudience: 'Students, Youth Leaders, Visitors & Community Partners',
-    leader: 'CNYC Facilities Team',
-    description: 'A walkthrough orientation of the Camarines Norte Youth Center (CNYC) building in Cobangbang, Daet. Explore the free student study hub, fellowship hall, and seminar classrooms.',
-    keyHighlights: [
-      'Free high-speed WiFi study hall open for junior high, senior high, and college students',
-      'Multi-purpose fellowship hall with acoustic sound system and projector setup',
-      'Safe, accessible campus location in Cobangbang, Daet',
-    ],
-    chapters: [
-      { timeSeconds: 0, timeLabel: '0:00', title: 'CNYC Overview & Grounds' },
-      { timeSeconds: 30, timeLabel: '0:30', title: 'Study Hub & Facilities' },
-      { timeSeconds: 65, timeLabel: '1:05', title: 'Fellowship Hall & Event Spaces' },
     ],
   },
 ];

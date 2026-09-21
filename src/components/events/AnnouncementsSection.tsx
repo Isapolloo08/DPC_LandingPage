@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, MapPin, ArrowRight, BellRing, Pin, Megaphone, CheckCircle2, Tv, } from 'lucide-react';
+import { Calendar, Clock, MapPin, ArrowRight, BellRing, Pin, Megaphone, CheckCircle2, Tv } from 'lucide-react';
 import { EVENTS_DATA } from '../../data/eventsData';
 import { ChurchEvent, Ministry } from '../../types/church';
 import { MINISTRIES_DATA } from '../../data/ministriesData';
-import { ImageStreamHero, StreamImage } from '@/components/ui/image-stream-hero';
 import { fetchAnnouncements, fetchEvents, BackendAnnouncement } from '../../services/api';
 import { ChurchVideoHub } from '../video/ChurchVideoHub';
-import { ScriptureReveal } from '../ui/ScriptureReveal';
-
 
 interface AnnouncementsSectionProps {
   onSelectEvent: (event: ChurchEvent) => void;
@@ -15,61 +12,110 @@ interface AnnouncementsSectionProps {
   onSelectMinistry?: (ministry: Ministry) => void;
 }
 
-// Import real authentic photos from each ministry folder in src/assets
-import streamKinder from '@/assets/Kinder Ministry/516368798_4004060663255125_3940156298598136062_n.jpg';
-import streamElem from '@/assets/Elementary Ministry/480577141_481392148377786_6333824624822562519_n.jpg';
-import streamHs from '@/assets/High School Ministry/680044493_935616212628115_2898471636377619378_n.jpg';
-import streamYouthCamp from '@/assets/Youth Ministry/656680392_958771106489110_8611197159791022889_n.jpg';
-import streamYouthPraise from '@/assets/Youth Ministry/714759264_1015627274136826_7581065074620186600_n.jpg';
-import streamYA from '@/assets/Young Adult Ministry/505320113_661118810260117_450252600683907860_n.jpg';
-import streamYAMission from '@/assets/Young Adult Ministry/690603367_927892950249367_8826331412381259866_n.jpg';
-import streamCouples from '@/assets/Junior Adult Minitry/615576920_889621683718381_8998977265371590367_n.jpg';
-import streamSeniors from '@/assets/Old Adult Ministry/722769534_122172250904944863_7045558778597727105_n.jpg';
-import streamSeniorsAgape from '@/assets/Old Adult Ministry/724408784_122172253130944863_6588021141249655795_n.jpg';
+/**
+ * Check if an event date is upcoming/active (hides finished events automatically)
+ */
+function isEventActive(event: ChurchEvent): boolean {
+  const dateStr = event.date.trim();
 
-// Curated church event and ministry gathering photographs from real DPC community
-const CHURCH_EVENT_STREAM_IMAGES: StreamImage[] = [
-  {
-    src: streamYouthCamp,
-    alt: 'Camarines Norte Youth Camp & Retreat Gathering',
-  },
-  {
-    src: streamKinder,
-    alt: 'Seeds of Grace Sunday School & Children Bible Storytelling',
-  },
-  {
-    src: streamHs,
-    alt: 'Ignite Teens High School Fellowship & Discipleship',
-  },
-  {
-    src: streamElem,
-    alt: 'Covenant Kids Elementary Sunday School & Vacation Bible School',
-  },
-  {
-    src: streamYouthPraise,
-    alt: 'DPC Sanctuary Acoustic Praise & Band Exaltation Team',
-  },
-  {
-    src: streamYA,
-    alt: 'Ambassadors for Christ Young Adults Roundtable & Fellowship',
-  },
-  {
-    src: streamCouples,
-    alt: 'Pillars of Faith Couples & Family Covenant Retreat',
-  },
-  {
-    src: streamYAMission,
-    alt: 'Daet Community Gospel Outreach & Medical Mission',
-  },
-  {
-    src: streamSeniors,
-    alt: 'Golden Heritage Senior Saints Morning Devotions & Prayer',
-  },
-  {
-    src: streamSeniorsAgape,
-    alt: 'Churchwide Thanksgiving & Agape Fellowship Gathering',
-  },
-];
+  // Recurring events are always active/upcoming
+  if (
+    dateStr.toLowerCase().includes('every') ||
+    dateStr.toLowerCase().includes('weekly') ||
+    dateStr.toLowerCase().includes('monthly')
+  ) {
+    return true;
+  }
+
+  try {
+    let parseableDate = dateStr;
+
+    // Handle date ranges like "April 10 – 12, 2026" or "May 20 - 22, 2026"
+    if (dateStr.includes('–') || dateStr.includes('-')) {
+      const parts = dateStr.split(/[–-]/);
+      const endPart = parts[parts.length - 1].trim();
+
+      if (!isNaN(Date.parse(endPart))) {
+        parseableDate = endPart;
+      } else {
+        // e.g. Extract starting month like "April" and combine with "12, 2026"
+        const monthMatch = parts[0].trim().match(/^[A-Za-z]+/);
+        if (monthMatch) {
+          parseableDate = `${monthMatch[0]} ${endPart}`;
+        }
+      }
+    }
+
+    const timestamp = Date.parse(parseableDate);
+    if (!isNaN(timestamp)) {
+      // Event remains visible until the end of its date (23:59:59)
+      const eventEnd = new Date(timestamp);
+      eventEnd.setHours(23, 59, 59, 999);
+      return eventEnd.getTime() >= Date.now();
+    }
+  } catch {
+    return true; // Fallback to keeping it if parsing is complex
+  }
+
+  return true;
+}
+
+/**
+ * Check if an announcement / bulletin is active (hides finished/expired announcements automatically)
+ */
+function isAnnouncementActive(ann: BackendAnnouncement): boolean {
+  // Pinned announcements always stay active
+  if (ann.is_pinned) return true;
+
+  const now = Date.now();
+
+  // 1. Explicit expiration date
+  if (ann.expires_at) {
+    const expDate = new Date(ann.expires_at);
+    if (!isNaN(expDate.getTime())) {
+      expDate.setHours(23, 59, 59, 999);
+      return expDate.getTime() >= now;
+    }
+  }
+
+  // 2. Check if title or body contains a specific date
+  const text = `${ann.title} ${ann.body}`;
+  const dateRegex = /\b(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+\d{1,2}(?:st|nd|rd|th)?(?:\s*,?\s*\d{4})?/gi;
+  const matches = text.match(dateRegex);
+
+  if (matches && matches.length > 0) {
+    for (const matchStr of matches) {
+      const cleanMatch = matchStr.replace(/(st|nd|rd|th)/gi, '');
+      const parsed = Date.parse(cleanMatch.includes('202') ? cleanMatch : `${cleanMatch}, ${new Date().getFullYear()}`);
+      if (!isNaN(parsed)) {
+        const d = new Date(parsed);
+        d.setHours(23, 59, 59, 999);
+        // If the date in announcement text has passed, hide it
+        if (d.getTime() < now) {
+          return false;
+        }
+      }
+    }
+  }
+
+  // 3. Birthday or celebratory greetings expire after 5 days
+  const isGreeting = /birthday|bday|happy\s+birthday|hbd|congrat/i.test(text);
+  if (ann.created_at) {
+    const createdDate = new Date(ann.created_at);
+    if (!isNaN(createdDate.getTime())) {
+      const diffDays = (now - createdDate.getTime()) / (1000 * 60 * 60 * 24);
+      if (isGreeting && diffDays > 5) {
+        return false;
+      }
+      // General non-pinned bulletins expire after 7 days
+      if (diffDays > 7) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
 
 export const AnnouncementsSection: React.FC<AnnouncementsSectionProps> = ({
   onSelectEvent,
@@ -102,60 +148,19 @@ export const AnnouncementsSection: React.FC<AnnouncementsSectionProps> = ({
 
   const categories = ['all', 'Youth', 'Worship', 'Discipleship', 'Outreach', 'Fellowship'];
 
+  // Filter out finished/past events automatically
+  const activeEvents = events.filter(isEventActive);
+
+  // Filter out finished/expired bulletins automatically
+  const activeAnnouncements = announcements.filter(isAnnouncementActive);
+
   const filteredEvents = selectedCategory === 'all'
-    ? events
-    : events.filter((e) => e.category.toLowerCase() === selectedCategory.toLowerCase());
+    ? activeEvents
+    : activeEvents.filter((e) => e.category.toLowerCase() === selectedCategory.toLowerCase());
 
   return (
-    <section id="events" className="py-16 sm:py-20 bg-gradient-to-b from-dpc-navy-950 via-dpc-navy-900 to-dpc-navy-950 relative overflow-hidden section-render-opt">
-
-      {/* ========================================================= */}
-      {/* --- FULL-WIDTH EDGE-TO-EDGE 3D IMAGE STREAM CORRIDOR --- */}
-      {/* ========================================================= */}
-      <div className="w-full relative overflow-hidden">
-        <ImageStreamHero
-          images={CHURCH_EVENT_STREAM_IMAGES}
-          speed={22}
-          cards={8}
-          axis={52}
-          className="h-[340px] sm:h-[420px] md:h-[500px] w-full border-0 bg-transparent overflow-hidden relative"
-        >
-          {/* Subtle Ambient Vignettes & Vertical Fades */}
-          <div className="absolute inset-0 bg-gradient-to-t from-dpc-navy-950 via-dpc-navy-950/20 to-dpc-navy-950/50 pointer-events-none z-0"></div>
-          <div className="absolute inset-y-0 left-0 w-16 sm:w-32 bg-gradient-to-r from-dpc-navy-950 to-transparent pointer-events-none z-0"></div>
-          <div className="absolute inset-y-0 right-0 w-16 sm:w-32 bg-gradient-to-l from-dpc-navy-950 to-transparent pointer-events-none z-0"></div>
-
-          {/* Centered Floating Overlay Content - No Box */}
-          <div className="relative z-10 flex h-full flex-col items-center justify-center py-6 sm:py-10 text-center px-4 sm:px-6 max-w-4xl mx-auto pointer-events-none">
-            <div className="space-y-3 sm:space-y-4">
-              <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold font-serif text-white tracking-tight [text-shadow:_0_4px_20px_rgb(0_0_0_/_95%)]">
-                Witness God’s Faithfulness <br className="hidden sm:inline" />
-                <span className="gold-shimmer">In Motion</span>
-              </h2>
-
-              {/* Floating Verse with Word-by-Word Reveal */}
-              <div className="max-w-2xl mx-auto pt-1">
-                <ScriptureReveal
-                  quote="God is Spirit, and those who worship Him must worship in spirit and truth."
-                  reference="John 4:24"
-                  version="ESV"
-                  showQuoteMarks={true}
-                  highlightWords={['Spirit', 'truth', 'worship']}
-                  quoteClassName="text-sm sm:text-base md:text-lg text-white font-serif italic leading-relaxed tracking-wide [text-shadow:_0_2px_12px_rgb(0_0_0_/_95%)]"
-                  referenceClassName="!mt-2"
-                  align="center"
-                  staggerDelay={0.04}
-                  initialDelay={0.2}
-                />
-              </div>
-            </div>
-          </div>
-        </ImageStreamHero>
-      </div>
-
-      {/* ========================================================= */}
-      {/* --- 2. VIRTUAL CINEMA & MINISTRY VIDEO ORIENTATION HUB --- */}
-      {/* ========================================================= */}
+    <section id="events" className="py-12 sm:py-16 bg-gradient-to-b from-dpc-navy-950 via-dpc-navy-900 to-dpc-navy-950 relative overflow-hidden section-render-opt">
+      {/* --- 1. VIRTUAL CINEMA & MINISTRY VIDEO ORIENTATION HUB --- */}
       <ChurchVideoHub
         onPlanVisitClick={onPlanVisitClick || (() => { })}
         onSelectMinistryModal={(ministryId) => {
@@ -204,12 +209,12 @@ export const AnnouncementsSection: React.FC<AnnouncementsSectionProps> = ({
         </div>
 
         {/* Live Church Announcements from Database */}
-        {announcements.length > 0 && (
+        {activeAnnouncements.length > 0 && (
           <div className="mb-12">
             <div className="flex items-center gap-2 mb-4">
               <Megaphone className="w-4 h-4 text-dpc-gold-400" />
               <h3 className="text-sm font-bold uppercase tracking-wider text-dpc-gold-300">
-                Official Ministry Bulletins ({announcements.length})
+                Official Ministry Bulletins ({activeAnnouncements.length})
               </h3>
               {isLiveAnnouncements && (
                 <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-500/40">
@@ -219,7 +224,7 @@ export const AnnouncementsSection: React.FC<AnnouncementsSectionProps> = ({
               )}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {announcements.map((ann) => (
+              {activeAnnouncements.map((ann) => (
                 <div
                   key={ann.id}
                   className="glass-panel rounded-2xl p-5 border-dpc-gold-500/30 hover:border-dpc-gold-400 transition-all flex flex-col justify-between relative overflow-hidden group"
@@ -262,75 +267,87 @@ export const AnnouncementsSection: React.FC<AnnouncementsSectionProps> = ({
         )}
 
         {/* Events Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {filteredEvents.map((event) => (
-            <div
-              key={event.id}
-              className={`rounded-3xl p-5 sm:p-6 md:p-7 flex flex-col justify-between transition-all duration-300 relative group overflow-hidden ${event.featured
-                ? 'glass-panel-gold border-dpc-gold-500/50 shadow-gold-glow'
-                : 'glass-panel border-white/10 hover:border-dpc-gold-500/40 hover:-translate-y-1'
-                }`}
-            >
-              <div>
-                {/* Meta Top Bar */}
-                <div className="flex items-center justify-between gap-2 mb-3 sm:mb-4">
-                  <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-dpc-navy-800 text-dpc-gold-300 border border-dpc-gold-500/30">
-                    {event.category}
-                  </span>
-
-                  {event.badge && (
-                    <span className="text-[10px] sm:text-[11px] font-bold px-2 py-0.5 rounded bg-dpc-gold-500/20 text-dpc-gold-300 border border-dpc-gold-500/40">
-                      {event.badge}
+        {filteredEvents.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            {filteredEvents.map((event) => (
+              <div
+                key={event.id}
+                className={`rounded-3xl p-5 sm:p-6 md:p-7 flex flex-col justify-between transition-all duration-300 relative group overflow-hidden ${event.featured
+                  ? 'glass-panel-gold border-dpc-gold-500/50 shadow-gold-glow'
+                  : 'glass-panel border-white/10 hover:border-dpc-gold-500/40 hover:-translate-y-1'
+                  }`}
+              >
+                <div>
+                  {/* Meta Top Bar */}
+                  <div className="flex items-center justify-between gap-2 mb-3 sm:mb-4">
+                    <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-dpc-navy-800 text-dpc-gold-300 border border-dpc-gold-500/30">
+                      {event.category}
                     </span>
-                  )}
+
+                    {event.badge && (
+                      <span className="text-[10px] sm:text-[11px] font-bold px-2 py-0.5 rounded bg-dpc-gold-500/20 text-dpc-gold-300 border border-dpc-gold-500/40">
+                        {event.badge}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="text-lg sm:text-xl font-bold text-white font-serif group-hover:text-dpc-gold-300 transition-colors mb-3 leading-snug">
+                    {event.title}
+                  </h3>
+
+                  {/* Event Details */}
+                  <div className="space-y-2 mb-4 text-xs text-slate-300">
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-3.5 h-3.5 text-dpc-gold-400 shrink-0" />
+                      <span className="font-medium text-slate-200">{event.date}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-3.5 h-3.5 text-dpc-gold-400 shrink-0" />
+                      <span>{event.time}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <MapPin className="w-3.5 h-3.5 text-dpc-gold-400 shrink-0" />
+                      <span className="truncate">{event.location}</span>
+                    </div>
+                  </div>
+
+                  {/* Description snippet */}
+                  <p className="text-xs sm:text-sm text-slate-300 font-light leading-relaxed mb-6 line-clamp-3">
+                    {event.description}
+                  </p>
                 </div>
 
-                {/* Title */}
-                <h3 className="text-lg sm:text-xl font-bold text-white font-serif group-hover:text-dpc-gold-300 transition-colors mb-3 leading-snug">
-                  {event.title}
-                </h3>
+                {/* Card Footer */}
+                <div className="pt-4 border-t border-white/10 flex items-center justify-between mt-auto">
+                  <div className="text-[11px] text-slate-400">
+                    {event.currentRsvp && (
+                      <span><strong>{event.currentRsvp}</strong> Attending</span>
+                    )}
+                  </div>
 
-                {/* Event Details */}
-                <div className="space-y-2 mb-4 text-xs text-slate-300">
-                  <div className="flex items-center gap-2">
-                    <Calendar className="w-3.5 h-3.5 text-dpc-gold-400 shrink-0" />
-                    <span className="font-medium text-slate-200">{event.date}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Clock className="w-3.5 h-3.5 text-dpc-gold-400 shrink-0" />
-                    <span>{event.time}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-3.5 h-3.5 text-dpc-gold-400 shrink-0" />
-                    <span className="truncate">{event.location}</span>
-                  </div>
+                  <button
+                    onClick={() => onSelectEvent(event)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-dpc-navy-950 bg-dpc-gold-400 hover:bg-dpc-gold-300 shadow-sm transition-all cursor-pointer"
+                  >
+                    <span>{event.registrationOpen ? 'RSVP / Details' : 'View Details'}</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </button>
                 </div>
-
-                {/* Description snippet */}
-                <p className="text-xs sm:text-sm text-slate-300 font-light leading-relaxed mb-6 line-clamp-3">
-                  {event.description}
-                </p>
               </div>
-
-              {/* Card Footer */}
-              <div className="pt-4 border-t border-white/10 flex items-center justify-between mt-auto">
-                <div className="text-[11px] text-slate-400">
-                  {event.currentRsvp && (
-                    <span><strong>{event.currentRsvp}</strong> Attending</span>
-                  )}
-                </div>
-
-                <button
-                  onClick={() => onSelectEvent(event)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-dpc-navy-950 bg-dpc-gold-400 hover:bg-dpc-gold-300 shadow-sm transition-all cursor-pointer"
-                >
-                  <span>{event.registrationOpen ? 'RSVP / Details' : 'View Details'}</span>
-                  <ArrowRight className="w-3 h-3" />
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12 px-6 rounded-3xl glass-panel border border-white/10 max-w-xl mx-auto">
+            <Calendar className="w-10 h-10 text-dpc-gold-400 mx-auto mb-3 opacity-80" />
+            <h4 className="text-base font-bold text-white font-serif mb-1">
+              No Upcoming Events in this Category
+            </h4>
+            <p className="text-xs text-slate-300 leading-relaxed font-light">
+              All past activities have concluded. Check back soon for new announcements or join our weekly Lord's Day worship!
+            </p>
+          </div>
+        )}
 
       </div>
     </section>

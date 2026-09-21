@@ -11,7 +11,6 @@ import {
   Share2,
   Check,
   RotateCcw,
-  Church,
   GraduationCap,
   Sparkles,
   Calendar,
@@ -81,15 +80,13 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
 
   // Filter categories
   const categories = [
-    { id: 'all', label: `All Orientations (${VIDEO_ORIENTATIONS_DATA.length})`, icon: Film },
-    { id: 'general', label: 'General & CNYC Tour (2)', icon: Church },
+    { id: 'all', label: `All 7 Ministries (${VIDEO_ORIENTATIONS_DATA.length})`, icon: Film },
     { id: 'children-youth', label: 'Children & Youth (4)', icon: GraduationCap },
     { id: 'adults', label: 'Adults & Seniors (3)', icon: Users },
   ];
 
   const filteredVideos = VIDEO_ORIENTATIONS_DATA.filter((v) => {
     if (selectedCategory === 'all') return true;
-    if (selectedCategory === 'general') return v.category === 'general' || v.category === 'facilities';
     if (selectedCategory === 'children-youth')
       return (
         v.ministryId === 'kinder' ||
@@ -106,17 +103,21 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
     return true;
   });
 
-  // Switch active video
+  // Switch active video and smoothly scroll up to the video player container
   const handleSelectVideo = (video: VideoOrientation) => {
     setSelectedVideo(video);
     setIsPlaying(true);
     setActiveChapter(null);
 
-    // Smooth scroll to video viewport on smaller screens
-    if (window.innerWidth < 1024 && playerContainerRef.current) {
-      playerContainerRef.current.scrollIntoView({
+    // Automatic smooth scroll up to the video theater on both desktop and mobile
+    if (playerContainerRef.current) {
+      const navHeight = 85;
+      const elementTop = playerContainerRef.current.getBoundingClientRect().top;
+      const offsetTop = elementTop + window.pageYOffset - navHeight;
+
+      window.scrollTo({
+        top: Math.max(0, offsetTop),
         behavior: 'smooth',
-        block: 'start',
       });
     }
   };
@@ -145,7 +146,6 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
   return (
     <div
       id="videos"
-      ref={playerContainerRef}
       className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden"
     >
       {/* Background Ambient Glows */}
@@ -204,7 +204,10 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
         {/* ========================================================= */}
         {/* --- MAIN CINEMA THEATER VIEWPORT --- */}
         {/* ========================================================= */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-12">
+        <div
+          ref={playerContainerRef}
+          className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-12 scroll-mt-24"
+        >
           
           {/* Main Video Viewport (16:9 Screen) */}
           <div className="lg:col-span-8 flex flex-col">
@@ -248,23 +251,25 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
                   </button>
                 </div>
               ) : (
-                /* Poster Thumbnail with Glowing Play Trigger */
-                <div
+                /* Poster Thumbnail with Centered Glowing Play Trigger */
+                <button
+                  type="button"
                   onClick={() => setIsPlaying(true)}
-                  className="w-full h-full relative cursor-pointer flex items-center justify-center"
+                  aria-label={`Play ${selectedVideo.title}`}
+                  className="w-full h-full relative cursor-pointer flex items-center justify-center border-0 p-0 bg-black text-left outline-none focus-visible:ring-2 focus-visible:ring-dpc-gold-400 group"
                 >
-                  {/* Background High-res Poster */}
+                  {/* Background High-res Poster - Absolute Inset for perfect centering */}
                   <img
                     src={selectedVideo.thumbnail}
                     alt={selectedVideo.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80"
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80"
                   />
 
                   {/* Dark Cinema Gradient Vignette */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/60 group-hover:via-black/30 transition-colors" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/60 group-hover:via-black/30 transition-colors pointer-events-none" />
 
                   {/* Top Tags */}
-                  <div className="absolute top-4 inset-x-4 flex items-center justify-between z-10">
+                  <div className="absolute top-4 inset-x-4 flex items-center justify-between z-10 pointer-events-none">
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-dpc-gold-500/20 border border-dpc-gold-500/40 backdrop-blur-md text-dpc-gold-300 text-xs font-bold uppercase tracking-wider">
                       <Film className="w-3.5 h-3.5" />
                       <span>{selectedVideo.categoryLabel}</span>
@@ -276,21 +281,21 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
                     </span>
                   </div>
 
-                  {/* Center Glowing Big Play Button */}
-                  <div className="relative z-10 flex flex-col items-center gap-3">
+                  {/* Center Glowing Big Play Button - Always Exactly Centered */}
+                  <div className="relative z-10 flex flex-col items-center justify-center gap-2.5 sm:gap-3 pointer-events-none">
                     <span className="relative flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-dpc-gold-400 opacity-60" />
-                      <span className="relative inline-flex rounded-full h-16 w-16 sm:h-20 sm:w-20 bg-gradient-to-tr from-dpc-gold-500 via-dpc-gold-400 to-amber-300 items-center justify-center text-dpc-navy-950 shadow-[0_0_30px_rgba(212,175,55,0.9)] group-hover:scale-110 transition-transform">
+                      <span className="relative inline-flex rounded-full h-16 w-16 sm:h-20 sm:w-20 bg-gradient-to-tr from-dpc-gold-500 via-dpc-gold-400 to-amber-300 items-center justify-center text-dpc-navy-950 shadow-[0_0_35px_rgba(212,175,55,0.9)] group-hover:scale-110 group-active:scale-95 transition-transform duration-300">
                         <Play className="w-7 h-7 sm:w-9 sm:h-9 fill-current ml-1" />
                       </span>
                     </span>
-                    <span className="px-3 py-1 rounded-full bg-black/80 border border-white/20 text-white text-xs font-bold backdrop-blur-md shadow-md">
+                    <span className="px-3.5 py-1.5 rounded-full bg-black/85 border border-white/20 text-white text-xs font-bold backdrop-blur-md shadow-lg group-hover:border-dpc-gold-400/60 group-hover:text-dpc-gold-300 transition-colors">
                       Click to Play Orientation Video
                     </span>
                   </div>
 
                   {/* Bottom Video Headline Overlay */}
-                  <div className="absolute bottom-4 inset-x-4 z-10 text-left">
+                  <div className="absolute bottom-4 inset-x-4 z-10 text-left pointer-events-none">
                     <h3 className="text-base sm:text-xl font-bold font-serif text-white drop-shadow-md leading-tight">
                       {selectedVideo.title}
                     </h3>
@@ -298,7 +303,7 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
                       {selectedVideo.subtitle}
                     </p>
                   </div>
-                </div>
+                </button>
               )}
 
             </div>

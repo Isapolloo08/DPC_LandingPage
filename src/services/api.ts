@@ -23,6 +23,7 @@ export interface BackendAnnouncement {
   body: string;
   is_pinned?: boolean;
   created_at?: string;
+  expires_at?: string | null;
   ministry_id?: number | null;
   ministry_name?: string | null;
   ministry_color?: string | null;
@@ -221,11 +222,22 @@ export async function fetchEvents(): Promise<{ data: ChurchEvent[]; isLive: bool
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const rawEvents: BackendEvent[] = await res.json();
 
-    if (!Array.isArray(rawEvents) || rawEvents.length === 0) {
-      return { data: EVENTS_DATA, isLive: false };
+    const now = Date.now();
+    const activeRawEvents = rawEvents.filter((be) => {
+      const eventEnd = be.end_time ? new Date(be.end_time) : be.start_time ? new Date(be.start_time) : null;
+      if (eventEnd && !isNaN(eventEnd.getTime())) {
+        // Keep active until the end of the day of the event
+        eventEnd.setHours(23, 59, 59, 999);
+        return eventEnd.getTime() >= now;
+      }
+      return true;
+    });
+
+    if (activeRawEvents.length === 0) {
+      return { data: [], isLive: true };
     }
 
-    const mappedEvents: ChurchEvent[] = rawEvents.map((be, idx) => {
+    const mappedEvents: ChurchEvent[] = activeRawEvents.map((be, idx) => {
       const startDate = new Date(be.start_time);
       const formattedDate = isNaN(startDate.getTime())
         ? be.start_time
