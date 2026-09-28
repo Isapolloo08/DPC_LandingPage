@@ -18,7 +18,6 @@ import {
   Eye,
   Bus,
   Compass,
-  Sparkles,
   Layers,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -210,7 +209,7 @@ export function ExpandMap({
             {/* Top Section Header */}
             <div className="w-full flex items-center justify-between z-10 pb-3 border-b border-white/10">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-dpc-gold-400 animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-dpc-gold-400" />
                 <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-dpc-gold-400">
                   Location & Commute Overview
                 </span>
@@ -218,7 +217,7 @@ export function ExpandMap({
 
               <div className="flex items-center gap-2">
                 <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                   <span className="text-[10px] font-bold tracking-wider uppercase">
                     GPS Ready
                   </span>
@@ -265,10 +264,9 @@ export function ExpandMap({
                   </span>
                 </div>
 
-                {/* Center Pulsing Church Pin Marker */}
+                {/* Center Church Pin Marker */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center pointer-events-none">
                   <span className="relative flex h-8 w-8 items-center justify-center">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-dpc-gold-400 opacity-75" />
                     <span className="relative inline-flex rounded-full h-8 w-8 bg-dpc-navy-950 items-center justify-center text-dpc-gold-400 shadow-[0_0_15px_rgba(212,175,55,1)] border border-dpc-gold-400">
                       <Church className="w-4 h-4" />
                     </span>
@@ -521,7 +519,7 @@ export function ExpandMap({
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-xs text-slate-300">
                     <div className="flex items-center gap-1.5 font-semibold text-cyan-400">
-                      <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+                      <span className="w-2 h-2 rounded-full bg-cyan-400" />
                       <span className="truncate max-w-[140px] sm:max-w-[180px]">{userLocation.name}</span>
                     </div>
 
@@ -536,12 +534,11 @@ export function ExpandMap({
                     </div>
                   </div>
 
-                  {/* Animated Connecting Distance Beam */}
+                  {/* Connecting Distance Beam */}
                   <div className="relative w-full h-2.5 bg-black/60 rounded-full overflow-hidden border border-white/10 flex items-center px-1">
                     <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 via-dpc-gold-400 to-amber-500 opacity-70" />
-                    <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.8)_50%,transparent_100%)] bg-[length:200%_100%] animate-[shimmer_2s_infinite_linear]" />
 
-                    {/* Pulsing indicator along the bar */}
+                    {/* Indicator along the bar */}
                     <div className="relative z-10 flex items-center justify-between w-full">
                       <span className="w-2 h-2 rounded-full bg-cyan-300 shadow-[0_0_8px_#22d3ee]" />
                       <span className="text-[9px] font-extrabold text-black uppercase tracking-wider px-1 bg-white/90 rounded-sm shadow-sm">
@@ -582,7 +579,7 @@ export function ExpandMap({
                 /* Location Request Prompt / Notice Bar */
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-dpc-gold-400 animate-pulse" />
+                    <span className="w-2 h-2 rounded-full bg-dpc-gold-400" />
                     <span className="text-xs font-semibold text-white">
                       📍 Turn on location to see the actual road route to church:
                     </span>

@@ -12,7 +12,6 @@ import {
   Check,
   RotateCcw,
   GraduationCap,
-  Sparkles,
   Calendar,
   ExternalLink,
 } from 'lucide-react';
@@ -161,7 +160,7 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
           </div>
 
           <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold font-serif text-white tracking-tight">
-            Watch Our Church Life & <span className="gold-shimmer">Ministry Orientations</span>
+            Watch Our Church Life & <span className="text-dpc-gold-300">Ministry Orientations</span>
           </h2>
 
           <div className="max-w-2xl mx-auto mt-3">
@@ -281,11 +280,10 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
                     </span>
                   </div>
 
-                  {/* Center Glowing Big Play Button - Always Exactly Centered */}
+                  {/* Center Glowing Big Play Button */}
                   <div className="relative z-10 flex flex-col items-center justify-center gap-2.5 sm:gap-3 pointer-events-none">
                     <span className="relative flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-dpc-gold-400 opacity-60" />
-                      <span className="relative inline-flex rounded-full h-16 w-16 sm:h-20 sm:w-20 bg-gradient-to-tr from-dpc-gold-500 via-dpc-gold-400 to-amber-300 items-center justify-center text-dpc-navy-950 shadow-[0_0_35px_rgba(212,175,55,0.9)] group-hover:scale-110 group-active:scale-95 transition-transform duration-300">
+                      <span className="relative inline-flex rounded-full h-16 w-16 sm:h-20 sm:w-20 bg-gradient-to-tr from-dpc-gold-500 via-dpc-gold-400 to-amber-300 items-center justify-center text-dpc-navy-950 shadow-[0_0_35px_rgba(212,175,55,0.7)] group-hover:scale-110 group-active:scale-95 transition-transform duration-300">
                         <Play className="w-7 h-7 sm:w-9 sm:h-9 fill-current ml-1" />
                       </span>
                     </span>
@@ -429,7 +427,7 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
                 <ul className="space-y-1.5">
                   {selectedVideo.keyHighlights.map((hl, i) => (
                     <li key={i} className="flex items-start gap-2 text-xs text-slate-200">
-                      <span className="text-dpc-gold-400 font-bold mt-0.5">✦</span>
+                      <span className="text-dpc-gold-400 font-bold mt-0.5">•</span>
                       <span className="leading-snug">{hl}</span>
                     </li>
                   ))}
@@ -446,7 +444,7 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
                   onClick={() => onSelectMinistryModal(selectedVideo.ministryId!)}
                   className="w-full py-2.5 px-3 rounded-xl bg-dpc-gold-500/20 hover:bg-dpc-gold-500/30 text-dpc-gold-300 border border-dpc-gold-500/40 text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md hover:scale-[1.01]"
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-dpc-gold-400" />
+                  <Compass className="w-3.5 h-3.5 text-dpc-gold-400" />
                   <span>View Full Ministry Gallery & Connect</span>
                   <ExternalLink className="w-3.5 h-3.5 ml-auto" />
                 </button>
@@ -454,10 +452,10 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
 
               <button
                 onClick={onPlanVisitClick}
-                className="w-full py-3 rounded-xl text-xs sm:text-sm font-bold text-dpc-navy-950 bg-gradient-to-r from-dpc-gold-400 via-dpc-gold-300 to-dpc-gold-400 hover:from-dpc-gold-300 hover:to-dpc-gold-200 shadow-gold-glow text-center cursor-pointer transition-all flex items-center justify-center gap-2"
+                className="w-full py-3 rounded-xl text-xs sm:text-sm font-bold text-dpc-navy-950 bg-gradient-to-r from-dpc-gold-400 via-dpc-gold-300 to-dpc-gold-400 hover:from-dpc-gold-300 hover:to-dpc-gold-200 shadow-gold-glow text-center cursor-pointer transition-all flex items-center justify-center gap-2 group"
               >
                 <span>Plan a Visit This Sunday</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
               </button>
 
               <button
@@ -530,7 +528,7 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
                     {/* Active State / Soundwave Pill */}
                     {isSelected ? (
                       <div className="absolute top-2 left-2 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-dpc-gold-400 text-dpc-navy-950 text-[10px] font-extrabold shadow-md">
-                        <span className="w-1.5 h-1.5 rounded-full bg-dpc-navy-950 animate-ping" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-dpc-navy-950" />
                         <span>NOW PLAYING</span>
                       </div>
                     ) : (
@@ -581,3 +579,4 @@ export const ChurchVideoHub: React.FC<ChurchVideoHubProps> = ({
 };
 
 export default ChurchVideoHub;
+

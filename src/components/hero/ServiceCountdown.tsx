@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Clock, Calendar, Bell, MapPin, Sparkles, AlertCircle, Users } from 'lucide-react';
+import { Clock, Calendar, Bell, Users } from 'lucide-react';
 import { CHURCH_INFO } from '../../data/churchInfo';
 import { ScriptureReveal } from '../ui/ScriptureReveal';
 
@@ -83,7 +83,7 @@ export const ServiceCountdown: React.FC = () => {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6 border-b border-white/10 pb-4">
             <div className="flex items-center gap-3 text-left">
               <div className="w-10 h-10 rounded-xl bg-dpc-gold-500/20 border border-dpc-gold-500/40 flex items-center justify-center text-dpc-gold-300">
-                <Bell className="w-5 h-5 animate-bounce" />
+                <Bell className="w-5 h-5" />
               </div>
               <div>
                 <h3 className="text-base sm:text-lg font-bold text-white font-serif">
@@ -202,3 +202,6 @@ export const ServiceCountdown: React.FC = () => {
     </section>
   );
 };
+
+export default ServiceCountdown;
+

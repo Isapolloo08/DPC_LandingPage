@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, MapPin, Clock, Users, Sparkles, Compass } from 'lucide-react';
+import { BookOpen, MapPin, Clock, Users, Compass, Church } from 'lucide-react';
 import { CHURCH_INFO } from '../../data/churchInfo';
 import { MINISTRIES_DATA } from '../../data/ministriesData';
 
@@ -97,7 +97,7 @@ export const ChurchBuilding3DCard: React.FC = () => {
           <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 pointer-events-none">
             <div>
               <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-dpc-navy-950/90 border border-dpc-gold-500/40 text-[10px] sm:text-[11px] font-bold text-dpc-gold-300 backdrop-blur-md mb-1.5 shadow-sm">
-                <Sparkles className="w-3 h-3 text-dpc-gold-400" />
+                <Church className="w-3 h-3 text-dpc-gold-400" />
                 <span>Sanctuary & Youth Center</span>
               </div>
               <p className="text-sm sm:text-base font-serif font-bold text-white drop-shadow-md">
@@ -255,3 +255,4 @@ export const ChurchBuilding3DCard: React.FC = () => {
     </div>
   );
 };
+

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Compass, Church, Calendar, Sparkles, MapPin, ArrowRight, RotateCw } from 'lucide-react';
+import { Mail, Compass, Church, Calendar, MapPin, RotateCw, ArrowRight } from 'lucide-react';
 import { CHURCH_INFO } from '../../data/churchInfo';
 import { ExpandMap } from '@/components/ui/expand-map';
 
@@ -135,7 +135,7 @@ export const LocationMapSection: React.FC<LocationMapSectionProps> = ({ onPlanVi
                 {/* Bottom Overlay Content on the Photo */}
                 <div className="relative z-10 space-y-2 pointer-events-none">
                   <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-dpc-navy-950/90 border border-dpc-gold-500/40 text-[11px] font-bold text-dpc-gold-300 backdrop-blur-md shadow-sm">
-                    <Sparkles className="w-3.5 h-3.5 text-dpc-gold-400" />
+                    <Church className="w-3.5 h-3.5 text-dpc-gold-400" />
                     <span>Sanctuary & Camarines Norte Youth Center</span>
                   </div>
 
@@ -323,10 +323,10 @@ export const LocationMapSection: React.FC<LocationMapSectionProps> = ({ onPlanVi
                       e.stopPropagation();
                       onPlanVisitClick();
                     }}
-                    className="w-full py-3 rounded-xl text-xs sm:text-sm font-bold text-dpc-navy-950 bg-gradient-to-r from-dpc-gold-400 via-dpc-gold-300 to-dpc-gold-400 hover:from-dpc-gold-300 hover:to-dpc-gold-200 shadow-gold-glow text-center cursor-pointer transition-all flex items-center justify-center gap-2"
+                    className="w-full py-3 rounded-xl text-xs sm:text-sm font-bold text-dpc-navy-950 bg-gradient-to-r from-dpc-gold-400 via-dpc-gold-300 to-dpc-gold-400 hover:from-dpc-gold-300 hover:to-dpc-gold-200 shadow-gold-glow text-center cursor-pointer transition-all flex items-center justify-center gap-2 group"
                   >
-                    <Sparkles className="w-4 h-4 shrink-0" />
                     <span>Plan a Visit to DPC</span>
+                    <ArrowRight className="w-4 h-4 shrink-0 group-hover:translate-x-0.5 transition-transform" />
                   </button>
                 </div>
               </motion.div>
@@ -360,3 +360,4 @@ export const LocationMapSection: React.FC<LocationMapSectionProps> = ({ onPlanVi
 };
 
 export default LocationMapSection;
+

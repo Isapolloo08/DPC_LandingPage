@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Calendar, MapPin, User, BookOpen, CheckCircle2, Send, Sparkles, Camera, Maximize2 } from 'lucide-react';
+import { X, Calendar, MapPin, User, BookOpen, CheckCircle2, Send, Camera, Maximize2, Users } from 'lucide-react';
 import { Ministry } from '../../types/church';
 import { CircularTestimonials, TestimonialItem } from '@/components/ui/circular-testimonials';
 import { ImageLightboxModal, LightboxImage } from '@/components/ui/ImageLightboxModal';
@@ -246,7 +246,7 @@ export const MinistryDetailModal: React.FC<MinistryDetailModalProps> = ({
             ) : (
               <form onSubmit={handleJoinSubmit} className="space-y-3">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-dpc-gold-400 flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5" />
+                  <Users className="w-3.5 h-3.5" />
                   <span>Interested in joining or inquiring for {ministry.name}?</span>
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -291,3 +291,6 @@ export const MinistryDetailModal: React.FC<MinistryDetailModalProps> = ({
     </div>
   );
 };
+
+export default MinistryDetailModal;
+

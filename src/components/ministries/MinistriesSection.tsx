@@ -39,7 +39,6 @@ export const MinistriesSection: React.FC<MinistriesSectionProps> = ({ onSelectMi
       case 'Baby':
         return Sprout;
       case 'BookOpen':
-      case 'Sparkles':
         return BookOpen;
       case 'Flame':
         return Flame;

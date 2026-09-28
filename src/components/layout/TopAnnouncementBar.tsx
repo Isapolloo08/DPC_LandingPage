@@ -11,7 +11,7 @@ export const TopAnnouncementBar: React.FC<TopAnnouncementBarProps> = ({ onPlanVi
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
         <div className="flex items-center gap-2 justify-center sm:justify-start">
           <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-red-950/80 text-red-400 border border-red-500/40">
-            <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></span>
+            <span className="w-2 h-2 rounded-full bg-red-500"></span>
             <Radio className="w-3 h-3" />
             THIS SUNDAY
           </span>

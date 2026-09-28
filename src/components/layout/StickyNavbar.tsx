@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, UserCheck, Church, Sparkles } from 'lucide-react';
+import { Menu, X, Church, ArrowRight } from 'lucide-react';
 import { CHURCH_INFO } from '../../data/churchInfo';
 
 interface StickyNavbarProps {
@@ -60,7 +60,6 @@ export const StickyNavbar: React.FC<StickyNavbarProps> = ({
                 <span className="font-serif font-bold text-xs xs:text-sm sm:text-base md:text-lg tracking-wide text-white group-hover:text-dpc-gold-300 transition-colors whitespace-nowrap">
                   {CHURCH_INFO.name}
                 </span>
-                <span className="hidden md:inline-block w-1.5 h-1.5 rounded-full bg-dpc-gold-500"></span>
                 <span className="hidden md:inline-block text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-dpc-gold-400 bg-dpc-gold-500/10 px-2 py-0.5 rounded border border-dpc-gold-500/30">
                   Reformed
                 </span>
@@ -88,10 +87,10 @@ export const StickyNavbar: React.FC<StickyNavbarProps> = ({
           <div className="hidden sm:flex items-center gap-2.5">
             <button
               onClick={onPlanVisitClick}
-              className="inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-dpc-navy-950 bg-gradient-to-r from-dpc-gold-400 via-dpc-gold-300 to-dpc-gold-400 hover:from-dpc-gold-300 hover:to-dpc-gold-200 rounded-lg shadow-gold-glow hover:shadow-gold-glow-lg transition-all transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer shrink-0"
+              className="inline-flex items-center gap-2 px-4 sm:px-4.5 py-2 text-xs sm:text-sm font-semibold text-dpc-navy-950 bg-gradient-to-r from-dpc-gold-400 via-dpc-gold-300 to-dpc-gold-400 hover:from-dpc-gold-300 hover:to-dpc-gold-200 rounded-lg shadow-gold-glow hover:shadow-gold-glow-lg transition-all transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer shrink-0 group"
             >
-              <Sparkles className="w-4 h-4 text-dpc-navy-950 shrink-0" />
               <span>Plan a Visit</span>
+              <ArrowRight className="w-3.5 h-3.5 text-dpc-navy-950 group-hover:translate-x-0.5 transition-transform" />
             </button>
           </div>
 
@@ -99,9 +98,8 @@ export const StickyNavbar: React.FC<StickyNavbarProps> = ({
           <div className="flex lg:hidden items-center gap-1.5 sm:gap-2 shrink-0">
             <button
               onClick={onPlanVisitClick}
-              className="hidden xs:inline-flex sm:hidden items-center gap-1 px-2.5 py-1.5 text-xs font-bold text-dpc-navy-950 bg-gradient-to-r from-dpc-gold-400 to-dpc-gold-300 hover:from-dpc-gold-300 hover:to-dpc-gold-200 rounded-lg shadow-sm cursor-pointer transition-all shrink-0"
+              className="hidden xs:inline-flex sm:hidden items-center gap-1 px-3 py-1.5 text-xs font-bold text-dpc-navy-950 bg-gradient-to-r from-dpc-gold-400 to-dpc-gold-300 hover:from-dpc-gold-300 hover:to-dpc-gold-200 rounded-lg shadow-sm cursor-pointer transition-all shrink-0"
             >
-              <Sparkles className="w-3.5 h-3.5" />
               <span>Visit</span>
             </button>
             <button
@@ -148,8 +146,8 @@ export const StickyNavbar: React.FC<StickyNavbarProps> = ({
               }}
               className="w-full flex items-center justify-center gap-2 py-3 px-4 text-xs sm:text-sm font-bold text-dpc-navy-950 bg-gradient-to-r from-dpc-gold-400 via-dpc-gold-300 to-dpc-gold-400 hover:from-dpc-gold-300 hover:to-dpc-gold-200 rounded-xl shadow-gold-glow cursor-pointer transition-all"
             >
-              <Sparkles className="w-4 h-4 text-dpc-navy-950" />
               <span>Plan Your First Visit This Sunday</span>
+              <ArrowRight className="w-4 h-4 text-dpc-navy-950" />
             </button>
           </div>
         </div>
@@ -157,4 +155,7 @@ export const StickyNavbar: React.FC<StickyNavbarProps> = ({
     </header>
   );
 };
+
+export default StickyNavbar;
+
 

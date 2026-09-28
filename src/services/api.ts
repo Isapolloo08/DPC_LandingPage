@@ -49,7 +49,7 @@ export interface BackendEvent {
 const getMinistryIconName = (name: string): string => {
   const lower = name.toLowerCase();
   if (lower.includes('kinder') || lower.includes('seed') || lower.includes('toddler')) return 'Baby';
-  if (lower.includes('elementary') || lower.includes('kid') || lower.includes('covenant')) return 'Sparkles';
+  if (lower.includes('elementary') || lower.includes('kid') || lower.includes('covenant')) return 'BookOpen';
   if (lower.includes('high') || lower.includes('teen') || lower.includes('ignite')) return 'Flame';
   if (lower.includes('youth') || lower.includes('college') || lower.includes('campus')) return 'Compass';
   if (lower.includes('young') || lower.includes('pro') || lower.includes('career')) return 'Briefcase';

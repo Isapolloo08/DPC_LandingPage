@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Sparkles, CheckCircle2, Send } from 'lucide-react';
+import { X, CheckCircle2, Send, Users } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 interface PlanVisitModalProps {
@@ -114,14 +114,14 @@ export const PlanVisitModal: React.FC<PlanVisitModalProps> = ({ isOpen, onClose 
             {/* Header */}
             <div className="mb-6">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-dpc-gold-500/10 border border-dpc-gold-500/30 text-xs font-semibold uppercase tracking-wider text-dpc-gold-400 mb-2">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>VIP Hospitality Experience</span>
+                <Users className="w-3.5 h-3.5" />
+                <span>First-Time Guest Welcome</span>
               </div>
               <h3 className="text-2xl font-bold text-white font-serif">
                 Plan Your First Visit to DPC
               </h3>
               <p className="text-xs sm:text-sm text-slate-300 mt-1 font-light">
-                Let us know you're coming so our pastoral team and greeters can roll out the red carpet for you.
+                Let us know you're coming so our pastoral team and greeters can warmly welcome you.
               </p>
             </div>
 
@@ -268,3 +268,4 @@ export const PlanVisitModal: React.FC<PlanVisitModalProps> = ({ isOpen, onClose 
     </div>
   );
 };
+

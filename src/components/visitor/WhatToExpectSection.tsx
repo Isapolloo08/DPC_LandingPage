@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Car, Shirt, ShieldCheck, UtensilsCrossed, Music, Heart, HelpCircle, ArrowRight, Sparkles } from 'lucide-react';
+import { Car, Shirt, ShieldCheck, UtensilsCrossed, Music, Heart, HelpCircle, ArrowRight } from 'lucide-react';
 import { ScriptureReveal } from '../ui/ScriptureReveal';
 
 import kidsImg from '@/assets/Kinder Ministry/516368798_4004060663255125_3940156298598136062_n.jpg';
@@ -244,11 +244,10 @@ export const WhatToExpectSection: React.FC<WhatToExpectSectionProps> = ({ onPlan
                 </div>
                 <button
                   onClick={onPlanVisitClick}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-dpc-navy-950 bg-gradient-to-r from-dpc-gold-400 to-dpc-gold-300 hover:from-dpc-gold-300 hover:to-dpc-gold-200 shadow-gold-glow shrink-0 transition-all cursor-pointer text-center"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-xs font-bold text-dpc-navy-950 bg-gradient-to-r from-dpc-gold-400 to-dpc-gold-300 hover:from-dpc-gold-300 hover:to-dpc-gold-200 shadow-gold-glow shrink-0 transition-all cursor-pointer text-center group"
                 >
-                  <Sparkles className="w-4 h-4 shrink-0" />
                   <span>Plan a Visit Now</span>
-                  <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+                  <ArrowRight className="w-3.5 h-3.5 shrink-0 group-hover:translate-x-0.5 transition-transform" />
                 </button>
               </div>
 
@@ -261,3 +260,4 @@ export const WhatToExpectSection: React.FC<WhatToExpectSectionProps> = ({ onPlan
     </section>
   );
 };
+
