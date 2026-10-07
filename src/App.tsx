@@ -1,154 +1,74 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useState } from "react";
+import "./landing.css";
+import { StickyNavbar } from "./components/layout/StickyNavbar";
+import { HeroBanner } from "./components/hero/HeroBanner";
+import { ServiceCountdown } from "./components/hero/ServiceCountdown";
+import { WhatToExpectSection } from "./components/visitor/WhatToExpectSection";
+import { PlanVisitModal } from "./components/visitor/PlanVisitModal";
+import { MinistriesSection } from "./components/ministries/MinistriesSection";
+import { MinistryDetailModal } from "./components/ministries/MinistryDetailModal";
+import { AnnouncementsSection } from "./components/events/AnnouncementsSection";
+import { EventRsvpModal } from "./components/events/EventRsvpModal";
+import { LocationMapSection } from "./components/location/LocationMapSection";
+import { Footer } from "./components/layout/Footer";
+import { CHURCH_INFO } from "./data/churchInfo";
+import { Ministry, ChurchEvent } from "./types/church";
+import { ScrollReveal } from "./components/ui/ScrollReveal";
 
-// Register GSAP Plugin
-gsap.registerPlugin(ScrollTrigger);
-
-// Domain Components
-import { StickyNavbar } from './components/layout/StickyNavbar';
-import { HeroBanner } from './components/hero/HeroBanner';
-import { ServiceCountdown } from './components/hero/ServiceCountdown';
-import { WhatToExpectSection } from './components/visitor/WhatToExpectSection';
-import { PlanVisitModal } from './components/visitor/PlanVisitModal';
-import { MinistriesSection } from './components/ministries/MinistriesSection';
-import { MinistryDetailModal } from './components/ministries/MinistryDetailModal';
-import { AnnouncementsSection } from './components/events/AnnouncementsSection';
-import { EventRsvpModal } from './components/events/EventRsvpModal';
-import { LocationMapSection } from './components/location/LocationMapSection';
-import { Footer } from './components/layout/Footer';
-
-import { Ministry, ChurchEvent } from './types/church';
-
-export const App: React.FC = () => {
-  // Modal states
+export const App = () => {
   const [isPlanVisitOpen, setIsPlanVisitOpen] = useState(false);
-  const [selectedMinistry, setSelectedMinistry] = useState<Ministry | null>(null);
+  const [selectedMinistry, setSelectedMinistry] = useState<Ministry | null>(
+    null,
+  );
   const [selectedEvent, setSelectedEvent] = useState<ChurchEvent | null>(null);
-
-  const mainRef = useRef<HTMLDivElement>(null);
-
-  // Ensure fresh page reload always starts at the top
-  useEffect(() => {
-    if ('scrollRestoration' in window.history) {
-      window.history.scrollRestoration = 'manual';
-    }
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-  }, []);
-
-  // GSAP Animations with Clean Lifecycle & Compositor Performance
-  useEffect(() => {
-    const isMobile = window.innerWidth < 768;
-    const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    const ctx = gsap.context(() => {
-      // Animate Section Entrances using GPU-accelerated transforms & opacity
-      const animatedSections = [
-        '#services',
-        '#what-to-expect',
-        '#ministries',
-        '#events',
-        '#location',
-      ];
-
-      animatedSections.forEach((selector) => {
-        const el = document.querySelector(selector);
-        if (el) {
-          if (isReducedMotion) {
-            gsap.set(el, { opacity: 1, y: 0 });
-            return;
-          }
-
-          gsap.fromTo(
-            el,
-            { opacity: 0.9, y: isMobile ? 12 : 24 },
-            {
-              opacity: 1,
-              y: 0,
-              duration: isMobile ? 0.45 : 0.65,
-              ease: 'power2.out',
-              force3D: true,
-              clearProps: 'transform,willChange',
-              scrollTrigger: {
-                trigger: el,
-                start: isMobile ? 'top 92%' : 'top 85%',
-                toggleActions: 'play none none none',
-                once: true,
-              },
-            }
-          );
-        }
-      });
-    }, mainRef);
-
-    return () => ctx.revert(); // GSAP context cleanup on unmount
-  }, []);
-
+  const openVisit = () => setIsPlanVisitOpen(true);
   return (
-    <div ref={mainRef} className="min-h-screen flex flex-col bg-dpc-navy-950 text-slate-100 selection:bg-dpc-gold-500 selection:text-dpc-navy-950">
-      
-      {/* Sticky Header & Navigation */}
-      <StickyNavbar
-        onPlanVisitClick={() => setIsPlanVisitOpen(true)}
-      />
-
-      <main className="flex-1">
-        {/* 3. Hero Banner with Romans 12:5 & Call to Action */}
-        <HeroBanner
-          onPlanVisitClick={() => setIsPlanVisitOpen(true)}
-        />
-
-        {/* 4. Service Times & Live Calculating Countdown */}
+    <div className="landing-page">
+      <a className="skip-link" href="#main-content">
+        Skip to content
+      </a>
+      <StickyNavbar onPlanVisitClick={openVisit} />
+      <main id="main-content">
+        <HeroBanner onPlanVisitClick={openVisit} />
         <ServiceCountdown />
-
-        {/* 5. "What to Expect" First-Time Visitor Guide */}
-        <WhatToExpectSection onPlanVisitClick={() => setIsPlanVisitOpen(true)} />
-
-        {/* 6. The 7 Age-Bracket Ministries Showcase */}
-        <MinistriesSection onSelectMinistry={(m) => setSelectedMinistry(m)} />
-
-        {/* 7. Unified Media, Virtual Cinema Hub & Live Events Calendar */}
+        <WhatToExpectSection onPlanVisitClick={openVisit} />
+        <MinistriesSection onSelectMinistry={setSelectedMinistry} />
+        <section className="scripture-section">
+          <ScrollReveal className="page-container">
+            <span className="scripture-symbol" aria-hidden="true">
+              “
+            </span>
+            <blockquote>{CHURCH_INFO.verseText}</blockquote>
+            <p>
+              {CHURCH_INFO.verseRef} <span>·</span> ONE BODY. MANY MEMBERS.
+            </p>
+          </ScrollReveal>
+        </section>
         <AnnouncementsSection
-          onSelectEvent={(e) => setSelectedEvent(e)}
-          onPlanVisitClick={() => setIsPlanVisitOpen(true)}
-          onSelectMinistry={(m) => setSelectedMinistry(m)}
+          onSelectEvent={setSelectedEvent}
+          onPlanVisitClick={openVisit}
+          onSelectMinistry={setSelectedMinistry}
         />
-
-        {/* 8. Location, Directions, Map & Socials */}
-        <LocationMapSection
-          onPlanVisitClick={() => setIsPlanVisitOpen(true)}
-        />
+        <LocationMapSection onPlanVisitClick={openVisit} />
       </main>
-
-      {/* 9. Footer */}
-      <Footer
-        onPlanVisitClick={() => setIsPlanVisitOpen(true)}
-      />
-
-      {/* --- Interactive Modals --- */}
-      
-      {/* Plan a Visit Modal */}
+      <Footer onPlanVisitClick={openVisit} />
       <PlanVisitModal
         isOpen={isPlanVisitOpen}
         onClose={() => setIsPlanVisitOpen(false)}
       />
-
-      {/* Ministry Deep Dive & Connection Modal */}
       <MinistryDetailModal
+        key={selectedMinistry?.id || "closed-ministry"}
         ministry={selectedMinistry}
         isOpen={!!selectedMinistry}
         onClose={() => setSelectedMinistry(null)}
       />
-
-      {/* Event RSVP & Ticket Modal */}
       <EventRsvpModal
+        key={selectedEvent?.id || "closed-event"}
         event={selectedEvent}
         isOpen={!!selectedEvent}
         onClose={() => setSelectedEvent(null)}
       />
-
     </div>
   );
 };
-
 export default App;

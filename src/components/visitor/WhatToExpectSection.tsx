@@ -1,263 +1,173 @@
-import React, { useState } from 'react';
-import { Car, Shirt, ShieldCheck, UtensilsCrossed, Music, Heart, HelpCircle, ArrowRight } from 'lucide-react';
-import { ScriptureReveal } from '../ui/ScriptureReveal';
+import { useState } from "react";
+import { ArrowRight, Minus, Plus } from "lucide-react";
+import { ChurchPhotoStream } from "../hero/ChurchPhotoStream";
+import { ScrollReveal } from "../ui/ScrollReveal";
+import welcomePhoto from "../../assets/Young Adult Ministry/719789654_956689864036342_2095763987152963926_n.webp";
+import attirePhoto from "../../assets/Young Adult Ministry/719532750_956690060702989_7373299191000118107_n.webp";
+import childrenPhoto from "../../assets/Kinder Ministry/516368798_4004060663255125_3940156298598136062_n.webp";
+import worshipPhoto from "../../assets/Junior Adult Minitry/626386732_906329712047578_6172969032115822277_n.webp";
+import mealPhoto from "../../assets/Junior Adult Minitry/724019843_1322877753302746_8993175069316953491_n.webp";
 
-import kidsImg from '@/assets/Kinder Ministry/516368798_4004060663255125_3940156298598136062_n.jpg';
-import attireImg from '@/assets/Young Adult Ministry/505320113_661118810260117_450252600683907860_n.jpg';
-import lunchImg from '@/assets/Old Adult Ministry/724408784_122172253130944863_6588021141249655795_n.jpg';
-import worshipImg from '@/assets/Youth Ministry/714759264_1015627274136826_7581065074620186600_n.jpg';
+const questions = [
+  {
+    title: "A warm welcome, from the moment you arrive",
+    image: welcomePhoto,
+    imageAlt: "Church members smiling together at a welcoming gathering",
+    imagePosition: "50% 65%",
+    photoLabel: "THERE’S A SEAT FOR YOU",
+    photoHeading: "New here?",
+    photoMessage: "You’re already welcome.",
+    body: "Our greeters will help you find your way around and settle in. On-site parking is available in Purok 2, Cobangbang. Arrive around 9:30 AM for our 9:40 AM main worship, or at 8:00 AM for Bible study and Sunday school.",
+  },
+  {
+    title: "Come as you are",
+    image: attirePhoto,
+    imageAlt: "Church members in dresses, shirts, and casual clothes enjoying an activity together",
+    imagePosition: "45% center",
+    photoLabel: "COME AS YOU ARE",
+    photoHeading: "A familiar face.",
+    photoMessage: "A place to belong.",
+    body: "You’ll see everything from smart-casual clothes to Sunday dresses and Barong. There is no strict dress code—come ready to worship and feel at home.",
+  },
+  {
+    title: "A place for your little ones, too",
+    image: childrenPhoto,
+    imageAlt: "Kinder Ministry children and their teachers gathered for a church activity",
+    imagePosition: "50% 65%",
+    photoLabel: "LITTLE HEARTS. BIG WELCOME.",
+    photoHeading: "Room to learn.",
+    photoMessage: "Room to grow.",
+    body: "Our Kinder and Elementary ministries offer Bible stories, songs, and crafts from 8:00 to 9:30 AM, followed by supervised activities during main worship. Our teachers can help you with check-in when you arrive.",
+  },
+  {
+    title: "Worship rooted in God’s Word",
+    image: worshipPhoto,
+    imageAlt: "Junior Adult Ministry singing special praise before the congregation",
+    imagePosition: "50% 60%",
+    photoLabel: "TOGETHER IN WORSHIP",
+    photoHeading: "One church family.",
+    photoMessage: "Lifting our voices.",
+    body: "Expect Christ-centered praise, historic hymns, contemporary songs, prayer, and verse-by-verse preaching from Scripture. Our main Sunday service runs from 9:40 to 11:30 AM.",
+  },
+  {
+    title: "Stay a little longer. Share a meal.",
+    image: mealPhoto,
+    imageAlt: "Church members sharing food and conversation around a table",
+    imagePosition: "50% center",
+    photoLabel: "FELLOWSHIP AROUND THE TABLE",
+    photoHeading: "Share a meal.",
+    photoMessage: "Make a friend.",
+    body: "After Sunday worship, join our church family for agape fellowship lunch. It’s a relaxed opportunity to meet new friends and our pastoral team. Lunch is on us for first-time guests.",
+  },
+];
 
-interface WhatToExpectSectionProps {
+export const WhatToExpectSection = ({
+  onPlanVisitClick,
+}: {
   onPlanVisitClick: () => void;
-}
-
-export const WhatToExpectSection: React.FC<WhatToExpectSectionProps> = ({ onPlanVisitClick }) => {
-  const [activeTab, setActiveTab] = useState(0);
-
-  const guideItems = [
-    {
-      id: 'parking',
-      icon: Car,
-      title: 'Dedicated Parking & Arrival',
-      tagline: 'Stress-free arrival in Daet, Camarines Norte',
-      summary: 'Convenient on-site parking at DPC premises in Purok 2, Brgy. Cobangbang.',
-      details: [
-        'Friendly volunteer parking marshals will guide you safely to open slots upon arrival.',
-        'Designated accessible spots for senior saints and families with small infants right in front of the main entrance.',
-        'Arrive at 8:00 AM for Adult Bible Study / High School Worship / Kids Sunday School, or by 9:30 AM for the 9:40 AM Main Worship Service.'
-      ],
-      badge: 'Arrival Guide',
-      image: '/images/church-building.jpg'
-    },
-    {
-      id: 'attire',
-      icon: Shirt,
-      title: 'What Should I Wear?',
-      tagline: 'Warmth, modesty, and grace over formality',
-      summary: 'Come as you are! You will see everything from smart-casual and polo shirts to Sunday dresses and Barong.',
-      details: [
-        'There is no strict dress code; our focus is on genuine worship of our Lord in spirit and in truth.',
-        'Most members and college youth wear smart-casual, denim, or Sunday semi-formal.',
-        'Our sanctuary and youth hall are well-ventilated and air-conditioned for your comfort.'
-      ],
-      badge: 'Attire',
-      image: attireImg
-    },
-    {
-      id: 'kids',
-      icon: ShieldCheck,
-      title: 'Children’s Sunday School & Care (DPC Kids)',
-      tagline: 'Clean, secure, and Christ-centered care',
-      summary: 'Dedicated Bible classes from 8:00 AM to 9:30 AM, followed by supervised fun playtime, crafts, and Christian movies.',
-      details: [
-        'Safe parent check-in ensures your children are safe and well-cared for by loving, background-checked teachers.',
-        'Age-tailored Bible story lessons, crafts, and memory verses from 8:00 AM to 9:30 AM.',
-        'After 9:30 AM (while adults attend Main Worship), kids enjoy supervised playtime, interactive games, and inspiring Christian animations in our kids hall.'
-      ],
-      badge: 'Family & Children',
-      image: kidsImg
-    },
-    {
-      id: 'lunch',
-      icon: UtensilsCrossed,
-      title: 'Post-Service Agape Fellowship Lunch',
-      tagline: 'Free hearty lunch for all first-time guests',
-      summary: 'Every Sunday after the 11:30 AM benediction, our church family gathers for a warm community meal.',
-      details: [
-        'Enjoy local Bicolano dishes and refreshments at the DPC Fellowship Courtyard.',
-        'As our first-time guest, lunch is completely on us! No need to bring anything.',
-        'An easy, no-pressure opportunity to chat with our pastoral team, elders, and young adults.'
-      ],
-      badge: 'Community Meal',
-      image: lunchImg
-    },
-    {
-      id: 'worship',
-      icon: Music,
-      title: 'The Worship & Preaching Style',
-      tagline: 'Scripture-soaked, Christ-exalting, and reformed',
-      summary: 'A reverent yet joyful liturgy featuring historic hymns, contemporary acoustic praise, and expository preaching.',
-      details: [
-        'We practice verse-by-verse expository preaching through books of the Old and New Testaments.',
-        'Congregational singing blending majestic hymns with contemporary praise songs led by our youth and music teams.',
-        'Celebration of the Lord’s Supper (Holy Communion) on designated Lord’s Days for all baptized believers in good standing.'
-      ],
-      badge: 'Sunday Liturgy',
-      image: worshipImg
-    }
-  ];
-
+}) => {
+  const [selection, setSelection] = useState({ index: 0, expanded: true });
+  const active = selection.expanded ? selection.index : null;
+  const selectedPhoto = questions[selection.index];
   return (
-    <section id="what-to-expect" className="py-20 bg-dpc-navy-950 px-4 sm:px-6 lg:px-8 relative overflow-hidden section-render-opt">
-      {/* Background accents */}
-      <div className="absolute top-1/2 -left-20 w-80 h-80 radial-cross-glow opacity-30 blur-3xl pointer-events-none -z-10"></div>
-
-      <div className="max-w-7xl mx-auto relative z-10">
-        
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-dpc-gold-500/10 border border-dpc-gold-500/30 text-xs font-semibold uppercase tracking-wider text-dpc-gold-400 mb-3">
-            <HelpCircle className="w-3.5 h-3.5" />
-            <span>First-Time Visitor Guide</span>
-          </div>
-          <h2 className="text-2xl sm:text-4xl font-bold font-serif text-white tracking-tight">
-            What to Expect at DPC
+    <>
+      <section id="about" className="about-section">
+        <ScrollReveal className="page-container about-grid">
+          <h2>
+            Different stories.
+            <br />
+            <em>One family in Christ.</em>
           </h2>
-          <div className="max-w-2xl mx-auto mt-3">
-            <ScriptureReveal
-              quote="Therefore welcome one another as Christ has welcomed you, for the glory of God."
-              reference="Romans 15:7"
-              version="ESV"
-              showQuoteMarks={false}
-              highlightWords={['welcome', 'Christ', 'glory', 'God']}
-              quoteClassName="text-sm sm:text-base text-slate-200 font-serif italic leading-relaxed"
-              referenceClassName="!mt-1.5"
-              align="center"
-              staggerDelay={0.04}
-              initialDelay={0.15}
-            />
+          <div className="about-description">
+            <p>
+              We’re a Reformed Presbyterian church rooted in Biblical truth and
+              God’s grace. Since 2007, we’ve gathered in Daet to worship Jesus,
+              care for one another, and share His love with our community.
+            </p>
+            <a className="text-link" href="#ministries">
+              Find your community <ArrowRight size={16} />
+            </a>
           </div>
-        </div>
-
-        {/* Interactive Step Navigator */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
-          
-          {/* Left Navigation Buttons */}
-          <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2.5 sm:gap-3">
-            {guideItems.map((item, index) => {
-              const Icon = item.icon;
-              const isActive = activeTab === index;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveTab(index)}
-                  className={`w-full text-left p-3.5 sm:p-4 md:p-5 rounded-2xl transition-all duration-300 flex items-start gap-3.5 sm:gap-4 border cursor-pointer ${
-                    isActive
-                      ? 'glass-panel-gold border-dpc-gold-500/60 shadow-gold-glow sm:scale-[1.02]'
-                      : 'glass-panel border-white/5 hover:border-dpc-gold-500/30 hover:bg-white/5 opacity-80 hover:opacity-100'
-                  }`}
-                >
-                  <div
-                    className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
-                      isActive
-                        ? 'bg-dpc-gold-500 text-dpc-navy-950 shadow-md shadow-dpc-gold-500/30'
-                        : 'bg-dpc-navy-800 text-dpc-gold-400 border border-dpc-gold-500/20'
-                    }`}
-                  >
-                    <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </div>
-
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between gap-1.5 mb-1">
-                      <h3
-                        className={`text-xs sm:text-sm md:text-base font-bold font-serif truncate ${
-                          isActive ? 'text-dpc-gold-300' : 'text-white'
-                        }`}
-                      >
-                        {item.title}
-                      </h3>
-                      <span className="text-[9px] sm:text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-white/10 text-slate-300 shrink-0">
-                        {item.badge}
-                      </span>
-                    </div>
-                    <p className="text-[11px] sm:text-xs text-slate-400 line-clamp-1 font-light">
-                      {item.tagline}
-                    </p>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Right Active Details Panel */}
-          <div className="lg:col-span-7">
-            <div className="glass-panel-gold rounded-3xl p-5 sm:p-8 md:p-10 relative overflow-hidden border-dpc-gold-500/40 shadow-2xl animate-in fade-in duration-300">
-              
-              {/* Top Accent Icon & Title */}
-              <div className="flex items-center justify-between gap-4 mb-5 sm:mb-6 pb-5 sm:pb-6 border-b border-white/10">
-                <div className="flex items-center gap-3 sm:gap-3.5">
-                  {React.createElement(guideItems[activeTab].icon, {
-                    className: "w-7 h-7 sm:w-8 sm:h-8 text-dpc-gold-400 shrink-0"
-                  })}
-                  <div>
-                    <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-dpc-gold-400">
-                      Step {activeTab + 1} of {guideItems.length}
-                    </span>
-                    <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white font-serif">
-                      {guideItems[activeTab].title}
-                    </h3>
-                  </div>
-                </div>
-
-                <span className="hidden sm:inline-flex items-center gap-1 text-xs text-slate-400 shrink-0">
-                  <Heart className="w-3.5 h-3.5 text-red-400 fill-red-400" />
-                  <span>Visitor Friendly</span>
-                </span>
-              </div>
-
-              {/* Step Photo Feature */}
-              {guideItems[activeTab].image && (
-                <div className="relative w-full h-44 sm:h-52 rounded-2xl overflow-hidden mb-5 border border-white/10 shadow-lg">
-                  <img
-                    src={guideItems[activeTab].image}
-                    alt={guideItems[activeTab].title}
-                    loading="lazy"
-                    decoding="async"
-                    className="w-full h-full object-cover animate-in fade-in zoom-in-95 duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-3">
-                    <span className="text-[11px] font-semibold text-white drop-shadow">
-                      {guideItems[activeTab].tagline}
-                    </span>
-                  </div>
-                </div>
-              )}
-
-              {/* Summary Statement */}
-              <p className="text-sm sm:text-base md:text-lg text-slate-200 font-medium mb-5 sm:mb-6 leading-relaxed">
-                {guideItems[activeTab].summary}
+        </ScrollReveal>
+        <ChurchPhotoStream />
+      </section>
+      <section id="what-to-expect" className="visitor-section">
+        <ScrollReveal className="page-container visitor-grid" effect="reveal">
+          <ScrollReveal className="visitor-photo" effect="morph">
+            {questions.map((question, index) => (
+              <img
+                key={question.title}
+                className={selection.index === index ? "is-active" : ""}
+                src={question.image}
+                alt={selection.index === index ? question.imageAlt : ""}
+                aria-hidden={selection.index !== index}
+                style={{ objectPosition: question.imagePosition }}
+                loading="lazy"
+                decoding="async"
+                draggable={false}
+              />
+            ))}
+            <div className="visitor-photo-note">
+              <span>{selectedPhoto.photoLabel}</span>
+              <p>
+                {selectedPhoto.photoHeading}
+                <br />
+                {selectedPhoto.photoMessage}
               </p>
-
-              {/* Bulleted Insights */}
-              <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
-                {guideItems[activeTab].details.map((detail, idx) => (
-                  <div key={idx} className="flex items-start gap-2.5 sm:gap-3">
-                    <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-dpc-gold-500/20 border border-dpc-gold-500/40 flex items-center justify-center shrink-0 mt-0.5 text-dpc-gold-300 text-[10px] sm:text-xs font-bold">
-                      ✓
-                    </div>
-                    <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-light">
-                      {detail}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-              {/* Prompt CTA Card */}
-              <div className="bg-dpc-navy-950/80 rounded-2xl p-4 sm:p-5 border border-dpc-gold-500/20 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-                <div>
-                  <p className="text-xs font-bold text-white uppercase tracking-wider">
-                    Ready to visit us this coming Sunday?
-                  </p>
-                  <p className="text-[11px] sm:text-xs text-slate-400 font-light mt-0.5">
-                    We would love to reserve a seat and prepare a welcome gift for you.
-                  </p>
-                </div>
-                <button
-                  onClick={onPlanVisitClick}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-xs font-bold text-dpc-navy-950 bg-gradient-to-r from-dpc-gold-400 to-dpc-gold-300 hover:from-dpc-gold-300 hover:to-dpc-gold-200 shadow-gold-glow shrink-0 transition-all cursor-pointer text-center group"
-                >
-                  <span>Plan a Visit Now</span>
-                  <ArrowRight className="w-3.5 h-3.5 shrink-0 group-hover:translate-x-0.5 transition-transform" />
-                </button>
-              </div>
-
             </div>
+          </ScrollReveal>
+          <div className="visitor-copy">
+            <p className="eyebrow">YOUR FIRST SUNDAY</p>
+            <h2>
+              A little less unknown.
+              <br />
+              <em>A lot more welcome.</em>
+            </h2>
+            <p className="section-description">
+              Visiting a new church can feel like a big step. Here’s what you
+              can look forward to with us.
+            </p>
+            <div className="visitor-accordion">
+              {questions.map((question, index) => (
+                <div className="accordion-item" key={question.title}>
+                  <h3>
+                    <button
+                      id={`visitor-question-${index}`}
+                      aria-expanded={active === index}
+                      aria-controls={`visitor-answer-${index}`}
+                      onClick={() =>
+                        setSelection((current) => ({
+                          index,
+                          expanded: current.index !== index || !current.expanded,
+                        }))
+                      }
+                    >
+                      <span className="accordion-number">0{index + 1}</span>
+                      <span>{question.title}</span>
+                      {active === index ? (
+                        <Minus size={17} />
+                      ) : (
+                        <Plus size={17} />
+                      )}
+                    </button>
+                  </h3>
+                  <div
+                    id={`visitor-answer-${index}`}
+                    role="region"
+                    aria-labelledby={`visitor-question-${index}`}
+                    hidden={active !== index}
+                  >
+                    <p>{question.body}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button className="button button-navy" onClick={onPlanVisitClick}>
+              Plan your first visit <ArrowRight size={16} />
+            </button>
           </div>
-
-        </div>
-
-      </div>
-    </section>
+        </ScrollReveal>
+      </section>
+    </>
   );
 };
-

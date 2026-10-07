@@ -75,7 +75,7 @@ export const ChurchBuilding3DCard: React.FC = () => {
           className="absolute inset-0 w-full h-full rounded-3xl overflow-hidden bg-dpc-navy-950 border border-dpc-gold-500/40 hover:border-dpc-gold-400 shadow-2xl transition-colors duration-300"
         >
           <img
-            src="/images/church-building.jpg"
+            src="/images/church-building.webp"
             alt="Daet Presbyterian Church & Camarines Norte Youth Center Building"
             loading="lazy"
             decoding="async"

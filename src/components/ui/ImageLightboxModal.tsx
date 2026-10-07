@@ -1,6 +1,14 @@
-import React, { useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, ChevronLeft, ChevronRight, Maximize2, Tag, Info } from 'lucide-react';
+import { useDialogAccessibility } from "./useDialogAccessibility";
+import React, { useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  X,
+  ChevronLeft,
+  ChevronRight,
+  Maximize2,
+  Tag,
+  Info,
+} from "lucide-react";
 
 export interface LightboxImage {
   url: string;
@@ -24,6 +32,7 @@ export const ImageLightboxModal: React.FC<ImageLightboxModalProps> = ({
   onClose,
   onNavigate,
 }) => {
+  const dialogRef = useDialogAccessibility(isOpen, onClose);
   const currentImage = images[currentIndex];
 
   const handleNext = useCallback(() => {
@@ -43,25 +52,31 @@ export const ImageLightboxModal: React.FC<ImageLightboxModalProps> = ({
     if (!isOpen) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         onClose();
-      } else if (e.key === 'ArrowRight') {
+      } else if (e.key === "ArrowRight") {
         handleNext();
-      } else if (e.key === 'ArrowLeft') {
+      } else if (e.key === "ArrowLeft") {
         handlePrev();
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, handleNext, handlePrev, onClose]);
 
   if (!isOpen || !currentImage) return null;
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-md p-2 sm:p-4 md:p-6 select-none animate-in fade-in duration-200">
-        
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Ministry photo viewer"
+        tabIndex={-1}
+        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-md p-2 sm:p-4 md:p-6 select-none animate-in fade-in duration-200"
+      >
         {/* Top Header Bar */}
         <div className="absolute top-0 inset-x-0 z-20 flex items-center justify-between p-4 sm:p-6 bg-gradient-to-b from-black/80 via-black/40 to-transparent">
           <div className="flex items-center gap-2.5">
@@ -127,12 +142,16 @@ export const ImageLightboxModal: React.FC<ImageLightboxModalProps> = ({
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.25, ease: 'easeOut' }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
             className="relative flex items-center justify-center max-h-[72vh] sm:max-h-[75vh]"
           >
             <img
               src={currentImage.url}
-              alt={currentImage.caption || currentImage.title || 'Church Event Photo'}
+              alt={
+                currentImage.caption ||
+                currentImage.title ||
+                "Church Event Photo"
+              }
               className="max-h-[70vh] sm:max-h-[75vh] max-w-[92vw] sm:max-w-[85vw] object-contain rounded-2xl shadow-2xl border border-white/15"
             />
           </motion.div>
@@ -161,9 +180,10 @@ export const ImageLightboxModal: React.FC<ImageLightboxModalProps> = ({
         {/* Click backdrop helper indicator on desktop */}
         <div className="absolute bottom-3 right-4 hidden sm:flex items-center gap-1.5 text-[11px] text-slate-500 pointer-events-none">
           <Info className="w-3.5 h-3.5" />
-          <span>Press ESC or click outside to close • Arrow keys to navigate</span>
+          <span>
+            Press ESC or click outside to close • Arrow keys to navigate
+          </span>
         </div>
-
       </div>
     </AnimatePresence>
   );

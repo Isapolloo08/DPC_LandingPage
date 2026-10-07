@@ -4,13 +4,13 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 // Import real authentic photos from ministry folders
-import streamKinder from '@/assets/Kinder Ministry/516368798_4004060663255125_3940156298598136062_n.jpg';
-import streamElem from '@/assets/Elementary Ministry/480577141_481392148377786_6333824624822562519_n.jpg';
-import streamHs from '@/assets/High School Ministry/680044493_935616212628115_2898471636377619378_n.jpg';
-import streamYouthCamp from '@/assets/Youth Ministry/656680392_958771106489110_8611197159791022889_n.jpg';
-import streamYouthPraise from '@/assets/Youth Ministry/714759264_1015627274136826_7581065074620186600_n.jpg';
-import streamYA from '@/assets/Young Adult Ministry/505320113_661118810260117_450252600683907860_n.jpg';
-import streamCouples from '@/assets/Junior Adult Minitry/615576920_889621683718381_8998977265371590367_n.jpg';
+import streamKinder from '@/assets/Kinder Ministry/516368798_4004060663255125_3940156298598136062_n.webp';
+import streamElem from '@/assets/Elementary Ministry/480577141_481392148377786_6333824624822562519_n.webp';
+import streamHs from '@/assets/High School Ministry/680044493_935616212628115_2898471636377619378_n.webp';
+import streamYouthCamp from '@/assets/Youth Ministry/656680392_958771106489110_8611197159791022889_n.webp';
+import streamYouthPraise from '@/assets/Youth Ministry/714759264_1015627274136826_7581065074620186600_n.webp';
+import streamYA from '@/assets/Young Adult Ministry/505320113_661118810260117_450252600683907860_n.webp';
+import streamCouples from '@/assets/Junior Adult Minitry/615576920_889621683718381_8998977265371590367_n.webp';
 
 export interface CoverflowSlide {
   id: string;
@@ -23,7 +23,7 @@ export interface CoverflowSlide {
 export const HERO_GALLERY_SLIDES: CoverflowSlide[] = [
   {
     id: 'church-sanctuary',
-    src: '/images/church-building.jpg',
+    src: '/images/church-building.webp',
     alt: 'Daet Presbyterian Church sanctuary building and Camarines Norte Youth Center',
     tag: 'Sanctuary',
     title: 'Our Church Home & Worship Sanctuary',

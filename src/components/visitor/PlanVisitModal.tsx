@@ -1,271 +1,140 @@
-import React, { useState } from 'react';
-import { X, CheckCircle2, Send, Users } from 'lucide-react';
-import confetti from 'canvas-confetti';
+import { useEffect, useRef, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { ArrowLeft, ArrowRight, Check, Clock, Mail, MapPin, Users, X } from "lucide-react";
+import { useDialogAccessibility } from "../ui/useDialogAccessibility";
+import { CHURCH_INFO } from "../../data/churchInfo";
+import { MINISTRIES_DATA } from "../../data/ministriesData";
+import { responsiveImage } from "../../lib/responsiveImages";
+import familyPhoto from "../../assets/Kinder Ministry/516368798_4004060663255125_3940156298598136062_n.webp";
 
-interface PlanVisitModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+interface PlanVisitModalProps { isOpen: boolean; onClose: () => void; }
+type Party = "Just me" | "With friends" | "With family";
+const steps = ["Your visit", "Children", "Directions", "Your guide"];
+const ageOptions = ["Under 3", "Ages 3–5", "Ages 6–12"];
+const childMinistries = MINISTRIES_DATA.filter(m => /kinder|elementary/i.test(m.ageBracket));
+const worship = CHURCH_INFO.services.find(service => service.isMainWorship)!;
+const address = `${CHURCH_INFO.address.street}, ${CHURCH_INFO.address.barangay}, ${CHURCH_INFO.address.municipality}, ${CHURCH_INFO.address.province}`;
 
-export const PlanVisitModal: React.FC<PlanVisitModalProps> = ({ isOpen, onClose }) => {
-  const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    phone: '',
-    visitDate: 'This Coming Sunday (9:00 AM)',
-    adultsCount: '1',
-    childrenCount: '0',
-    needsKidsCheckIn: false,
-    specialNotes: '',
-  });
+export const PlanVisitModal = ({ isOpen, onClose }: PlanVisitModalProps) => {
+  const [step, setStep] = useState(0);
+  const [party, setParty] = useState<Party>("Just me");
+  const [visitDate, setVisitDate] = useState("This coming Sunday");
+  const [children, setChildren] = useState(false);
+  const [ages, setAges] = useState<string[]>([]);
+  const [directions, setDirections] = useState(true);
+  const [contactOpen, setContactOpen] = useState(false);
+  const [contact, setContact] = useState({ fullName: "", email: "", phone: "", notes: "" });
+  const reducedMotion = useReducedMotion();
+  const dialogRef = useDialogAccessibility(isOpen, onClose);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!isOpen) return;
+    contentRef.current?.scrollTo({ top: 0, behavior: "instant" });
+    headingRef.current?.focus({ preventScroll: true });
+  }, [step, isOpen]);
 
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const relevantMinistries = childMinistries.filter(m => ages.length === 0 ||
+    (ages.includes("Ages 3–5") && /kinder/i.test(m.ageBracket)) ||
+    (ages.includes("Ages 6–12") && /elementary/i.test(m.ageBracket)));
+  const plan = `${visitDate}\n${party}${children ? `, bringing children${ages.length ? ` (${ages.join(", ")})` : ""}` : ""}\n${worship.name}: ${worship.time}\nSuggested arrival: 9:30 AM\n${address}`;
+  const mailBody = `Hello DPC,\n\nI'd like to ask about my first visit.\n\n${plan}\n\nName: ${contact.fullName}\nEmail: ${contact.email}\nPhone: ${contact.phone}\nQuestions or accessibility needs: ${contact.notes}\n`;
+  const mailHref = `mailto:${CHURCH_INFO.contact.email}?subject=${encodeURIComponent("My first Sunday at DPC")}&body=${encodeURIComponent(mailBody)}`;
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-
-      // Trigger celebratory confetti
-      try {
-        confetti({
-          particleCount: 80,
-          spread: 70,
-          origin: { y: 0.6 },
-          colors: ['#d4af37', '#fcd34d', '#1d3557', '#ffffff']
-        });
-      } catch {
-        // fallback if canvas-confetti is not loaded
-      }
-    }, 600);
-  };
-
-  const handleReset = () => {
-    setIsSubmitted(false);
-    onClose();
-  };
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-xl bg-[#0c192c] rounded-2xl sm:rounded-3xl p-5 sm:p-7 md:p-8 shadow-2xl border border-dpc-gold-500/50 max-h-[92vh] sm:max-h-[90vh] overflow-y-auto">
-        
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 sm:top-5 sm:right-5 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer shrink-0"
-          aria-label="Close modal"
-        >
-          <X className="w-4 h-4" />
-        </button>
-
-        {isSubmitted ? (
-          <div className="text-center py-6 space-y-5 animate-in zoom-in-95 duration-300">
-            <div className="w-16 h-16 rounded-full bg-emerald-950 border border-emerald-500/50 text-emerald-400 flex items-center justify-center mx-auto shadow-lg shadow-emerald-950/50">
-              <CheckCircle2 className="w-9 h-9" />
-            </div>
-
-            <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-dpc-gold-400">
-                You're All Set!
-              </span>
-              <h3 className="text-2xl font-bold text-white font-serif mt-1">
-                We Can't Wait to Welcome You!
-              </h3>
-              <p className="text-sm text-slate-300 max-w-md mx-auto mt-2 leading-relaxed font-light">
-                Thank you, <strong className="text-white">{formData.fullName || 'Beloved Guest'}</strong>. Our hospitality team and greeters will have a welcome packet, reserved seats, and a gift waiting for you at the foyer.
-              </p>
-            </div>
-
-            {/* Visit Summary Card */}
-            <div className="bg-dpc-navy-950/90 rounded-2xl p-4 border border-dpc-gold-500/20 text-left space-y-2 text-xs text-slate-300">
-              <div className="flex justify-between">
-                <span className="text-slate-400">Date & Service:</span>
-                <span className="font-semibold text-dpc-gold-300">{formData.visitDate}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-400">Party Size:</span>
-                <span className="font-semibold text-white">
-                  {formData.adultsCount} Adult(s) {parseInt(formData.childrenCount) > 0 && `• ${formData.childrenCount} Child(ren)`}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-400">Location:</span>
-                <span className="font-semibold text-white">Purok 2, Cobangbang, Daet</span>
-              </div>
-            </div>
-
-            <div className="pt-3">
-              <button
-                onClick={handleReset}
-                className="w-full py-3 rounded-xl text-sm font-bold text-dpc-navy-950 bg-gradient-to-r from-dpc-gold-400 to-dpc-gold-300 shadow-gold-glow hover:from-dpc-gold-300 hover:to-dpc-gold-200 transition-all cursor-pointer"
-              >
-                Close & Return to Page
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div>
-            {/* Header */}
-            <div className="mb-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-dpc-gold-500/10 border border-dpc-gold-500/30 text-xs font-semibold uppercase tracking-wider text-dpc-gold-400 mb-2">
-                <Users className="w-3.5 h-3.5" />
-                <span>First-Time Guest Welcome</span>
-              </div>
-              <h3 className="text-2xl font-bold text-white font-serif">
-                Plan Your First Visit to DPC
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-300 mt-1 font-light">
-                Let us know you're coming so our pastoral team and greeters can warmly welcome you.
-              </p>
-            </div>
-
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-                  Full Name *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={formData.fullName}
-                  onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                  placeholder="e.g. Juan Dela Cruz"
-                  className="w-full px-4 py-2.5 rounded-xl bg-dpc-navy-950/90 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-dpc-gold-400 focus:ring-1 focus:ring-dpc-gold-400"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-                    Mobile Phone *
-                  </label>
-                  <input
-                    type="tel"
-                    required
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    placeholder="0917 123 4567"
-                    className="w-full px-4 py-2.5 rounded-xl bg-dpc-navy-950/90 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-dpc-gold-400"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="name@example.com"
-                    className="w-full px-4 py-2.5 rounded-xl bg-dpc-navy-950/90 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-dpc-gold-400"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-                    Service / Date *
-                  </label>
-                  <select
-                    value={formData.visitDate}
-                    onChange={(e) => setFormData({ ...formData, visitDate: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl bg-dpc-navy-950/90 border border-white/10 text-white text-sm focus:outline-none focus:border-dpc-gold-400"
-                  >
-                    <option value="This Coming Sunday (9:40 AM)">This Coming Sunday (9:40 AM Worship)</option>
-                    <option value="Next Sunday (9:40 AM)">Next Sunday (9:40 AM Worship)</option>
-                    <option value="Sunday School / Bible Study (8:00 AM)">Sunday School / Bible Study (8:00 AM)</option>
-                    <option value="High School Worship (8:00 AM)">High School Worship (8:00 AM)</option>
-                    <option value="Wednesday Prayer Meeting (5:30 PM)">Wednesday Prayer Meeting (5:30 PM)</option>
-                  </select>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-                      Adults
-                    </label>
-                    <input
-                      type="number"
-                      min="1"
-                      max="20"
-                      value={formData.adultsCount}
-                      onChange={(e) => setFormData({ ...formData, adultsCount: e.target.value })}
-                      className="w-full px-3 py-2.5 rounded-xl bg-dpc-navy-950/90 border border-white/10 text-white text-sm text-center focus:outline-none focus:border-dpc-gold-400"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-                      Kids (0-12)
-                    </label>
-                    <input
-                      type="number"
-                      min="0"
-                      max="15"
-                      value={formData.childrenCount}
-                      onChange={(e) => setFormData({ ...formData, childrenCount: e.target.value })}
-                      className="w-full px-3 py-2.5 rounded-xl bg-dpc-navy-950/90 border border-white/10 text-white text-sm text-center focus:outline-none focus:border-dpc-gold-400"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Kids Check-In Checkbox */}
-              <label className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-dpc-gold-500/30 cursor-pointer transition-colors">
-                <input
-                  type="checkbox"
-                  checked={formData.needsKidsCheckIn}
-                  onChange={(e) => setFormData({ ...formData, needsKidsCheckIn: e.target.checked })}
-                  className="w-4 h-4 rounded text-dpc-gold-500 focus:ring-dpc-gold-400 bg-dpc-navy-900 border-white/20"
-                />
-                <span className="text-xs text-slate-200">
-                  I would like pre-registered safe check-in for my children in <strong>DPC Kids</strong>
-                </span>
+    <div className="visit-planner-overlay" onClick={event => { if (event.target === event.currentTarget) onClose(); }}>
+      <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="visit-planner-title" tabIndex={-1} className="modal-surface visit-planner">
+        <header className="visit-planner-header">
+          <p className="eyebrow">YOUR FIRST SUNDAY</p>
+          <h2 id="visit-planner-title">A little less unknown.</h2>
+          <p>A Sunday guide, made for you. No registration needed.</p>
+          <button type="button" className="visit-planner-close" onClick={onClose} aria-label="Close visit planner"><X size={20} /></button>
+          <ol className="visit-planner-progress" aria-label="Visit planner progress">
+            {steps.map((label, index) => <li key={label} className={index <= step ? "is-current" : ""} aria-current={index === step ? "step" : undefined}>
+              <span aria-hidden="true">{index < step ? <Check size={13} /> : index + 1}</span><small>{label}</small>
+            </li>)}
+          </ol>
+        </header>
+        <div ref={contentRef} className="visit-planner-content">
+          <motion.div key={step} initial={reducedMotion ? false : { opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reducedMotion ? 0 : 0.2 }}>
+            <h3 ref={headingRef} tabIndex={-1} className="visit-planner-step-title">{["Who’s coming with you?", "Bringing little ones?", "Let’s help you find us.", "Your Sunday at DPC"][step]}</h3>
+            {step === 0 && <>
+              <p className="visit-planner-intro">Come on your own or bring someone along. There’s a seat for you.</p>
+              <fieldset className="visit-planner-choices"><legend className="sr-only">Who is coming?</legend>
+                {(["Just me", "With friends", "With family"] as Party[]).map(choice => <label key={choice} className={`visit-planner-choice${party === choice ? " is-selected" : ""}`}>
+                  <input type="radio" name="visit-party" value={choice} checked={party === choice} onChange={() => setParty(choice)} />
+                  <Users size={20} aria-hidden="true" /><span>{choice}</span>
+                </label>)}
+              </fieldset>
+              <label className="visit-planner-field">When would you like to visit?
+                <select value={visitDate} onChange={event => setVisitDate(event.target.value)}><option>This coming Sunday</option><option>Next Sunday</option></select>
               </label>
-
-              {/* Special Note */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-                  Any Questions or Accessibility Needs?
-                </label>
-                <textarea
-                  rows={2}
-                  value={formData.specialNotes}
-                  onChange={(e) => setFormData({ ...formData, specialNotes: e.target.value })}
-                  placeholder="e.g. Wheelchair ramp needed, dietary allergies for Agape lunch, etc."
-                  className="w-full px-4 py-2 rounded-xl bg-dpc-navy-950/90 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-dpc-gold-400"
-                ></textarea>
+              <p className="visit-planner-note"><Clock size={16} aria-hidden="true" />Sunday worship · {worship.time}</p>
+            </>}
+            {step === 1 && <>
+              <img className="visit-planner-photo" {...responsiveImage(familyPhoto, "(max-width: 640px) calc(100vw - 64px), 520px")} alt="Kinder Ministry children and their teachers gathered together" />
+              <fieldset className="visit-planner-choices visit-planner-choices-inline"><legend className="sr-only">Are you bringing children?</legend>
+                {[false, true].map(value => <label key={String(value)} className={`visit-planner-choice${children === value ? " is-selected" : ""}`}>
+                  <input type="radio" name="visit-children" checked={children === value} onChange={() => setChildren(value)} /><span>{value ? "Yes, bringing children" : "No children this visit"}</span>
+                </label>)}
+              </fieldset>
+              {children ? <>
+                <fieldset className="visit-planner-ages"><legend>Their ages <span>(optional · select all that apply)</span></legend>
+                  {ageOptions.map(age => <label key={age}><input type="checkbox" checked={ages.includes(age)} onChange={event => setAges(current => event.target.checked ? [...current, age] : current.filter(item => item !== age))} />{age}</label>)}
+                </fieldset>
+                <div className="visit-planner-guidance"><h4>A place to learn and grow</h4>
+                  {relevantMinistries.map(m => <p key={m.id}><strong>{m.name}</strong> · {m.ageRange}</p>)}
+                  {(ages.length === 0 || ages.some(age => age !== "Under 3")) && <p>Bible stories, songs, and crafts from 8:00–9:30 AM, followed by supervised activities during main worship. Ask our teachers for help with check-in when you arrive.</p>}
+                  {ages.includes("Under 3") && <p>For children under 3, ask our greeters about available arrangements.</p>}
+                </div>
+              </> : <p className="visit-planner-intro">We’ll keep your guide focused on the main Sunday worship.</p>}
+            </>}
+            {step === 2 && <>
+              <img className="visit-planner-photo" {...responsiveImage("/images/church-building.webp", "(max-width: 640px) calc(100vw - 64px), 520px")} alt="Daet Presbyterian Church building in Cobangbang" />
+              <p className="visit-planner-address"><MapPin size={20} aria-hidden="true" /><span><strong>{CHURCH_INFO.name}</strong>{address}</span></p>
+              <p className="visit-planner-intro">{CHURCH_INFO.address.landmark}. On-site parking is available.</p>
+              <fieldset className="visit-planner-choices visit-planner-choices-inline"><legend>Would directions help?</legend>
+                {[true, false].map(value => <label key={String(value)} className={`visit-planner-choice${directions === value ? " is-selected" : ""}`}>
+                  <input type="radio" name="visit-directions" checked={directions === value} onChange={() => setDirections(value)} /><span>{value ? "Yes, show directions" : "I know the way"}</span>
+                </label>)}
+              </fieldset>
+            </>}
+            {step === 3 && <>
+              <p className="visit-planner-intro">{visitDate} · {party}{children ? " · Bringing children" : ""}</p>
+              <dl className="visit-planner-summary">
+                <div><dt>Arrive around 9:30 AM</dt><dd>Our greeters will help you find your way and settle in.</dd></div>
+                <div><dt>Sunday worship · {worship.time}</dt><dd>Christ-centered praise, prayer, and preaching from Scripture.</dd></div>
+                {children && <div><dt>For your children{ages.length ? ` · ${ages.join(", ")}` : ""}</dt><dd>
+                  {relevantMinistries.length > 0 && <>{relevantMinistries.map(m => `${m.name} (${m.ageRange})`).join("; ")}. Sunday school begins at 8:00 AM, with supervised activities after 9:30 AM. Teachers can help with check-in.</>}
+                  {ages.includes("Under 3") && <> Ask our greeters about arrangements for children under 3.</>}
+                </dd></div>}
+                <div><dt>Come as you are</dt><dd>There is no strict dress code. Wear what helps you feel comfortable.</dd></div>
+                <div><dt>Find us in Cobangbang</dt><dd>{address}</dd></div>
+              </dl>
+              {!directions && <a className="text-link" href={CHURCH_INFO.address.mapCoordinates.googleMapsUrl} target="_blank" rel="noopener noreferrer">Open directions <ArrowRight size={16} /></a>}
+              <div className="visit-planner-contact">
+                <button type="button" className="text-link" aria-expanded={contactOpen} aria-controls="visit-planner-contact" onClick={() => setContactOpen(!contactOpen)}><Mail size={16} />Questions before you visit?</button>
+                {contactOpen && <div id="visit-planner-contact">
+                  <p>Add details if you’d like, then review and send the draft in your email app. Your guide works without contacting us.</p>
+                  <div className="visit-planner-contact-fields">
+                    <label className="visit-planner-field">Your name (optional)<input autoComplete="name" value={contact.fullName} onChange={e => setContact({ ...contact, fullName: e.target.value })} /></label>
+                    <label className="visit-planner-field">Email (optional)<input type="email" autoComplete="email" value={contact.email} onChange={e => setContact({ ...contact, email: e.target.value })} /></label>
+                    <label className="visit-planner-field">Phone (optional)<input type="tel" autoComplete="tel" value={contact.phone} onChange={e => setContact({ ...contact, phone: e.target.value })} /></label>
+                  </div>
+                  <label className="visit-planner-field">Questions or accessibility needs<textarea rows={3} value={contact.notes} onChange={e => setContact({ ...contact, notes: e.target.value })} /></label>
+                  <a className="button button-outline" href={mailHref}>Open email draft <Mail size={16} /></a>
+                  <p className="visit-planner-email">Or email <a href={`mailto:${CHURCH_INFO.contact.email}`}>{CHURCH_INFO.contact.email}</a>.</p>
+                </div>}
               </div>
-
-              {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full py-3.5 rounded-xl text-sm font-bold text-dpc-navy-950 bg-gradient-to-r from-dpc-gold-400 via-dpc-gold-300 to-dpc-gold-400 hover:from-dpc-gold-300 hover:to-dpc-gold-200 shadow-gold-glow transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
-              >
-                {isSubmitting ? (
-                  <span className="inline-block w-5 h-5 border-2 border-dpc-navy-950 border-t-transparent rounded-full animate-spin"></span>
-                ) : (
-                  <>
-                    <Send className="w-4 h-4" />
-                    <span>Confirm My Visit</span>
-                  </>
-                )}
-              </button>
-            </form>
-          </div>
-        )}
-
+            </>}
+          </motion.div>
+        </div>
+        <footer className="visit-planner-actions">
+          {step > 0 ? <button type="button" className="button button-outline" onClick={() => setStep(step - 1)}><ArrowLeft size={16} />Back</button> : <span className="visit-planner-footer-note">Your choices stay on this page.</span>}
+          {step < 3 ? <button type="button" className="button button-navy" onClick={() => setStep(step + 1)}>{step === 2 ? "See my Sunday guide" : "Continue"}<ArrowRight size={16} /></button> : directions ? <a className="button button-navy" href={CHURCH_INFO.address.mapCoordinates.googleMapsUrl} target="_blank" rel="noopener noreferrer">Open directions <ArrowRight size={16} /></a> : <button type="button" className="button button-navy" onClick={onClose}>Done <Check size={16} /></button>}
+        </footer>
       </div>
     </div>
   );
 };
-

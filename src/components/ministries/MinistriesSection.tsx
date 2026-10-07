@@ -1,206 +1,117 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Sprout, BookOpen, Flame, GraduationCap, Compass, Shield, Award,
-  ArrowRight, Users, CheckCircle2, Database, RefreshCw
-} from 'lucide-react';
-import { MINISTRIES_DATA } from '../../data/ministriesData';
-import { Ministry } from '../../types/church';
-import { fetchMinistries } from '../../services/api';
-import { ScriptureReveal } from '../ui/ScriptureReveal';
+import { responsiveImage } from "../../lib/responsiveImages";
+import { useEffect, useState } from "react";
+import { ArrowUpRight } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
+import { MINISTRIES_DATA } from "../../data/ministriesData";
+import { fetchMinistries } from "../../services/api";
+import { Ministry } from "../../types/church";
+import { ScrollReveal } from "../ui/ScrollReveal";
 
-interface MinistriesSectionProps {
-  onSelectMinistry: (ministry: Ministry) => void;
-}
-
-export const MinistriesSection: React.FC<MinistriesSectionProps> = ({ onSelectMinistry }) => {
-  const [ministries, setMinistries] = useState<Ministry[]>(MINISTRIES_DATA);
-  const [selectedTab, setSelectedTab] = useState<string>('all');
-  const [isLive, setIsLive] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    let isMounted = true;
-    async function loadData() {
-      setLoading(true);
-      const res = await fetchMinistries();
-      if (isMounted) {
-        setMinistries(res.data);
-        setIsLive(res.isLive);
-        setLoading(false);
-      }
-    }
-    loadData();
-    return () => { isMounted = false; };
-  }, []);
-
-  const getMinistryIcon = (iconName: string) => {
-    switch (iconName) {
-      case 'Sprout':
-      case 'Baby':
-        return Sprout;
-      case 'BookOpen':
-        return BookOpen;
-      case 'Flame':
-        return Flame;
-      case 'GraduationCap':
-      case 'Zap':
-        return GraduationCap;
-      case 'Compass':
-        return Compass;
-      case 'Shield':
-        return Shield;
-      case 'Award':
-      case 'Crown':
-        return Award;
-      default:
-        return Users;
-    }
-  };
-
-  const filteredMinistries = selectedTab === 'all'
-    ? ministries
-    : ministries.filter(m => m.id === selectedTab || m.ageBracket.toLowerCase() === selectedTab.toLowerCase());
-
+const filters = ["Everyone", "Children", "Students", "Adults"] as const;
+type Filter = (typeof filters)[number];
+const belongsTo = (ministry: Ministry, filter: Filter) => {
+  const bracket = ministry.ageBracket.toLowerCase();
+  const children = /kinder|elementary/.test(bracket);
+  const students = /high school|youth|college/.test(bracket);
   return (
-    <section id="ministries" className="py-20 bg-gradient-to-b from-dpc-navy-950 via-dpc-navy-900 to-dpc-navy-950 px-4 sm:px-6 lg:px-8 relative section-render-opt">
-      <div className="max-w-7xl mx-auto">
+    filter === "Everyone" ||
+    (filter === "Children" && children) ||
+    (filter === "Students" && students) ||
+    (filter === "Adults" && !children && !students)
+  );
+};
 
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12">
-
-          <h2 className="text-2xl sm:text-4xl font-bold font-serif text-white tracking-tight">
-            The 7 Ministries
-          </h2>
-          <div className="max-w-2xl mx-auto mt-3">
-            <ScriptureReveal
-              quote="One generation shall commend Your works to another, and shall declare Your mighty acts."
-              reference="Psalm 145:4"
-              version="ESV"
-              showQuoteMarks={false}
-              highlightWords={['generation', 'works', 'mighty', 'acts']}
-              quoteClassName="text-sm sm:text-base text-slate-200 font-serif italic leading-relaxed"
-              referenceClassName="!mt-1.5"
-              align="center"
-              staggerDelay={0.04}
-              initialDelay={0.15}
-            />
+export const MinistriesSection = ({
+  onSelectMinistry,
+}: {
+  onSelectMinistry: (ministry: Ministry) => void;
+}) => {
+  const reducedMotion = useReducedMotion();
+  const [ministries, setMinistries] = useState(MINISTRIES_DATA);
+  const [filter, setFilter] = useState<Filter>("Everyone");
+  useEffect(() => {
+    let active = true;
+    fetchMinistries().then((result) => {
+      if (active) setMinistries(result.data);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
+  const filtered = ministries.filter((ministry) => belongsTo(ministry, filter));
+  return (
+    <section id="ministries" className="ministries-section">
+      <div className="page-container">
+        <ScrollReveal className="section-heading">
+          <div>
+            <h2>
+              Every season of life.
+              <br />
+              <em>A community for you.</em>
+            </h2>
           </div>
-        </div>
-
-        {/* Filter Pills */}
-        <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2.5 mb-8 sm:mb-10">
-          <button
-            onClick={() => setSelectedTab('all')}
-            className={`px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs font-bold transition-all shrink-0 cursor-pointer ${selectedTab === 'all'
-              ? 'bg-dpc-gold-400 text-dpc-navy-950 shadow-gold-glow'
-              : 'bg-dpc-navy-800 text-slate-300 hover:text-white hover:bg-dpc-navy-700 border border-white/10'
-              }`}
-          >
-            All {ministries.length} Ministries
-          </button>
-          {ministries.map((m) => (
+          <p className="section-description">
+            From little first steps to a lifetime of faith, our ministries help
+            every generation connect, learn, and serve.
+          </p>
+        </ScrollReveal>
+        <div
+          className="ministry-filters"
+          role="group"
+          aria-label="Filter ministries by life stage"
+        >
+          {filters.map((item) => (
             <button
-              key={m.id}
-              onClick={() => setSelectedTab(m.id)}
-              className={`px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs font-semibold transition-all shrink-0 cursor-pointer ${selectedTab === m.id
-                ? 'bg-dpc-gold-400 text-dpc-navy-950 shadow-gold-glow font-bold'
-                : 'bg-dpc-navy-800 text-slate-300 hover:text-white hover:bg-dpc-navy-700 border border-white/10'
-                }`}
+              key={item}
+              className={filter === item ? "active" : ""}
+              aria-pressed={filter === item}
+              onClick={() => setFilter(item)}
             >
-              {m.ageBracket}
+              {item}
             </button>
           ))}
+          <span role="status" aria-live="polite">{filtered.length} ministries · One church family</span>
         </div>
-
-        {/* Ministry Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {filteredMinistries.map((ministry) => {
-            const Icon = getMinistryIcon(ministry.iconName);
-            return (
-              <div
-                key={ministry.id}
-                className="glass-panel rounded-3xl p-5 sm:p-6 md:p-7 border-white/10 hover:border-dpc-gold-500/50 hover:shadow-gold-glow transition-all duration-300 flex flex-col justify-between group relative overflow-hidden"
-              >
-                {/* Top Subtle Gradient Light */}
-                <div className={`absolute -top-12 -right-12 w-32 h-32 bg-gradient-to-br ${ministry.color} opacity-10 rounded-full blur-xl group-hover:opacity-25 transition-opacity`}></div>
-
-                <div>
-                  {/* Ministry Live Photo Preview */}
-                  {ministry.eventPhotos && ministry.eventPhotos.length > 0 && (
-                    <div
-                      onClick={() => onSelectMinistry(ministry)}
-                      className="relative w-full h-40 sm:h-44 mb-4 rounded-2xl overflow-hidden group/img cursor-pointer border border-white/10 shadow-md"
-                    >
-                      <img
-                        src={ministry.eventPhotos[0].url}
-                        alt={ministry.name}
-                        loading="lazy"
-                        decoding="async"
-                        className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                      <span className="absolute top-2.5 right-2.5 text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-black/75 text-dpc-gold-300 border border-dpc-gold-500/30 backdrop-blur-sm shadow-sm">
-                        {ministry.ageRange}
-                      </span>
-                      <span className="absolute bottom-2 left-2.5 text-[10px] font-medium text-slate-200 truncate max-w-[90%] drop-shadow-md">
-                        📸 {ministry.eventPhotos[0].caption}
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Top Meta Header */}
-                  <div className="flex items-center justify-between gap-3 mb-3">
-                    <div className="w-11 h-11 rounded-xl bg-dpc-navy-800 border border-dpc-gold-500/30 flex items-center justify-center text-dpc-gold-400 shadow-md group-hover:scale-105 group-hover:text-dpc-gold-300 transition-all">
-                      <Icon className="w-5 h-5" />
-                    </div>
-
-                    <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-dpc-gold-500/10 text-dpc-gold-300 border border-dpc-gold-500/30">
-                      {ministry.ageBracket}
-                    </span>
-                  </div>
-
-                  {/* Title & Tagline */}
-                  <h3 className="text-lg sm:text-xl font-bold text-white font-serif group-hover:text-dpc-gold-300 transition-colors mb-1">
-                    {ministry.name}
-                  </h3>
-                  <p className="text-xs font-medium text-dpc-gold-400/90 mb-3">
-                    {ministry.tagline}
-                  </p>
-
-                  <p className="text-xs sm:text-sm text-slate-300 font-light leading-relaxed mb-4 line-clamp-2 sm:line-clamp-3">
-                    {ministry.description}
-                  </p>
-
-                  {/* Quick Features List */}
-                  <div className="space-y-1.5 mb-6 pt-3 border-t border-white/5">
-                    {ministry.activities.slice(0, 2).map((act, i) => (
-                      <div key={i} className="flex items-center gap-2 text-xs text-slate-400">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-dpc-gold-400 shrink-0" />
-                        <span className="truncate">{act}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Footer / Trigger */}
-                <div className="pt-4 border-t border-white/10 flex items-center justify-between mt-auto">
-                  <div className="text-[11px] text-slate-400">
-                    <span className="font-semibold text-white">{ministry.stats.membersCount}</span> {ministry.stats.membersCount === 1 ? 'Active Member' : 'Active Members'}
-                  </div>
-
-                  <button
-                    onClick={() => onSelectMinistry(ministry)}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-dpc-gold-400 group-hover:text-dpc-gold-300 group-hover:translate-x-1 transition-all cursor-pointer"
-                  >
-                    <span>View Ministry Details</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
+        <ScrollReveal delay={0.04}>
+        <motion.div key={filter} className="ministry-grid"
+          initial={reducedMotion ? false : { opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: reducedMotion ? 0 : 0.22 }}>
+          {filtered.map((ministry) => (
+            <button
+              className="ministry-card"
+              key={ministry.id}
+              onClick={() => onSelectMinistry(ministry)}
+              aria-label={`Explore ${ministry.name}`}
+            >
+              <div className="ministry-photo">
+                <img
+                  {...responsiveImage(ministry.eventPhotos?.[0]?.url || "/images/church-building.webp")}
+                  alt={
+                    ministry.eventPhotos?.[0]?.caption || ministry.ageBracket
+                  }
+                  loading="lazy"
+                />
+                <span>{ministry.ageRange}</span>
               </div>
-            );
-          })}
-        </div>
-
+              <div className="ministry-card-copy">
+                <small>{ministry.ageBracket}</small>
+                <h3>{ministry.name}</h3>
+                <p>{ministry.tagline}</p>
+                <span className="ministry-arrow">
+                  <ArrowUpRight size={19} />
+                </span>
+              </div>
+            </button>
+          ))}
+        </motion.div>
+        </ScrollReveal>
+        {filtered.length === 0 && (
+          <p className="empty-message">
+            No ministries are listed for this life stage yet. Explore everyone
+            to find your community.
+          </p>
+        )}
       </div>
     </section>
   );

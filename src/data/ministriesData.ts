@@ -1,57 +1,57 @@
 import { Ministry } from '../types/church';
 
 // --- Kindergarten Ministry Photos ---
-import kinder1 from '../assets/Kinder Ministry/516368798_4004060663255125_3940156298598136062_n.jpg';
-import kinder2 from '../assets/Kinder Ministry/728951324_122175506078930669_1302733184598992361_n.jpg';
-import kinder3 from '../assets/Kinder Ministry/754936307_122179487474930669_1777378976676395677_n.jpg';
-import kinder4 from '../assets/Kinder Ministry/779266768_122183506274930669_3501010079158056945_n.jpg';
-import kinder5 from '../assets/Kinder Ministry/780981404_122183506370930669_5423111782680396998_n.jpg';
-import kinder6 from '../assets/Kinder Ministry/784351130_122184551582930669_4276604463356943367_n.jpg';
+import kinder1 from '../assets/Kinder Ministry/516368798_4004060663255125_3940156298598136062_n.webp';
+import kinder2 from '../assets/Kinder Ministry/728951324_122175506078930669_1302733184598992361_n.webp';
+import kinder3 from '../assets/Kinder Ministry/754936307_122179487474930669_1777378976676395677_n.webp';
+import kinder4 from '../assets/Kinder Ministry/779266768_122183506274930669_3501010079158056945_n.webp';
+import kinder5 from '../assets/Kinder Ministry/780981404_122183506370930669_5423111782680396998_n.webp';
+import kinder6 from '../assets/Kinder Ministry/784351130_122184551582930669_4276604463356943367_n.webp';
 
 // --- Elementary Ministry Photos ---
-import elem1 from '../assets/Elementary Ministry/480577141_481392148377786_6333824624822562519_n.jpg';
-import elem2 from '../assets/Elementary Ministry/696478001_828648963652101_5968731956145118473_n.jpg';
-import elem3 from '../assets/Elementary Ministry/737422339_874215309095466_1606506382904725503_n.jpg';
-import elem4 from '../assets/Elementary Ministry/795644009_928842926966037_5150057302117564802_n.jpg';
-import elem5 from '../assets/Elementary Ministry/799224843_928844726965857_6065735132368469794_n.jpg';
+import elem1 from '../assets/Elementary Ministry/480577141_481392148377786_6333824624822562519_n.webp';
+import elem2 from '../assets/Elementary Ministry/696478001_828648963652101_5968731956145118473_n.webp';
+import elem3 from '../assets/Elementary Ministry/737422339_874215309095466_1606506382904725503_n.webp';
+import elem4 from '../assets/Elementary Ministry/795644009_928842926966037_5150057302117564802_n.webp';
+import elem5 from '../assets/Elementary Ministry/799224843_928844726965857_6065735132368469794_n.webp';
 
 // --- High School Ministry Photos ---
-import hs1 from '../assets/High School Ministry/680044493_935616212628115_2898471636377619378_n.jpg';
-import hs2 from '../assets/High School Ministry/710746185_963948939794842_623334035736010395_n.jpg';
-import hs3 from '../assets/High School Ministry/796426561_1048179688038433_4617103635744998378_n.jpg';
-import hs4 from '../assets/High School Ministry/796527703_1048178428038559_3748025892055604993_n.jpg';
-import hs5 from '../assets/High School Ministry/799143002_1048180528038349_2765333488138193180_n.jpg';
+import hs1 from '../assets/High School Ministry/680044493_935616212628115_2898471636377619378_n.webp';
+import hs2 from '../assets/High School Ministry/710746185_963948939794842_623334035736010395_n.webp';
+import hs3 from '../assets/High School Ministry/796426561_1048179688038433_4617103635744998378_n.webp';
+import hs4 from '../assets/High School Ministry/796527703_1048178428038559_3748025892055604993_n.webp';
+import hs5 from '../assets/High School Ministry/799143002_1048180528038349_2765333488138193180_n.webp';
 
 // --- Youth / College Ministry Photos ---
-import youth1 from '../assets/Youth Ministry/656680392_958771106489110_8611197159791022889_n.jpg';
-import youth2 from '../assets/Youth Ministry/712445122_1016213600744860_322202296073548293_n.jpg';
-import youth3 from '../assets/Youth Ministry/714759264_1015627274136826_7581065074620186600_n.jpg';
-import youth4 from '../assets/Youth Ministry/714955504_1016212557411631_4274729500767112906_n.jpg';
-import youth5 from '../assets/Youth Ministry/715331357_1015629344136619_1242035705707588863_n.jpg';
-import youth6 from '../assets/Youth Ministry/717067034_891611547288431_5177310937572915941_n.jpg';
-import youth7 from '../assets/Youth Ministry/784025624_1083340277365525_1609884367141469746_n.jpg';
-import youth8 from '../assets/Youth Ministry/785944586_1083340190698867_8844997979530727943_n.jpg';
+import youth1 from '../assets/Youth Ministry/656680392_958771106489110_8611197159791022889_n.webp';
+import youth2 from '../assets/Youth Ministry/712445122_1016213600744860_322202296073548293_n.webp';
+import youth3 from '../assets/Youth Ministry/714759264_1015627274136826_7581065074620186600_n.webp';
+import youth4 from '../assets/Youth Ministry/714955504_1016212557411631_4274729500767112906_n.webp';
+import youth5 from '../assets/Youth Ministry/715331357_1015629344136619_1242035705707588863_n.webp';
+import youth6 from '../assets/Youth Ministry/717067034_891611547288431_5177310937572915941_n.webp';
+import youth7 from '../assets/Youth Ministry/784025624_1083340277365525_1609884367141469746_n.webp';
+import youth8 from '../assets/Youth Ministry/785944586_1083340190698867_8844997979530727943_n.webp';
 
 // --- Young Adult Ministry Photos ---
-import ya1 from '../assets/Young Adult Ministry/505320113_661118810260117_450252600683907860_n.jpg';
-import ya2 from '../assets/Young Adult Ministry/690603367_927892950249367_8826331412381259866_n.jpg';
-import ya3 from '../assets/Young Adult Ministry/719532750_956690060702989_7373299191000118107_n.jpg';
-import ya4 from '../assets/Young Adult Ministry/719789654_956689864036342_2095763987152963926_n.jpg';
-import ya5 from '../assets/Young Adult Ministry/721169757_956689977369664_8716597357679262405_n.jpg';
+import ya1 from '../assets/Young Adult Ministry/505320113_661118810260117_450252600683907860_n.webp';
+import ya2 from '../assets/Young Adult Ministry/690603367_927892950249367_8826331412381259866_n.webp';
+import ya3 from '../assets/Young Adult Ministry/719532750_956690060702989_7373299191000118107_n.webp';
+import ya4 from '../assets/Young Adult Ministry/719789654_956689864036342_2095763987152963926_n.webp';
+import ya5 from '../assets/Young Adult Ministry/721169757_956689977369664_8716597357679262405_n.webp';
 
 // --- Junior Adult / Couples Ministry Photos ---
-import ja1 from '../assets/Junior Adult Minitry/615576920_889621683718381_8998977265371590367_n.jpg';
-import ja2 from '../assets/Junior Adult Minitry/626386732_906329712047578_6172969032115822277_n.jpg';
-import ja3 from '../assets/Junior Adult Minitry/723706238_2023262101883568_5866319006622625006_n.jpg';
-import ja4 from '../assets/Junior Adult Minitry/724019843_1322877753302746_8993175069316953491_n.jpg';
-import ja5 from '../assets/Junior Adult Minitry/724203661_994313309635368_1473330047075204322_n.jpg';
+import ja1 from '../assets/Junior Adult Minitry/615576920_889621683718381_8998977265371590367_n.webp';
+import ja2 from '../assets/Junior Adult Minitry/626386732_906329712047578_6172969032115822277_n.webp';
+import ja3 from '../assets/Junior Adult Minitry/723706238_2023262101883568_5866319006622625006_n.webp';
+import ja4 from '../assets/Junior Adult Minitry/724019843_1322877753302746_8993175069316953491_n.webp';
+import ja5 from '../assets/Junior Adult Minitry/724203661_994313309635368_1473330047075204322_n.webp';
 
 // --- Old Adult / Seniors Ministry Photos ---
-import oa1 from '../assets/Old Adult Ministry/722769534_122172250904944863_7045558778597727105_n.jpg';
-import oa2 from '../assets/Old Adult Ministry/723686534_122172251312944863_2969969421896590995_n.jpg';
-import oa3 from '../assets/Old Adult Ministry/724408784_122172253130944863_6588021141249655795_n.jpg';
-import oa4 from '../assets/Old Adult Ministry/724666165_122172254354944863_1398728098788348633_n.jpg';
-import oa5 from '../assets/Old Adult Ministry/724937515_122172251114944863_6146316512934255477_n.jpg';
+import oa1 from '../assets/Old Adult Ministry/722769534_122172250904944863_7045558778597727105_n.webp';
+import oa2 from '../assets/Old Adult Ministry/723686534_122172251312944863_2969969421896590995_n.webp';
+import oa3 from '../assets/Old Adult Ministry/724408784_122172253130944863_6588021141249655795_n.webp';
+import oa4 from '../assets/Old Adult Ministry/724666165_122172254354944863_1398728098788348633_n.webp';
+import oa5 from '../assets/Old Adult Ministry/724937515_122172251114944863_6146316512934255477_n.webp';
 
 export const MINISTRIES_DATA: Ministry[] = [
   {

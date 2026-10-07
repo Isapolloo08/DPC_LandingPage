@@ -1,13 +1,13 @@
 import { VideoOrientation } from '../types/church';
 
 // Import authentic photos from ministry assets for orientation video thumbnails
-import kinderThumb from '../assets/Kinder Ministry/516368798_4004060663255125_3940156298598136062_n.jpg';
-import elemThumb from '../assets/Elementary Ministry/480577141_481392148377786_6333824624822562519_n.jpg';
-import hsThumb from '../assets/High School Ministry/680044493_935616212628115_2898471636377619378_n.jpg';
-import youthThumb from '../assets/Youth Ministry/714759264_1015627274136826_7581065074620186600_n.jpg';
-import yaThumb from '../assets/Young Adult Ministry/505320113_661118810260117_450252600683907860_n.jpg';
-import jaThumb from '../assets/Junior Adult Minitry/615576920_889621683718381_8998977265371590367_n.jpg';
-import oaThumb from '../assets/Old Adult Ministry/722769534_122172250904944863_7045558778597727105_n.jpg';
+import kinderThumb from '../assets/Kinder Ministry/516368798_4004060663255125_3940156298598136062_n.webp';
+import elemThumb from '../assets/Elementary Ministry/480577141_481392148377786_6333824624822562519_n.webp';
+import hsThumb from '../assets/High School Ministry/680044493_935616212628115_2898471636377619378_n.webp';
+import youthThumb from '../assets/Youth Ministry/714759264_1015627274136826_7581065074620186600_n.webp';
+import yaThumb from '../assets/Young Adult Ministry/505320113_661118810260117_450252600683907860_n.webp';
+import jaThumb from '../assets/Junior Adult Minitry/615576920_889621683718381_8998977265371590367_n.webp';
+import oaThumb from '../assets/Old Adult Ministry/722769534_122172250904944863_7045558778597727105_n.webp';
 
 // Import authentic local MP4 video assets
 import elemVideo from '../assets/Elementary Ministry.mp4';

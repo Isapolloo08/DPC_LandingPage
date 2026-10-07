@@ -1,41 +1,12 @@
+import { responsiveImage } from "@/lib/responsiveImages";
 "use client";
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-/* ── the corridor ────────────────────────────────────────────────
- * Two rails of cards ride from far behind the screen toward the
- * viewer. Perspective alone does the work that looks like two
- * animations: as a card's z grows it gets bigger *and* its screen x
- * sweeps outward from the vanishing point, because the projection
- * scales position and size by the same factor.
- *
- * Three things shape it, and each one fixes a specific artefact:
- *
- * 1. Depth is authored as *apparent size*, geometrically — each card
- *    is a constant ratio bigger than the one behind it, all the way
- *    out. Spacing a straight z-range evenly instead makes the near
- *    cards tear apart from each other as the projection blows up.
- * 2. The rails open hard in the first stretch and then hold
- *    (`fan` > 1). That opening cancels the — still slow — growth back
- *    there, so the ribbon leaves the centre as a flat band, bends
- *    once, and only then runs out on the diagonal. Parallel rails
- *    project to a straight cone with no bend at all.
- * 3. Neither end of the loop is ever on screen. A card dies with its
- *    inner edge past 50cqw, clear of the container's edge. And it is
- *    born *across* the axis — `railBirth` is negative, so the newest
- *    card starts on the far side and sweeps back through the centre.
- *    That plugs the throat: the axis stays covered at every instant,
- *    and a newborn lands behind cards that already cover it, so it
- *    needs no fade in. Birthing on its own side instead leaves a hole
- *    at dead centre that blinks open once every cycle.
- *
- * Every length is in `cqw` — a percentage of the container's width —
- * so the whole corridor keeps its proportions at any size. The
- * defaults were fitted numerically against a reference recording's
- * card-height and edge-position profile, not eyeballed.
- * ─────────────────────────────────────────────────────────────── */
-
+/* Project each photo independently instead of intersecting cards in a shared
+ * 3D scene. Explicit depth ordering keeps the mirrored rails stable, while
+ * fading the ends hides each card's reset back to the start of the loop. */
 /**
  * Geometry of the corridor. Every length is `cqw`, a percentage of the
  * container's width, so the shape is resolution-independent.
@@ -71,7 +42,7 @@ export type CorridorPath = {
   turnBirth?: number;
   /** Y-rotation at exit, degrees. @default 28 */
   turnExit?: number;
-  /** Keyframe stops used to trace the curve. Raise only if motion looks faceted. @default 24 */
+  /** Keyframe stops used to trace the curve. @default 48 */
   stops?: number;
 };
 
@@ -87,7 +58,7 @@ const PATH: Required<CorridorPath> = {
   fan: 3.3,
   turnBirth: 6,
   turnExit: 28,
-  stops: 24,
+  stops: 48,
 };
 
 /** Sample the path once so the CSS keyframes trace the real curve. */
@@ -100,14 +71,16 @@ function keyframes(dir: 1 | -1, name: string, p: Required<CorridorPath>) {
     const scale =
       (p.birthHeight / p.cardHeight) *
       Math.pow(p.exitHeight / p.birthHeight, u);
-    const z = p.perspective * (1 - 1 / scale);
     const rail =
       p.railExit - (p.railExit - p.railBirth) * Math.pow(1 - u, p.fan);
     const turn = p.turnBirth + (p.turnExit - p.turnBirth) * u;
+    const opacity = Math.min(1, u * 16, (1 - u) * 16);
     steps.push(
-      `${(u * 100).toFixed(2)}%{transform:translate3d(${(dir * rail).toFixed(
-        2,
-      )}cqw,0,${z.toFixed(2)}cqw) rotateY(${(-dir * turn).toFixed(2)}deg)}`,
+      `${(u * 100).toFixed(3)}%{` +
+      `transform:translate3d(${(dir * rail * scale).toFixed(4)}cqw,0,0) ` +
+      `scale(${scale.toFixed(6)}) perspective(${(p.perspective / scale).toFixed(4)}cqw) ` +
+      `rotateY(${(-dir * turn).toFixed(4)}deg);` +
+      `z-index:${Math.round(u * 1000)};opacity:${opacity.toFixed(4)}}`,
     );
   }
   return `@keyframes ${name}{${steps.join("")}}`;
@@ -148,6 +121,8 @@ export type ImageStreamHeroProps = {
   /** Content rendered above the corridor. */
   children?: React.ReactNode;
   className?: string;
+  /** Pause the corridor while keeping every card in its current position. */
+  paused?: boolean;
 };
 
 export function ImageStreamHero({
@@ -158,20 +133,11 @@ export function ImageStreamHero({
   path,
   children,
   className,
+  paused = false,
   ...props
 }: React.ComponentProps<"div"> & ImageStreamHeroProps) {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = React.useState(true);
-  const [isMobile, setIsMobile] = React.useState(false);
-
-  React.useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile, { passive: true });
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
 
   React.useEffect(() => {
     const el = containerRef.current;
@@ -181,7 +147,7 @@ export function ImageStreamHero({
       ([entry]) => {
         setIsVisible(entry.isIntersecting);
       },
-      { rootMargin: "150px 0px" }
+      { rootMargin: "150px 0px" },
     );
 
     observer.observe(el);
@@ -201,11 +167,13 @@ export function ImageStreamHero({
       // Pausing rather than disabling keeps the corridor whole: every card is
       // already dropped mid-flight by its negative delay, so it freezes as a
       // finished still instead of collapsing onto the axis.
-      `@media(prefers-reduced-motion:reduce){.${card}{animation-play-state:paused}}`,
+      `@media(prefers-reduced-motion:reduce){.${card}{animation-play-state:paused!important}}`,
     [right, left, card, p],
   );
 
-  const activeCards = isMobile ? Math.min(cards, 6) : cards;
+  // Density defines the overlap between cards. Keep it consistent when the
+  // viewport changes; dropping cards opens gaps in the perspective rails.
+  const activeCards = cards;
 
   return (
     <div
@@ -219,14 +187,10 @@ export function ImageStreamHero({
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
-        style={{
-          perspective: `${p.perspective}cqw`,
-          perspectiveOrigin: `50% ${axis}%`,
-        }}
       >
         <div
           className="absolute inset-0"
-          style={{ transformStyle: "preserve-3d" }}
+          style={{ isolation: "isolate" }}
         >
           {[right, left].map((name) =>
             Array.from({ length: activeCards }, (_, i) => {
@@ -236,10 +200,10 @@ export function ImageStreamHero({
               return (
                 <div
                   key={`${name}-${i}`}
+                  data-stream-card
                   className={cn(
                     card,
                     "absolute overflow-hidden shadow-lg",
-                    !isVisible && "invisible"
                   )}
                   style={{
                     left: "50%",
@@ -250,7 +214,8 @@ export function ImageStreamHero({
                     marginTop: `${-p.cardHeight / 2}cqw`,
                     borderRadius: `${p.cardRadius}cqw`,
                     animation: `${name} ${speed}s linear infinite`,
-                    animationPlayState: isVisible ? "running" : "paused",
+                    animationPlayState:
+                      isVisible && !paused ? "running" : "paused",
                     // Negative delay drops each card mid-flight, so the
                     // corridor is already full on the first frame.
                     animationDelay: `${-(i * speed) / activeCards}s`,
@@ -262,9 +227,9 @@ export function ImageStreamHero({
                 >
                   {img ? (
                     <img
-                      src={img.src}
+                      {...responsiveImage(img.src, "(max-width: 640px) 240px, 32vw")}
                       alt={img.alt ?? ""}
-                      loading="lazy"
+                      loading="eager"
                       decoding="async"
                       className="h-full w-full object-cover"
                       draggable={false}
@@ -283,3 +248,4 @@ export function ImageStreamHero({
 }
 
 export default ImageStreamHero;
+

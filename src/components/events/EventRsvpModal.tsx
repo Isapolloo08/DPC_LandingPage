@@ -1,7 +1,17 @@
-import React, { useState } from 'react';
-import { X, Calendar, Clock, MapPin, User, CheckCircle2, Send, Ticket } from 'lucide-react';
-import confetti from 'canvas-confetti';
-import { ChurchEvent } from '../../types/church';
+import { useDialogAccessibility } from "../ui/useDialogAccessibility";
+import React, { useState } from "react";
+import {
+  X,
+  Calendar,
+  Clock,
+  MapPin,
+  User,
+  CheckCircle2,
+  Send,
+  Ticket,
+} from "lucide-react";
+import confetti from "canvas-confetti";
+import { ChurchEvent } from "../../types/church";
 
 interface EventRsvpModalProps {
   event: ChurchEvent | null;
@@ -9,15 +19,21 @@ interface EventRsvpModalProps {
   onClose: () => void;
 }
 
-export const EventRsvpModal: React.FC<EventRsvpModalProps> = ({ event, isOpen, onClose }) => {
+export const EventRsvpModal: React.FC<EventRsvpModalProps> = ({
+  event,
+  isOpen,
+  onClose,
+}) => {
   const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    guestsCount: '1',
-    dietaryOrRemarks: '',
+    name: "",
+    phone: "",
+    email: "",
+    guestsCount: "1",
+    dietaryOrRemarks: "",
   });
   const [isRegistered, setIsRegistered] = useState(false);
+
+  const dialogRef = useDialogAccessibility(isOpen, onClose);
 
   if (!isOpen || !event) return null;
 
@@ -30,7 +46,7 @@ export const EventRsvpModal: React.FC<EventRsvpModalProps> = ({ event, isOpen, o
         particleCount: 70,
         spread: 60,
         origin: { y: 0.6 },
-        colors: ['#d4af37', '#60a5fa', '#34d399', '#ffffff']
+        colors: ["#d4af37", "#60a5fa", "#34d399", "#ffffff"],
       });
     } catch {
       // fallback
@@ -39,14 +55,26 @@ export const EventRsvpModal: React.FC<EventRsvpModalProps> = ({ event, isOpen, o
 
   const handleReset = () => {
     setIsRegistered(false);
-    setFormData({ name: '', phone: '', email: '', guestsCount: '1', dietaryOrRemarks: '' });
+    setFormData({
+      name: "",
+      phone: "",
+      email: "",
+      guestsCount: "1",
+      dietaryOrRemarks: "",
+    });
     onClose();
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-xl bg-[#0c192c] rounded-2xl sm:rounded-3xl p-5 sm:p-7 md:p-8 shadow-2xl border border-dpc-gold-500/50 max-h-[92vh] sm:max-h-[90vh] overflow-y-auto">
-        
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Event details and RSVP"
+        tabIndex={-1}
+        className="modal-surface relative w-full max-w-xl bg-[#0c192c] rounded-2xl sm:rounded-3xl p-5 sm:p-7 md:p-8 shadow-2xl border border-dpc-gold-500/50 max-h-[92vh] sm:max-h-[90vh] overflow-y-auto"
+      >
         {/* Close Button */}
         <button
           onClick={handleReset}
@@ -70,7 +98,13 @@ export const EventRsvpModal: React.FC<EventRsvpModalProps> = ({ event, isOpen, o
                 See You at {event.title}!
               </h3>
               <p className="text-sm text-slate-300 max-w-md mx-auto mt-2 leading-relaxed font-light">
-                We have reserved <strong className="text-white">{formData.guestsCount} seat(s)</strong> under <strong className="text-dpc-gold-300">{formData.name}</strong>. A confirmation SMS will be sent to your mobile.
+                We have reserved{" "}
+                <strong className="text-white">
+                  {formData.guestsCount} seat(s)
+                </strong>{" "}
+                under{" "}
+                <strong className="text-dpc-gold-300">{formData.name}</strong>.
+                A confirmation SMS will be sent to your mobile.
               </p>
             </div>
 
@@ -90,16 +124,24 @@ export const EventRsvpModal: React.FC<EventRsvpModalProps> = ({ event, isOpen, o
 
               <div className="grid grid-cols-2 gap-2 text-xs text-slate-300">
                 <div>
-                  <span className="text-slate-400 block text-[10px]">Date:</span>
+                  <span className="text-slate-400 block text-[10px]">
+                    Date:
+                  </span>
                   <span className="font-semibold text-white">{event.date}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block text-[10px]">Time:</span>
+                  <span className="text-slate-400 block text-[10px]">
+                    Time:
+                  </span>
                   <span className="font-semibold text-white">{event.time}</span>
                 </div>
                 <div className="col-span-2">
-                  <span className="text-slate-400 block text-[10px]">Venue:</span>
-                  <span className="font-semibold text-white">{event.location}</span>
+                  <span className="text-slate-400 block text-[10px]">
+                    Venue:
+                  </span>
+                  <span className="font-semibold text-white">
+                    {event.location}
+                  </span>
                 </div>
               </div>
             </div>
@@ -130,7 +172,9 @@ export const EventRsvpModal: React.FC<EventRsvpModalProps> = ({ event, isOpen, o
             <div className="bg-dpc-navy-950/80 rounded-2xl p-4 border border-white/10 space-y-2 text-xs text-slate-300 mb-6">
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-dpc-gold-400 shrink-0" />
-                <span>{event.date} • {event.time}</span>
+                <span>
+                  {event.date} • {event.time}
+                </span>
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-dpc-gold-400 shrink-0" />
@@ -152,14 +196,20 @@ export const EventRsvpModal: React.FC<EventRsvpModalProps> = ({ event, isOpen, o
                 </h4>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                  <label
+                    htmlFor="event-name"
+                    className="block text-[11px] font-semibold text-slate-300 uppercase tracking-wider mb-1"
+                  >
                     Your Full Name *
                   </label>
                   <input
                     type="text"
                     required
+                    id="event-name"
                     value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
                     placeholder="e.g. Maria Santos"
                     className="w-full px-4 py-2.5 rounded-xl bg-dpc-navy-950/90 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-dpc-gold-400"
                   />
@@ -167,29 +217,44 @@ export const EventRsvpModal: React.FC<EventRsvpModalProps> = ({ event, isOpen, o
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[11px] font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                    <label
+                      htmlFor="event-phone"
+                      className="block text-[11px] font-semibold text-slate-300 uppercase tracking-wider mb-1"
+                    >
                       Mobile Number *
                     </label>
                     <input
                       type="tel"
                       required
+                      id="event-phone"
                       value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, phone: e.target.value })
+                      }
                       placeholder="0917 123 4567"
                       className="w-full px-4 py-2.5 rounded-xl bg-dpc-navy-950/90 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-dpc-gold-400"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                    <label
+                      htmlFor="event-guestsCount"
+                      className="block text-[11px] font-semibold text-slate-300 uppercase tracking-wider mb-1"
+                    >
                       Number of Attendees
                     </label>
                     <input
                       type="number"
                       min="1"
                       max="10"
+                      id="event-guestsCount"
                       value={formData.guestsCount}
-                      onChange={(e) => setFormData({ ...formData, guestsCount: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          guestsCount: e.target.value,
+                        })
+                      }
                       className="w-full px-4 py-2.5 rounded-xl bg-dpc-navy-950/90 border border-white/10 text-white text-sm focus:outline-none focus:border-dpc-gold-400"
                     />
                   </div>
@@ -205,12 +270,14 @@ export const EventRsvpModal: React.FC<EventRsvpModalProps> = ({ event, isOpen, o
               </form>
             ) : (
               <div className="text-center py-4 text-slate-300 text-sm">
-                <p>This is an open churchwide event. No pre-registration required. Everyone is warmly invited!</p>
+                <p>
+                  This is an open churchwide event. No pre-registration
+                  required. Everyone is warmly invited!
+                </p>
               </div>
             )}
           </div>
         )}
-
       </div>
     </div>
   );
