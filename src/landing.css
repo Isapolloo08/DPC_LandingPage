@@ -665,6 +665,15 @@
   color: #59645f;
   line-height: 1.85;
 }
+.visitor-answer { display: grid; grid-template-rows: 0fr; visibility: hidden; transition: grid-template-rows .42s cubic-bezier(.22, 1, .36, 1), visibility 0s .42s; }
+.visitor-answer.is-open { grid-template-rows: 1fr; visibility: visible; transition-delay: 0s; }
+.visitor-answer-clip { min-height: 0; overflow: hidden; }
+.visitor-answer p { opacity: 0; transform: translateY(-6px); transition: opacity .2s ease, transform .32s ease; }
+.visitor-answer.is-open p { opacity: 1; transform: translateY(0); transition-delay: .07s; }
+@media (prefers-reduced-motion: reduce) {
+  .visitor-answer, .visitor-answer p { transition: none; }
+  .visitor-answer p { transform: none; }
+}
 .ministries-section {
   padding-block: 88px;
 }
@@ -1785,27 +1794,6 @@
   font: italic 19px/1.5 var(--font-editorial);
   margin-top: 5px;
 }
-.stream-motion-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  min-height: 40px;
-  padding: 8px 16px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 500;
-  flex-shrink: 0;
-  background: var(--canvas);
-  color: var(--ink);
-  transition: all 0.2s ease;
-}
-.stream-motion-toggle:hover {
-  background: var(--surface-warm);
-  border-color: var(--gold);
-  color: var(--gold-ink);
-}
 @media (max-width: 900px) {
   .church-stream-frame {
     height: 320px;
@@ -1830,10 +1818,6 @@
   .church-stream-caption p {
     font-size: 15px;
     max-width: 185px;
-  }
-  .stream-motion-toggle {
-    padding-inline: 11px;
-    font-size: 9px;
   }
 }
 .interactive-location-grid {
@@ -2608,21 +2592,6 @@
 .hero-model-caption .text-link:hover {
   color: var(--gold-ink);
 }
-.model-motion-toggle {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  flex-shrink: 0;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  color: var(--muted);
-}
-.model-motion-toggle:hover {
-  border-color: var(--gold);
-  color: var(--ink);
-  background: var(--surface-warm);
-}
 @keyframes model-float {
   0%,
   100% {
@@ -3203,4 +3172,105 @@
   .visit-planner-contact-fields { grid-template-columns: 1fr; }
   .visit-planner-footer-note { max-width: 90px; }
   .visit-planner-photo { height: 130px; }
+}
+/* Photo viewer follows the same editorial palette as the church landing page. */
+.photo-viewer { position: fixed; inset: 0; z-index: 100; height: 100dvh; background: var(--canvas); color: var(--ink); display: flex; flex-direction: column; padding: 0 32px; }
+.photo-viewer-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 22px 0 18px; border-bottom: 1px solid var(--line); flex-shrink: 0; }
+.photo-viewer-header .eyebrow { font-size: 11px; margin-bottom: 5px; overflow-wrap: anywhere; }
+.photo-viewer-count { font-size: 12px; color: var(--muted); }
+.photo-viewer-close { display: grid; place-items: center; width: 48px; height: 48px; flex-shrink: 0; border: 1px solid var(--line); border-radius: 5px; transition: background .15s; }
+.photo-viewer-close:hover { background: var(--surface-warm); }
+.photo-viewer-stage { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; padding: 24px 0 20px; }
+.photo-viewer-figure { width: min(100%, 1200px); max-height: 100%; min-height: 0; display: flex; flex-direction: column; }
+.photo-viewer-image { flex: 0 1 auto; min-height: 0; display: flex; align-items: center; justify-content: center; }
+.photo-viewer-image img { width: auto; height: auto; max-width: 100%; max-height: min(65dvh, calc(100dvh - 300px)); object-fit: contain; }
+.photo-viewer-caption { flex-shrink: 0; max-height: 22dvh; overflow-y: auto; text-align: center; padding: 18px 12px 0; }
+.landing-page .photo-viewer-caption h2 { font-size: 21px; font-weight: 400; line-height: 1.4; letter-spacing: -.02em; }
+.photo-viewer-caption p { font-size: 13px; color: var(--muted); line-height: 1.7; max-width: 76ch; margin: 6px auto 0; }
+.photo-viewer-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 0; border-top: 1px solid var(--line); flex-shrink: 0; }
+.photo-viewer-help { font-size: 12px; color: var(--muted); }
+.photo-viewer-navigation { display: flex; gap: 10px; }
+.photo-viewer-navigation button { min-width: 108px; min-height: 48px; display: flex; justify-content: center; align-items: center; gap: 10px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 5px; font-size: 13px; transition: background .15s; }
+.photo-viewer-navigation button:hover { background: var(--surface-warm); }
+@media (max-width: 640px) {
+  .photo-viewer { padding-inline: 16px; }
+  .photo-viewer-header { padding: 14px 0; }
+  .photo-viewer-header .eyebrow { font-size: 10px; }
+  .photo-viewer-stage { padding: 16px 0; }
+  .photo-viewer-caption { padding: 14px 0 0; max-height: 28dvh; }
+  .landing-page .photo-viewer-caption h2 { font-size: 18px; }
+  .photo-viewer-footer { padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
+  .photo-viewer-help { display: none; }
+  .photo-viewer-navigation { width: 100%; justify-content: space-between; }
+}
+/* Animate the schedule's height while retaining its natural responsive layout. */
+.schedule-disclosure { display: grid; grid-template-rows: 0fr; visibility: hidden; transition: grid-template-rows .38s cubic-bezier(.22, 1, .36, 1), visibility 0s .38s; }
+.schedule-disclosure.is-open { grid-template-rows: 1fr; visibility: visible; transition-delay: 0s; }
+.schedule-disclosure-clip { min-height: 0; overflow: hidden; }
+.schedule-disclosure .full-schedule { opacity: 0; transform: translateY(-8px); transition: opacity .2s ease, transform .28s ease; }
+.schedule-disclosure.is-open .full-schedule { opacity: 1; transform: translateY(0); transition-delay: .07s; }
+.service-next .schedule-toggle > svg { transition: transform .28s ease; }
+.service-next .schedule-toggle[aria-expanded="true"] > svg { transform: rotate(90deg); }
+@media (prefers-reduced-motion: reduce) {
+  .schedule-disclosure, .schedule-disclosure .full-schedule, .service-next .schedule-toggle > svg { transition: none; }
+  .schedule-disclosure .full-schedule { transform: none; }
+}
+.landing-page .visit-planner.is-map-view { width: min(100%, 820px); }
+.visit-notification-form { padding-top: 20px; }
+.visit-notification-form > form > p { font-size: 13px; line-height: 1.7; color: var(--muted); margin-bottom: 16px; }
+.visit-notification-form fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.visit-consent { display: flex; align-items: flex-start; gap: 10px; margin-top: 18px; font-size: 13px; line-height: 1.6; }
+.visit-consent input { flex-shrink: 0; margin-top: 4px; accent-color: var(--gold-ink); }
+.visit-form-error { color: #a12e25; font-size: 12px; line-height: 1.6; margin-block: 8px; }
+.visit-honeypot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.visit-notification-form .button { margin-top: 14px; }
+.visit-notification-form .button:disabled { opacity: .65; cursor: wait; }
+.visit-notification-form [role="status"] p { overflow-wrap: anywhere; }
+/* Development preview of the church's history; document order stays chronological. */
+.church-milestones { padding-block: 90px 45px; }
+.milestone-heading { max-width: 620px; margin-bottom: 50px; }
+.milestone-heading .eyebrow { margin-bottom: 14px; }
+.landing-page .milestone-heading h2 { font-size: clamp(26px, 2.2vw, 32px); line-height: 1.25; font-weight: 400; letter-spacing: -.02em; }
+.milestone-preview-note { font-size: 13px; line-height: 1.7; color: var(--muted); margin-top: 24px; padding-block: 14px; border-block: 1px solid var(--line); }
+.milestone-preview-note strong { font-weight: 500; color: var(--gold-ink); }
+.milestone-track { position: relative; }
+.milestone-spine { position: absolute; left: 50%; width: 2px; transform: translateX(-50%); pointer-events: none; }
+.milestone-progress { display: block; width: 100%; height: 100%; background: var(--gold-ink); transform-origin: center top; }
+.milestone-list { position: relative; list-style: none; margin: 0; padding: 0; }
+.milestone-row { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 112px; min-height: 320px; padding-block: 40px; }
+.milestone-row:nth-child(odd) .milestone-content { grid-column: 1; }
+.milestone-row:nth-child(even) .milestone-content { grid-column: 2; }
+.milestone-content { min-width: 0; max-width: 440px; }
+.milestone-row:nth-child(odd) .milestone-content { justify-self: end; width: 100%; }
+.milestone-year { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; font-family: var(--font-editorial); font-size: 36px; line-height: 1.5; color: var(--gold-ink); }
+.is-draft .milestone-year { font-size: 26px; }
+.milestone-draft-label { font-family: "DM Sans", sans-serif; font-size: 10px; line-height: 1.5; border: 1px solid var(--line); border-radius: 3px; padding: 3px 7px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+.landing-page .milestone-content h3 { font-size: 24px; font-weight: 400; line-height: 1.35; margin: 10px 0 12px; }
+.milestone-content > p { max-width: 48ch; font-size: 14px; line-height: 1.85; color: var(--muted); }
+.milestone-branch { position: absolute; top: 67px; left: 50%; width: 56px; height: 2px; background: var(--gold-ink); transform-origin: left center; }
+.milestone-branch::before { content: ""; position: absolute; width: 8px; height: 8px; top: -3px; left: -4px; border-radius: 50%; background: var(--gold-ink); }
+.milestone-row:nth-child(odd) .milestone-branch { left: calc(50% - 56px); transform-origin: right center; }
+.milestone-row:nth-child(odd) .milestone-branch::before { left: auto; right: -4px; }
+.milestone-photo, .milestone-photo-placeholder { margin-top: 24px; }
+.milestone-photo img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 4px; }
+.milestone-photo figcaption { margin-top: 8px; color: var(--muted); font-size: 12px; line-height: 1.6; }
+.milestone-photo-placeholder { min-height: 150px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 12px; padding: 20px; background: var(--surface-warm); border: 1px dashed #c9c2b2; border-radius: 4px; color: var(--muted); font-size: 12px; text-align: center; }
+@media (max-width: 760px) {
+  .church-milestones { padding-block: 60px 25px; }
+  .milestone-heading { margin-bottom: 26px; }
+  .milestone-spine { left: 7px; }
+  .milestone-row { display: block; min-height: 300px; padding: 30px 0 30px 48px; }
+  .milestone-branch, .milestone-row:nth-child(odd) .milestone-branch { top: 47px; left: 7px; width: 29px; transform-origin: left center; }
+  .milestone-row:nth-child(odd) .milestone-branch::before { left: -4px; right: auto; }
+  .milestone-row:nth-child(odd) .milestone-content, .milestone-row:nth-child(even) .milestone-content { width: 100%; max-width: none; }
+  .milestone-year { font-size: 32px; }
+  .is-draft .milestone-year { font-size: 23px; }
+  .landing-page .milestone-content h3 { font-size: 22px; }
+  .milestone-content > p { font-size: 13px; }
+  .milestone-photo-placeholder { min-height: 135px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .church-milestones .milestone-content > * { opacity: 1 !important; transform: none !important; }
+  .church-milestones .milestone-branch { transform: none !important; }
+  .church-milestones .milestone-progress { transform: none !important; }
 }

@@ -109,7 +109,7 @@ export const LocationMapSection = ({
                 <p className="sanctuary-service">
                   <Clock size={17} />
                   <span>
-                    <strong>Sunday worship</strong>9:40 AM – 11:30 AM
+                    <strong>Sunday worship</strong>10:00 AM – 11:30 AM
                   </span>
                 </p>
                 <p className="sanctuary-service">

@@ -46,13 +46,6 @@ export const Footer = ({
           >
             Facebook <ArrowUpRight size={13} />
           </a>
-          <a
-            href={CHURCH_INFO.contact.youtube}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            YouTube <ArrowUpRight size={13} />
-          </a>
           <a href="#home" aria-label="Back to top">
             Back to top <ArrowUp size={14} />
           </a>

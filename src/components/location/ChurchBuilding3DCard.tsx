@@ -185,7 +185,7 @@ export const ChurchBuilding3DCard: React.FC = () => {
                 <div className="grid grid-cols-2 gap-2 text-xs">
                   <div className="bg-[#081220] p-2 rounded-lg border border-dpc-gold-500/40 shadow-sm">
                     <p className="font-bold text-white text-[11px]">Main Worship</p>
-                    <p className="text-[11px] text-dpc-gold-300 font-bold">9:40 AM – 11:30 AM</p>
+                    <p className="text-[11px] text-dpc-gold-300 font-bold">10:00 AM – 11:30 AM</p>
                     <p className="text-[10px] text-slate-300">All Ages / Families</p>
                   </div>
                   <div className="bg-[#081220] p-2 rounded-lg border border-white/10">

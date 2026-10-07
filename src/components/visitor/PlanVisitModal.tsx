@@ -1,11 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Check, Clock, Mail, MapPin, Users, X } from "lucide-react";
 import { useDialogAccessibility } from "../ui/useDialogAccessibility";
 import { CHURCH_INFO } from "../../data/churchInfo";
 import { MINISTRIES_DATA } from "../../data/ministriesData";
 import { responsiveImage } from "../../lib/responsiveImages";
+import { getVisitSundays } from "../../lib/visitDates";
+import { VisitNotificationForm } from "./VisitNotificationForm";
 import familyPhoto from "../../assets/Kinder Ministry/516368798_4004060663255125_3940156298598136062_n.webp";
+
+const VisitMap = lazy(() => import("../ui/expand-map"));
 
 interface PlanVisitModalProps { isOpen: boolean; onClose: () => void; }
 type Party = "Just me" | "With friends" | "With family";
@@ -18,18 +22,19 @@ const address = `${CHURCH_INFO.address.street}, ${CHURCH_INFO.address.barangay},
 export const PlanVisitModal = ({ isOpen, onClose }: PlanVisitModalProps) => {
   const [step, setStep] = useState(0);
   const [party, setParty] = useState<Party>("Just me");
-  const [visitDate, setVisitDate] = useState("This coming Sunday");
+  const sundays = getVisitSundays();
+  const [visitDate, setVisitDate] = useState(() => getVisitSundays()[0].value);
   const [children, setChildren] = useState(false);
   const [ages, setAges] = useState<string[]>([]);
   const [directions, setDirections] = useState(true);
   const [contactOpen, setContactOpen] = useState(false);
-  const [contact, setContact] = useState({ fullName: "", email: "", phone: "", notes: "" });
   const reducedMotion = useReducedMotion();
   const dialogRef = useDialogAccessibility(isOpen, onClose);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!isOpen) return;
+    if (visitDate < getVisitSundays()[0].value) setVisitDate(getVisitSundays()[0].value);
     contentRef.current?.scrollTo({ top: 0, behavior: "instant" });
     headingRef.current?.focus({ preventScroll: true });
   }, [step, isOpen]);
@@ -37,28 +42,26 @@ export const PlanVisitModal = ({ isOpen, onClose }: PlanVisitModalProps) => {
   const relevantMinistries = childMinistries.filter(m => ages.length === 0 ||
     (ages.includes("Ages 3–5") && /kinder/i.test(m.ageBracket)) ||
     (ages.includes("Ages 6–12") && /elementary/i.test(m.ageBracket)));
-  const plan = `${visitDate}\n${party}${children ? `, bringing children${ages.length ? ` (${ages.join(", ")})` : ""}` : ""}\n${worship.name}: ${worship.time}\nSuggested arrival: 9:30 AM\n${address}`;
-  const mailBody = `Hello DPC,\n\nI'd like to ask about my first visit.\n\n${plan}\n\nName: ${contact.fullName}\nEmail: ${contact.email}\nPhone: ${contact.phone}\nQuestions or accessibility needs: ${contact.notes}\n`;
-  const mailHref = `mailto:${CHURCH_INFO.contact.email}?subject=${encodeURIComponent("My first Sunday at DPC")}&body=${encodeURIComponent(mailBody)}`;
+  const visitLabel = sundays.find(sunday => sunday.value === visitDate)?.label || visitDate;
   if (!isOpen) return null;
 
   return (
     <div className="visit-planner-overlay" onClick={event => { if (event.target === event.currentTarget) onClose(); }}>
-      <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="visit-planner-title" tabIndex={-1} className="modal-surface visit-planner">
+      <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="visit-planner-title" tabIndex={-1} className={`modal-surface visit-planner${step === 4 ? " is-map-view" : ""}`}>
         <header className="visit-planner-header">
           <p className="eyebrow">YOUR FIRST SUNDAY</p>
           <h2 id="visit-planner-title">A little less unknown.</h2>
           <p>A Sunday guide, made for you. No registration needed.</p>
           <button type="button" className="visit-planner-close" onClick={onClose} aria-label="Close visit planner"><X size={20} /></button>
           <ol className="visit-planner-progress" aria-label="Visit planner progress">
-            {steps.map((label, index) => <li key={label} className={index <= step ? "is-current" : ""} aria-current={index === step ? "step" : undefined}>
-              <span aria-hidden="true">{index < step ? <Check size={13} /> : index + 1}</span><small>{label}</small>
+            {steps.map((label, index) => <li key={label} className={index <= Math.min(step, 3) ? "is-current" : ""} aria-current={index === Math.min(step, 3) ? "step" : undefined}>
+              <span aria-hidden="true">{index < Math.min(step, 3) ? <Check size={13} /> : index + 1}</span><small>{label}</small>
             </li>)}
           </ol>
         </header>
         <div ref={contentRef} className="visit-planner-content">
           <motion.div key={step} initial={reducedMotion ? false : { opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reducedMotion ? 0 : 0.2 }}>
-            <h3 ref={headingRef} tabIndex={-1} className="visit-planner-step-title">{["Who’s coming with you?", "Bringing little ones?", "Let’s help you find us.", "Your Sunday at DPC"][step]}</h3>
+            <h3 ref={headingRef} tabIndex={-1} className="visit-planner-step-title">{["Who’s coming with you?", "Bringing little ones?", "Let’s help you find us.", "Your Sunday at DPC", "Directions to DPC"][step]}</h3>
             {step === 0 && <>
               <p className="visit-planner-intro">Come on your own or bring someone along. There’s a seat for you.</p>
               <fieldset className="visit-planner-choices"><legend className="sr-only">Who is coming?</legend>
@@ -68,7 +71,7 @@ export const PlanVisitModal = ({ isOpen, onClose }: PlanVisitModalProps) => {
                 </label>)}
               </fieldset>
               <label className="visit-planner-field">When would you like to visit?
-                <select value={visitDate} onChange={event => setVisitDate(event.target.value)}><option>This coming Sunday</option><option>Next Sunday</option></select>
+                <select value={visitDate} onChange={event => setVisitDate(event.target.value)}>{sundays.map(sunday => <option key={sunday.value} value={sunday.value}>{sunday.label}</option>)}</select>
               </label>
               <p className="visit-planner-note"><Clock size={16} aria-hidden="true" />Sunday worship · {worship.time}</p>
             </>}
@@ -101,7 +104,7 @@ export const PlanVisitModal = ({ isOpen, onClose }: PlanVisitModalProps) => {
               </fieldset>
             </>}
             {step === 3 && <>
-              <p className="visit-planner-intro">{visitDate} · {party}{children ? " · Bringing children" : ""}</p>
+              <p className="visit-planner-intro">{visitLabel} · {party}{children ? " · Bringing children" : ""}</p>
               <dl className="visit-planner-summary">
                 <div><dt>Arrive around 9:30 AM</dt><dd>Our greeters will help you find your way and settle in.</dd></div>
                 <div><dt>Sunday worship · {worship.time}</dt><dd>Christ-centered praise, prayer, and preaching from Scripture.</dd></div>
@@ -109,30 +112,21 @@ export const PlanVisitModal = ({ isOpen, onClose }: PlanVisitModalProps) => {
                   {relevantMinistries.length > 0 && <>{relevantMinistries.map(m => `${m.name} (${m.ageRange})`).join("; ")}. Sunday school begins at 8:00 AM, with supervised activities after 9:30 AM. Teachers can help with check-in.</>}
                   {ages.includes("Under 3") && <> Ask our greeters about arrangements for children under 3.</>}
                 </dd></div>}
-                <div><dt>Come as you are</dt><dd>There is no strict dress code. Wear what helps you feel comfortable.</dd></div>
+                <div><dt>Come as you are</dt><dd>Wear neat, casual clothing suitable for going out, such as a shirt with pants or a dress. Please avoid sleepwear or clothes meant only for lounging at home.</dd></div>
                 <div><dt>Find us in Cobangbang</dt><dd>{address}</dd></div>
               </dl>
-              {!directions && <a className="text-link" href={CHURCH_INFO.address.mapCoordinates.googleMapsUrl} target="_blank" rel="noopener noreferrer">Open directions <ArrowRight size={16} /></a>}
+              {!directions && <button type="button" className="text-link" onClick={() => setStep(4)}>Open directions <ArrowRight size={16} /></button>}
               <div className="visit-planner-contact">
-                <button type="button" className="text-link" aria-expanded={contactOpen} aria-controls="visit-planner-contact" onClick={() => setContactOpen(!contactOpen)}><Mail size={16} />Questions before you visit?</button>
-                {contactOpen && <div id="visit-planner-contact">
-                  <p>Add details if you’d like, then review and send the draft in your email app. Your guide works without contacting us.</p>
-                  <div className="visit-planner-contact-fields">
-                    <label className="visit-planner-field">Your name (optional)<input autoComplete="name" value={contact.fullName} onChange={e => setContact({ ...contact, fullName: e.target.value })} /></label>
-                    <label className="visit-planner-field">Email (optional)<input type="email" autoComplete="email" value={contact.email} onChange={e => setContact({ ...contact, email: e.target.value })} /></label>
-                    <label className="visit-planner-field">Phone (optional)<input type="tel" autoComplete="tel" value={contact.phone} onChange={e => setContact({ ...contact, phone: e.target.value })} /></label>
-                  </div>
-                  <label className="visit-planner-field">Questions or accessibility needs<textarea rows={3} value={contact.notes} onChange={e => setContact({ ...contact, notes: e.target.value })} /></label>
-                  <a className="button button-outline" href={mailHref}>Open email draft <Mail size={16} /></a>
-                  <p className="visit-planner-email">Or email <a href={`mailto:${CHURCH_INFO.contact.email}`}>{CHURCH_INFO.contact.email}</a>.</p>
-                </div>}
+                <button type="button" className="text-link" aria-expanded={contactOpen} aria-controls="visit-planner-contact" onClick={() => setContactOpen(!contactOpen)}><Mail size={16} />Let us know you’re coming (optional)</button>
               </div>
             </>}
+            {step === 4 && <Suspense fallback={<p role="status">Loading the map…</p>}><VisitMap initialExpanded allowExternalNavigation={false} title={CHURCH_INFO.name} address={`${address} ${CHURCH_INFO.address.zipCode}`} landmark="In front of Bicol CATV, near Mary's Bright Montessori" lat={CHURCH_INFO.address.mapCoordinates.lat} lng={CHURCH_INFO.address.mapCoordinates.lng} /></Suspense>}
           </motion.div>
+          <div id="visit-planner-contact" hidden={step !== 3 || !contactOpen}><VisitNotificationForm hidden={step !== 3 || !contactOpen} visitDate={visitDate} party={party} children={children} ages={ages} /></div>
         </div>
         <footer className="visit-planner-actions">
           {step > 0 ? <button type="button" className="button button-outline" onClick={() => setStep(step - 1)}><ArrowLeft size={16} />Back</button> : <span className="visit-planner-footer-note">Your choices stay on this page.</span>}
-          {step < 3 ? <button type="button" className="button button-navy" onClick={() => setStep(step + 1)}>{step === 2 ? "See my Sunday guide" : "Continue"}<ArrowRight size={16} /></button> : directions ? <a className="button button-navy" href={CHURCH_INFO.address.mapCoordinates.googleMapsUrl} target="_blank" rel="noopener noreferrer">Open directions <ArrowRight size={16} /></a> : <button type="button" className="button button-navy" onClick={onClose}>Done <Check size={16} /></button>}
+          {step < 3 ? <button type="button" className="button button-navy" onClick={() => setStep(step + 1)}>{step === 2 ? "See my Sunday guide" : "Continue"}<ArrowRight size={16} /></button> : step === 3 && directions ? <button type="button" className="button button-navy" onClick={() => setStep(4)}>Open directions <ArrowRight size={16} /></button> : <button type="button" className="button button-navy" onClick={onClose}>Done <Check size={16} /></button>}
         </footer>
       </div>
     </div>

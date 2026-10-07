@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import { ArrowRight, Minus, Plus } from "lucide-react";
 import { ChurchPhotoStream } from "../hero/ChurchPhotoStream";
 import { ScrollReveal } from "../ui/ScrollReveal";
@@ -7,6 +7,9 @@ import attirePhoto from "../../assets/Young Adult Ministry/719532750_95669006070
 import childrenPhoto from "../../assets/Kinder Ministry/516368798_4004060663255125_3940156298598136062_n.webp";
 import worshipPhoto from "../../assets/Junior Adult Minitry/626386732_906329712047578_6172969032115822277_n.webp";
 import mealPhoto from "../../assets/Junior Adult Minitry/724019843_1322877753302746_8993175069316953491_n.webp";
+
+// Draft history stays in the local preview until confirmed milestones are supplied.
+const ChurchMilestones = import.meta.env.DEV ? lazy(() => import("../history/ChurchMilestones")) : null;
 
 const questions = [
   {
@@ -17,7 +20,7 @@ const questions = [
     photoLabel: "THERE’S A SEAT FOR YOU",
     photoHeading: "New here?",
     photoMessage: "You’re already welcome.",
-    body: "Our greeters will help you find your way around and settle in. On-site parking is available in Purok 2, Cobangbang. Arrive around 9:30 AM for our 9:40 AM main worship, or at 8:00 AM for Bible study and Sunday school.",
+    body: "Our greeters will help you find your way around and settle in. On-site parking is available in Purok 2, Cobangbang. Arrive around 9:30 AM for our 10:00 AM main worship, or at 8:00 AM for Bible study and Sunday school.",
   },
   {
     title: "Come as you are",
@@ -27,7 +30,7 @@ const questions = [
     photoLabel: "COME AS YOU ARE",
     photoHeading: "A familiar face.",
     photoMessage: "A place to belong.",
-    body: "You’ll see everything from smart-casual clothes to Sunday dresses and Barong. There is no strict dress code—come ready to worship and feel at home.",
+    body: "Please wear neat, casual clothing suitable for going out, such as a shirt with pants or a dress. Choose something comfortable for worship, and avoid sleepwear or clothes meant only for lounging at home.",
   },
   {
     title: "A place for your little ones, too",
@@ -47,7 +50,7 @@ const questions = [
     photoLabel: "TOGETHER IN WORSHIP",
     photoHeading: "One church family.",
     photoMessage: "Lifting our voices.",
-    body: "Expect Christ-centered praise, historic hymns, contemporary songs, prayer, and verse-by-verse preaching from Scripture. Our main Sunday service runs from 9:40 to 11:30 AM.",
+    body: "Expect Christ-centered praise, historic hymns, contemporary songs, prayer, and verse-by-verse preaching from Scripture. Our main Sunday service runs from 10:00 to 11:30 AM.",
   },
   {
     title: "Stay a little longer. Share a meal.",
@@ -72,6 +75,7 @@ export const WhatToExpectSection = ({
   return (
     <>
       <section id="about" className="about-section">
+        {ChurchMilestones && <Suspense fallback={null}><ChurchMilestones /></Suspense>}
         <ScrollReveal className="page-container about-grid">
           <h2>
             Different stories.
@@ -82,10 +86,10 @@ export const WhatToExpectSection = ({
             <p>
               We’re a Reformed Presbyterian church rooted in Biblical truth and
               God’s grace. Since 2007, we’ve gathered in Daet to worship Jesus,
-              care for one another, and share His love with our community.
+              care for one another, and share His love with our ministry.
             </p>
             <a className="text-link" href="#ministries">
-              Find your community <ArrowRight size={16} />
+              Find your Ministry <ArrowRight size={16} />
             </a>
           </div>
         </ScrollReveal>
@@ -155,9 +159,10 @@ export const WhatToExpectSection = ({
                     id={`visitor-answer-${index}`}
                     role="region"
                     aria-labelledby={`visitor-question-${index}`}
-                    hidden={active !== index}
+                    aria-hidden={active !== index}
+                    className={"visitor-answer" + (active === index ? " is-open" : "")}
                   >
-                    <p>{question.body}</p>
+                    <div className="visitor-answer-clip"><p>{question.body}</p></div>
                   </div>
                 </div>
               ))}

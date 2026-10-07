@@ -39,6 +39,8 @@ export interface ExpandMapProps {
   lng?: number;
   googleMapsUrl?: string;
   className?: string;
+  initialExpanded?: boolean;
+  allowExternalNavigation?: boolean;
 }
 
 // Preset nearby towns in Camarines Norte / Bicol
@@ -98,8 +100,10 @@ export function ExpandMap({
   lng = 122.959450,
   googleMapsUrl,
   className,
+  initialExpanded = false,
+  allowExternalNavigation = true,
 }: ExpandMapProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(initialExpanded);
   const [copied, setCopied] = useState(false);
   const [copyError, setCopyError] = useState(false);
   const reducedMotion = useReducedMotion();
@@ -107,7 +111,16 @@ export function ExpandMap({
   const expandButton = useRef<HTMLButtonElement>(null);
   const collapseButton = useRef<HTMLButtonElement>(null);
   const focusAfterTransition = useRef(false);
-  useEffect(() => () => clearTimeout(copyTimer.current), []);
+  const mounted = useRef(false);
+  const locationRequest = useRef(0);
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+      locationRequest.current += 1;
+      clearTimeout(copyTimer.current);
+    };
+  }, []);
   const changeExpanded = (expanded: boolean) => {
     focusAfterTransition.current = true;
     setIsExpanded(expanded);
@@ -135,9 +148,11 @@ export function ExpandMap({
 
     setIsLocating(true);
     setLocationError(null);
+    const request = ++locationRequest.current;
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        if (!mounted.current || request !== locationRequest.current) return;
         setIsLocating(false);
         setUserLocation({
           lat: position.coords.latitude,
@@ -148,6 +163,7 @@ export function ExpandMap({
         setShowLocationNotice(false);
       },
       (error) => {
+        if (!mounted.current || request !== locationRequest.current) return;
         setIsLocating(false);
         if (error.code === error.PERMISSION_DENIED) {
           setLocationError("Location permission denied. Please allow location in your browser or pick a town below.");
@@ -161,6 +177,8 @@ export function ExpandMap({
 
   // Select Preset location
   const handleSelectPreset = (preset: (typeof NEARBY_PRESETS)[0]) => {
+    locationRequest.current += 1;
+    setIsLocating(false);
     setUserLocation({
       lat: preset.lat,
       lng: preset.lng,
@@ -195,11 +213,13 @@ export function ExpandMap({
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(address);
+      if (!mounted.current) return;
       setCopied(true);
       setCopyError(false);
       clearTimeout(copyTimer.current);
       copyTimer.current = setTimeout(() => setCopied(false), 2000);
     } catch {
+      if (!mounted.current) return;
       setCopyError(true);
     }
   };
@@ -281,9 +301,9 @@ export function ExpandMap({
                 <button type="button" className="travel-map-button travel-map-button-quiet" onClick={handleCopy}>
                   {copied ? <Check size={14} /> : <Copy size={14} />}<span aria-live="polite">{copyLabel}</span>
                 </button>
-                <a href={resolvedDirectionsUrl} target="_blank" rel="noopener noreferrer" className="travel-map-button travel-map-button-quiet">
+                {allowExternalNavigation && <a href={resolvedDirectionsUrl} target="_blank" rel="noopener noreferrer" className="travel-map-button travel-map-button-quiet">
                   <Navigation size={14} />Open GPS App
-                </a>
+                </a>}
                 <button type="button" className="travel-map-button travel-map-button-primary" onClick={() => changeExpanded(true)}>
                   Map & route <Maximize2 size={14} />
                 </button>
@@ -359,9 +379,9 @@ export function ExpandMap({
                 <button type="button" className="travel-map-button travel-map-button-quiet" onClick={handleCopy}>
                   {copied ? <Check size={14} /> : <Copy size={14} />}<span aria-live="polite">{copyLabel}</span>
                 </button>
-                <a href={resolvedDirectionsUrl} target="_blank" rel="noopener noreferrer" className="travel-map-button travel-map-button-primary">
+                {allowExternalNavigation && <a href={resolvedDirectionsUrl} target="_blank" rel="noopener noreferrer" className="travel-map-button travel-map-button-primary">
                   <Navigation size={14} />Open in Google Maps <ExternalLink size={13} />
-                </a>
+                </a>}
               </div>
               {copyError && <p role="status" className="travel-map-error">Couldn’t copy automatically. You can select the address above.</p>}
             </footer>

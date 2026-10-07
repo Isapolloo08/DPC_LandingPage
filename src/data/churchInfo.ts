@@ -32,8 +32,8 @@ export const CHURCH_INFO = {
     pastoralHotline: '+63 928 554 9920',
     email: 'info@daetpresbyterian.org',
     officeHours: 'Tuesday to Saturday: 8:30 AM – 5:00 PM | Sunday: 7:30 AM – 3:00 PM',
-    facebook: 'https://facebook.com/DaetPresbyterianChurch',
-    youtube: 'https://youtube.com/@DaetPresbyterianLive',
+    facebook: 'https://www.facebook.com/groups/2469286849978487',
+   
   },
   giving: {
     gcash: {
@@ -63,7 +63,7 @@ export const CHURCH_INFO = {
     {
       name: 'Sunday Main Worship Service',
       day: 'Every Sunday',
-      time: '9:40 AM – 11:30 AM',
+      time: '10:00 AM – 11:30 AM',
       description: 'Our primary congregational gathering for Youth, Young Adults, Junior Adults, and Senior Adults following morning Bible study. Features expository preaching, Christ-centered praise, corporate prayer, and Communion.',
       targetAudience: 'Youth, Young Adults, Adults, Families & Visitors',
       badge: 'Main Lord’s Day Service',
@@ -73,7 +73,7 @@ export const CHURCH_INFO = {
       name: 'Adult & Junior Adult Bible Study',
       day: 'Every Sunday',
       time: '8:00 AM – 9:30 AM',
-      description: 'Systematic expository Scripture study and discipleship circles for Junior Adults and Senior Adults before joining the 9:40 AM Main Worship.',
+      description: 'Systematic expository Scripture study and discipleship circles for Junior Adults and Senior Adults before joining the 10:00 AM Main Worship.',
       targetAudience: 'Junior Adults & Senior Adults',
       badge: 'Adult Discipleship',
       isMainWorship: false,
@@ -99,7 +99,7 @@ export const CHURCH_INFO = {
     {
       name: 'Midweek Prayer Meeting',
       day: 'Every Wednesday',
-      time: '5:30 PM – 7:30 PM',
+      time: '5:20 PM – 7:30 PM',
       description: 'A dedicated evening of corporate prayer, devotional reflection, and intercession for families, church ministries, and Camarines Norte.',
       targetAudience: 'All Church Family',
       badge: 'Prayer Meeting',

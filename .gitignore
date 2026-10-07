@@ -38,6 +38,8 @@ out/
 *.env
 *.env.*
 !.env.example
+# Public local proxy default only; overrides and credentials remain ignored.
+!.env.development
 
 # Confidential credentials and certificates
 *.pem

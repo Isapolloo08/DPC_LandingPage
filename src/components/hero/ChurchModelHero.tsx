@@ -1,6 +1,6 @@
-import { useEffect, useId, useRef, useState, type PointerEvent } from "react";
+import { useEffect, useId, useRef, type PointerEvent } from "react";
 import { motion, useInView, useReducedMotion, useSpring } from "framer-motion";
-import { ArrowUpRight, Clock, HeartHandshake, Pause, Play } from "lucide-react";
+import { ArrowUpRight, Clock, HeartHandshake } from "lucide-react";
 import churchModel from "@/assets/model-dpc-1448.webp";
 import churchModelSmall from "@/assets/model-dpc-640.webp";
 import churchModelMedium from "@/assets/model-dpc-960.webp";
@@ -9,11 +9,10 @@ export const ChurchModelHero = () => {
   const modelRef = useRef<HTMLElement>(null);
   const inView = useInView(modelRef, { margin: "100px" });
   const reducedMotion = useReducedMotion();
-  const [paused, setPaused] = useState(false);
   const ringPathId = "church-ring-" + useId().replace(/[^a-zA-Z0-9]/g, "");
   const rotateX = useSpring(0, { stiffness: 90, damping: 22 });
   const rotateY = useSpring(0, { stiffness: 90, damping: 22 });
-  const motionEnabled = !reducedMotion && !paused && inView;
+  const motionEnabled = !reducedMotion && inView;
 
   useEffect(() => {
     if (!motionEnabled) {
@@ -95,7 +94,7 @@ export const ChurchModelHero = () => {
           <a
             className="model-service-card"
             href="#services"
-            aria-label="Sunday worship at 9:40 AM — view service times"
+            aria-label="Sunday worship at 10:00 AM — view service times"
             style={{ animationPlayState: motionEnabled ? "running" : "paused" }}
           >
             <span className="model-service-icon">
@@ -103,7 +102,7 @@ export const ChurchModelHero = () => {
             </span>
             <span className="model-card-label">SUNDAY WORSHIP</span>
             <strong>
-              9:40 <span>AM</span>
+              10:00 <span>AM</span>
             </strong>
             <span className="model-service-footer">
               Every Sunday <ArrowUpRight size={13} />
@@ -138,19 +137,6 @@ export const ChurchModelHero = () => {
             Explore our church home <ArrowUpRight size={14} />
           </a>
         </div>
-        {!reducedMotion && (
-          <button
-            type="button"
-            className="model-motion-toggle"
-            aria-label={
-              paused ? "Play church animation" : "Pause church animation"
-            }
-            aria-pressed={paused}
-            onClick={() => setPaused(!paused)}
-          >
-            {paused ? <Play size={15} /> : <Pause size={15} />}
-          </button>
-        )}
       </figcaption>
     </figure>
   );

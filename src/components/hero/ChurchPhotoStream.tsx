@@ -38,16 +38,6 @@ export const ChurchPhotoStream = () => {
           <span className="eyebrow">LIFE TOGETHER AT DPC</span>
           <p>Every generation. One church family.</p>
         </div>
-        <button
-          type="button"
-          className="stream-motion-toggle cursor-pointer"
-          aria-label={paused ? "Play photos" : "Pause photos"}
-          aria-pressed={paused}
-          onClick={() => setPaused(!paused)}
-        >
-          {paused ? <Play size={14} /> : <Pause size={14} />}
-          {paused ? "Play photos" : "Pause photos"}
-        </button>
       </figcaption>
     </figure>
   );

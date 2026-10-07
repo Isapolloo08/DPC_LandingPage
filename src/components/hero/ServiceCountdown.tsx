@@ -7,13 +7,13 @@ export function getWorshipCountdown(now = new Date()) {
   const local = new Date(now.getTime() + 8 * 60 * 60 * 1000);
   const day = local.getUTCDay();
   const minute = local.getUTCHours() * 60 + local.getUTCMinutes();
-  if (day === 0 && minute >= 580 && minute < 690)
+  if (day === 0 && minute >= 600 && minute < 690)
     return { live: true, days: 0, hours: 0, minutes: 0, seconds: 0 };
   const next = new Date(local);
   next.setUTCDate(
     local.getUTCDate() + ((7 - day) % 7 || (minute >= 690 ? 7 : 0)),
   );
-  next.setUTCHours(9, 40, 0, 0);
+  next.setUTCHours(10, 0, 0, 0);
   const seconds = Math.max(
     0,
     Math.floor((next.getTime() - local.getTime()) / 1000),
@@ -44,7 +44,7 @@ export const ServiceCountdown = () => {
           <Clock />
           <div>
             <span className="eyebrow">SUNDAY WORSHIP</span>
-            <strong>9:40 AM – 11:30 AM</strong>
+            <strong>10:00 AM – 11:30 AM</strong>
             <small>A Sunday morning for the whole family.</small>
           </div>
         </div>
@@ -60,7 +60,7 @@ export const ServiceCountdown = () => {
           <HeartHandshake />
           <div>
             <span className="eyebrow">MIDWEEK PRAYER · WEDNESDAY</span>
-            <strong>5:30 PM</strong>
+            <strong>5:20 PM</strong>
             <small>Come pray with your church family.</small>
           </div>
         </div>
@@ -81,8 +81,8 @@ export const ServiceCountdown = () => {
           )}
         </span>
         <button
-          className="text-link"
-          onClick={() => setShowSchedule(!showSchedule)}
+          className="text-link schedule-toggle"
+          onClick={() => setShowSchedule(open => !open)}
           aria-expanded={showSchedule}
           aria-controls="full-schedule"
         >
@@ -90,8 +90,16 @@ export const ServiceCountdown = () => {
           <ArrowRight size={15} />
         </button>
       </div>
-      {showSchedule && (
-        <div id="full-schedule" className="page-container full-schedule">
+      <div
+        id="full-schedule"
+        className={`schedule-disclosure${showSchedule ? " is-open" : ""}`}
+        role="region"
+        aria-label="Full church schedule"
+        aria-hidden={!showSchedule}
+        inert={!showSchedule}
+      >
+        <div className="schedule-disclosure-clip">
+        <div className="page-container full-schedule">
           {CHURCH_INFO.services.map((service) => (
             <article key={service.name}>
               <h3>{service.name}</h3>
@@ -102,7 +110,8 @@ export const ServiceCountdown = () => {
             </article>
           ))}
         </div>
-      )}
+        </div>
+      </div>
     </section>
   );
 };

@@ -251,7 +251,9 @@ export const MinistryDetailModal: React.FC<MinistryDetailModalProps> = ({
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                 {ministry.eventPhotos.map((photo, pIdx) => (
-                  <div
+                  <button
+                    type="button"
+                    aria-label={`View photo ${pIdx + 1}: ${photo.tag || ministry.name}`}
                     key={pIdx}
                     onClick={() => setLightboxIndex(pIdx)}
                     className="relative aspect-video rounded-xl overflow-hidden group border border-white/10 hover:border-dpc-gold-400/60 shadow-sm bg-black/40 cursor-pointer transition-all hover:scale-[1.02]"
@@ -273,7 +275,7 @@ export const MinistryDetailModal: React.FC<MinistryDetailModalProps> = ({
                         {photo.caption}
                       </p>
                     </div>
-                  </div>
+                  </button>
                 ))}
               </div>
             </div>

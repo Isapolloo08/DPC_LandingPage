@@ -105,7 +105,7 @@ export const VIDEO_ORIENTATIONS_DATA: VideoOrientation[] = [
     leader: 'Jayson Almadrones',
     description: 'Orientation for collegiate students and young working youth up to 25. Learn about our campus discipleship networks across CNSC and Mabini Colleges, acoustic worship fellowships, and leadership development.',
     keyHighlights: [
-      'Sunday 9:40 AM Worship & mid-week collegiate discipleship cohorts',
+      'Sunday 10:00 AM Worship & mid-week collegiate discipleship cohorts',
       'Campus evangelism, study lounges, and Friendship Day activities',
       'Annual Camarines Norte Youth Camp & leadership retreats',
     ],

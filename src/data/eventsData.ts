@@ -96,7 +96,7 @@ export const EVENTS_DATA: ChurchEvent[] = [
     title: 'The Lord’s Supper & Covenant Communion Service',
     category: 'Worship',
     date: 'Every 1st Sunday of the Month',
-    time: '9:40 AM – 11:30 AM (During Main Worship)',
+    time: '10:00 AM – 11:30 AM (During Main Worship)',
     location: 'DPC Main Sanctuary, Purok 2, Cobangbang',
     description: 'Remembering the body broken and blood shed for our sins through the sacrament of the Lord’s Supper, renewing our covenant vows in holy communion with Christ and one another.',
     speakerOrLeader: 'Teaching & Ruling Elders',
