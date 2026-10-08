@@ -3226,6 +3226,7 @@
 .visit-notification-form .button { margin-top: 14px; }
 .visit-notification-form .button:disabled { opacity: .65; cursor: wait; }
 .visit-notification-form [role="status"] p { overflow-wrap: anywhere; }
+.visit-confirmation-next { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); }
 /* Development preview of the church's history; document order stays chronological. */
 .church-milestones { padding-block: 90px 45px; }
 .milestone-heading { max-width: 620px; margin-bottom: 50px; }

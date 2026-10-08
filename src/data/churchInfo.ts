@@ -30,7 +30,7 @@ export const CHURCH_INFO = {
     phone: '+63 (54) 721-2845',
     mobile: '+63 917 842 1982',
     pastoralHotline: '+63 928 554 9920',
-    email: 'info@daetpresbyterian.org',
+    email: 'markandrieremot25@gmail.com',
     officeHours: 'Tuesday to Saturday: 8:30 AM – 5:00 PM | Sunday: 7:30 AM – 3:00 PM',
     facebook: 'https://www.facebook.com/groups/2469286849978487',
    

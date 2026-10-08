@@ -33,7 +33,7 @@ The form keeps details and the retry token when the backend is unavailable, expl
 ## API
 
 - Public `POST /api/planned-visits`: `submission_token` (UUID), `visit_date` (`YYYY-MM-DD`, today or future Sunday in Asia/Manila), `party`, `bringing_children`, `child_age_groups`, `full_name`, optional `email`, `phone`, `questions`, `consent: true`, and empty honeypot `website`. Name and at least one contact method are required. Name max 120, email 254, phone 30, questions 2000 characters.
-- Response `201`: receipt identifier and message only. Same token/details returns the same receipt; a token reused for different details returns `409`. No public record lookup.
+- Response `201`: `receipt_id`, `message`, `confirmation_email` (`queued`, `sent`, `failed`, or `not_requested` for phone-only), and `follow_up` (`date` and `message`). Same token/details returns the same receipt and does not queue another email; a token reused for different details returns `409`. No public record lookup.
 - Staff `GET /api/planned-visits?page=1&limit=20&status=New&visit_date=YYYY-MM-DD`: summaries, total, page, totalPages. Limit max 100.
 - Staff `GET /api/planned-visits/:id`: complete visitor details, excluding submission token/hash.
 - Staff `PATCH /api/planned-visits/:id`: `status` (New, Contacted, Visited, Cancelled) and `staff_notes` (max 4000 characters).
@@ -43,4 +43,12 @@ The form keeps details and the retry token when the backend is unavailable, expl
 
 Run `npm run test:planned-visits` in the sibling server. Tests use a disposable schema in a local PostgreSQL instance (`127.0.0.1:5432`, database `chms_db`, development user/password); they never initialize or modify existing application tables. Persistence integration is explicitly skipped if this local connection is unavailable. Coverage includes validation, concurrent duplicate submissions, auth/roles, staff filters, consent storage, audit rollback, outage retry, and rate limiting.
 
-Email/SMS notifications, visitor accounts, GPS storage, member conversion, and public cancellation links are outside this first version.
+## Confirmation email and follow-up
+
+Email submissions queue a confirmation automatically when the plan is saved. The existing `notification_log` and `email_outbox` tables from migration 007 supply durable delivery and deduplication; the visit and email queue commit in one transaction. The existing worker attempts delivery every ten seconds and retains failures for retry. Phone-only submissions save normally without sending email or SMS.
+
+The email and on-screen confirmation include the selected Sunday, worship time (10:00–11:30 AM Philippine time), suggested arrival (9:30 AM), and the expected Saturday follow-up date before that visit. Saturday is described as the welcome team's usual schedule, not a guaranteed appointment. Sunday submissions say the team will get in touch as soon as possible, avoiding a date in the past. Retry responses calculate the expectation from the original submission time. Saturday follow-up is performed by church staff; this feature does not schedule another automatic email for Saturday.
+
+Deploy both the management backend changes and the landing-page changes to enable this in production. Configure the existing management system's Notification email settings (SMTP host, port/security, username/password, sender address), or its `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASSWORD`, and `SMTP_FROM_EMAIL` environment overrides. Credentials belong only on the backend. Saving a plan queues the message; it does not prove SMTP delivery. The UI reports queued/sent/delayed status and shows visit details even when email is delayed. A landing page served against an older backend displays that email confirmation is unavailable.
+
+SMS notifications, visitor accounts, GPS storage, member conversion, and public cancellation links remain outside this version.
