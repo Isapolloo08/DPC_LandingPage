@@ -13,6 +13,19 @@ The Sunday guide remains available without registration. Visitors may optionally
 
 Admin and Pastor accounts (including the system's legacy IT Admin compatibility) can open Planned visits, filter by status/date, view private contact information, and update notes/status. Updates and their audit record commit in one transaction. Mark Visited only after confirming arrival; submissions never create member or attendance records.
 
+## Hosted backend recovery
+
+The production landing page uses `https://dpc-landingpage.onrender.com/api`. This Render service is the management API despite its name. The former example host, `dpc-chms-server.onrender.com`, returns 404 and must not be used as an alternative.
+
+On 2026-10-08, read-only checks confirmed two independent deployment failures:
+
+- `GET /api/planned-visits` returned Express's `Cannot GET` 404. The local management server registers this route; an anonymous request to the deployed version should return 401. Deploy the management project's existing planned-visits changes, including `server/src/routes/plannedVisits.ts`, `server/src/services/plannedVisits.ts`, the route registration, schema initialization, and `014_planned_visits.sql`. Ensure the migration is included in the deployment source; it is currently an untracked local file. The server build copies migrations to `dist/db/migrations`.
+- `GET /api/health` returned 503 with `database: disconnected` and `connect ENETUNREACH` to an IPv6 address on port 5432. Ministries, events, and announcements returned the same connection error. Fix the Render service's `DATABASE_URL` before redeploying. For Supabase, copy the project's **Session pooler** URI (port 5432) from the Connect dialog, using its exact host and `postgres.<project-ref>` username. Replace the password placeholder with the URL-encoded database password. Session pooling supports IPv4; forcing IPv4 against an IPv6-only direct endpoint does not fix it. See [Supabase connection documentation](https://supabase.com/docs/guides/database/connecting-to-postgres). Keep this URI in Render's environment settings, never in the landing page or committed files.
+
+After recovery, verify `/api/health` returns 200 with `database: connected`, anonymous `/api/planned-visits` returns 401, and the three public content endpoints return 200. Confirm backend startup logs show successful schema initialization and migration 014 before testing an authorized visit submission. A 401 only proves the route exists; it does not prove that its table is ready.
+
+The form keeps details and the retry token when the backend is unavailable, explains that the visit has not been confirmed, and leaves the Sunday guide and directions available. Frontend changes alone cannot restore the hosted database or deploy the missing route.
+
 ## API
 
 - Public `POST /api/planned-visits`: `submission_token` (UUID), `visit_date` (`YYYY-MM-DD`, today or future Sunday in Asia/Manila), `party`, `bringing_children`, `child_age_groups`, `full_name`, optional `email`, `phone`, `questions`, `consent: true`, and empty honeypot `website`. Name and at least one contact method are required. Name max 120, email 254, phone 30, questions 2000 characters.

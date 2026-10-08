@@ -48,6 +48,9 @@ export function VisitNotificationForm({ hidden, visitDate, party, children, ages
       if (!response.ok) {
         setFields(result?.fields || {});
         if (response.status === 409) attempt.current = { signature: '', token: '' };
+        if (response.status === 404 || response.status >= 500) {
+          throw new Error('The church system is temporarily unavailable. Your plan hasn’t been confirmed. Please try again later. Your Sunday guide and directions are still available.');
+        }
         throw new Error(result?.error || 'We couldn’t save your visit plan. Please try again.');
       }
       if (typeof result?.receipt_id !== 'string') throw new Error('We couldn’t confirm your visit plan. Please try again.');
