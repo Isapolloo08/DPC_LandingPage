@@ -15,7 +15,11 @@ Admin and Pastor accounts (including the system's legacy IT Admin compatibility)
 
 ## Hosted backend recovery
 
-The production landing page uses `https://dpc-landingpage.onrender.com/api`. This Render service is the management API despite its name. The former example host, `dpc-chms-server.onrender.com`, returns 404 and must not be used as an alternative.
+The deployed management backend is `https://dpc-managementsystem.onrender.com/api`. Set `VITE_API_BASE_URL` to this URL in the Vercel project's Production environment and redeploy the landing page: Vite embeds this value at build time. The source default, local production `.env`, and `.env.example` use this host. Local development continues to use the `/api` proxy.
+
+Following deployment on 2026-10-08, read-only checks against this backend returned 200 with `database: connected` for `/api/health`, 401 for anonymous `/api/planned-visits`, and 200 for ministries, events, and announcements. Cross-origin requests from the Vercel landing page are allowed. No live visitor submission was made during these checks.
+
+The previous `dpc-landingpage.onrender.com` backend had the failures below. The former example host, `dpc-chms-server.onrender.com`, returned 404. Neither host is the newly deployed backend.
 
 On 2026-10-08, read-only checks confirmed two independent deployment failures:
 
