@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect,useState } from "react";
+import {ManageVisitPage} from './components/visitor/ManageVisitPage';
 import "./landing.css";
 import { StickyNavbar } from "./components/layout/StickyNavbar";
 import { HeroBanner } from "./components/hero/HeroBanner";
@@ -22,6 +23,9 @@ export const App = () => {
   );
   const [selectedEvent, setSelectedEvent] = useState<ChurchEvent | null>(null);
   const openVisit = () => setIsPlanVisitOpen(true);
+  const [hash,setHash]=useState(window.location.hash);
+  useEffect(()=>{const changed=()=>setHash(window.location.hash);window.addEventListener('hashchange',changed);return()=>window.removeEventListener('hashchange',changed);},[]);
+  if(hash.startsWith('#/visit/'))return <ManageVisitPage key={hash} token={hash.match(/^#\/visit\/([a-f0-9]{64})$/)?.[1]||''}/>;
   return (
     <div className="landing-page">
       <a className="skip-link" href="#main-content">

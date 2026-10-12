@@ -1,0 +1,13 @@
+.manage-visit { min-height:100dvh; }
+.manage-visit > main { max-width:720px; padding-top:64px; padding-bottom:64px; }
+.manage-visit h1 { font-size:clamp(36px,6vw,54px); margin:12px 0 20px; }
+.manage-visit .eyebrow { color:var(--gold-ink); font-size:10px; letter-spacing:.18em; }
+.manage-visit-intro { color:var(--muted); max-width:52ch; }
+.manage-visit .visit-confirmation { margin:28px 0; padding:28px; border:1px solid var(--line); border-top:3px solid var(--gold); background:var(--surface); }
+.manage-visit .visit-confirmation h2 { font-size:clamp(26px,4vw,34px); margin-bottom:12px; }
+.manage-visit .visit-confirmation form { margin-top:24px; padding-top:20px; border-top:1px solid var(--line); }
+.manage-visit .visit-confirmation input { margin:8px 0 16px; }
+.manage-visit .visit-planner-note { margin:20px 0; color:var(--muted); }
+.manage-visit button:disabled { opacity:.5; cursor:default; }
+.manage-visit a { text-underline-offset:4px; }
+@media(max-width:480px) { .manage-visit > main { padding-top:36px; } .manage-visit .visit-confirmation { padding:20px; } }

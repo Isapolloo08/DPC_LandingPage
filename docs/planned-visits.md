@@ -33,7 +33,8 @@ The form keeps details and the retry token when the backend is unavailable, expl
 ## API
 
 - Public `POST /api/planned-visits`: `submission_token` (UUID), `visit_date` (`YYYY-MM-DD`, today or future Sunday in Asia/Manila), `party`, `bringing_children`, `child_age_groups`, `full_name`, optional `email`, `phone`, `questions`, `consent: true`, and empty honeypot `website`. Name and at least one contact method are required. Name max 120, email 254, phone 30, questions 2000 characters.
-- Response `201`: `receipt_id`, `message`, `confirmation_email` (`queued`, `sent`, `failed`, or `not_requested` for phone-only), and `follow_up` (`date` and `message`). Same token/details returns the same receipt and does not queue another email; a token reused for different details returns `409`. No public record lookup.
+- Response `201`: `receipt_id`, `message`, `confirmation_email` (`queued`, `sent`, `failed`, or `not_requested` for phone-only), and `follow_up` (`date` and `message`). Same token/details returns the same receipt and does not queue another email; a token reused for different details returns `409`. No public visitor-details lookup.
+- Public `POST /api/planned-visits/confirmation-status`: requires both the original secret `submission_token` and `receipt_id`, returns only `confirmation_email`, and disables response caching. Rate-limited separately to 60 checks per 15 minutes per IP. The form checks every two seconds for up to 30 seconds and updates its email status without consuming visit-submission limits.
 - Staff `GET /api/planned-visits?page=1&limit=20&status=New&visit_date=YYYY-MM-DD`: summaries, total, page, totalPages. Limit max 100.
 - Staff `GET /api/planned-visits/:id`: complete visitor details, excluding submission token/hash.
 - Staff `PATCH /api/planned-visits/:id`: `status` (New, Contacted, Visited, Cancelled) and `staff_notes` (max 4000 characters).
@@ -45,10 +46,24 @@ Run `npm run test:planned-visits` in the sibling server. Tests use a disposable 
 
 ## Confirmation email and follow-up
 
-Email submissions queue a confirmation automatically when the plan is saved. The existing `notification_log` and `email_outbox` tables from migration 007 supply durable delivery and deduplication; the visit and email queue commit in one transaction. The existing worker attempts delivery every ten seconds and retains failures for retry. Phone-only submissions save normally without sending email or SMS.
+Email submissions queue a confirmation automatically when the plan is saved. The existing `notification_log` and `email_outbox` tables from migration 007 supply durable delivery and deduplication; the visit and email queue commit in one transaction. The route starts delivery immediately after commit, without waiting for the email provider before returning a receipt. The worker also checks every two seconds as a fallback. SMTP connections are pooled and up to two emails send concurrently. A PostgreSQL advisory lock prevents the desktop and landing-page backend processes from processing the same queue simultaneously. Phone-only submissions save normally without sending email or SMS.
+
+Migration `016_email_retry_schedule.sql` adds the retry schedule. Failures retry after 15 seconds, then one minute, five minutes, and fifteen minutes (five attempts total). Missing provider configuration does not consume attempts and is checked again after one minute. Fresh emails are prioritized over due retries. Acceptance by the email provider is recorded as `sent`; this does not guarantee arrival in the inbox rather than Spam.
 
 The email and on-screen confirmation include the selected Sunday, worship time (10:00–11:30 AM Philippine time), suggested arrival (9:30 AM), and the expected Saturday follow-up date before that visit. Saturday is described as the welcome team's usual schedule, not a guaranteed appointment. Sunday submissions say the team will get in touch as soon as possible, avoiding a date in the past. Retry responses calculate the expectation from the original submission time. Saturday follow-up is performed by church staff; this feature does not schedule another automatic email for Saturday.
 
 Deploy both the management backend changes and the landing-page changes to enable this in production. Configure the existing management system's Notification email settings (SMTP host, port/security, username/password, sender address), or its `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASSWORD`, and `SMTP_FROM_EMAIL` environment overrides. Credentials belong only on the backend. Saving a plan queues the message; it does not prove SMTP delivery. The UI reports queued/sent/delayed status and shows visit details even when email is delayed. A landing page served against an older backend displays that email confirmation is unavailable.
+
+### Render Free: HTTPS delivery
+
+[Render Free blocks outbound SMTP ports 25, 465, and 587](https://render.com/docs/free#other-limitations). Gmail SMTP can therefore work on the local computer but time out on the hosted backend. Use the implemented HTTPS transport on Render Free:
+
+1. Create a Resend account and [verify a sending domain](https://resend.com/docs/dashboard/domains/introduction) with its required DNS records.
+2. Add `EMAIL_PROVIDER=resend`, `RESEND_API_KEY` (a sending API key), and `RESEND_FROM_EMAIL` (a mailbox address on the verified domain) to Render's backend environment. The display name continues to use the existing email settings. Resend's default testing domain is limited to the account owner's address; it is not suitable for confirmations to arbitrary visitors.
+3. Deploy the management backend changes, including migration 016, and deploy the landing-page status update. To use HTTPS in local development too, set these same variables in `DPC-ManagementSystem/server/.env` and restart the backend.
+
+The HTTPS transport uses [Resend's Send Email API](https://resend.com/docs/api-reference/emails/send-email), a 15-second timeout, and a stable idempotency key for retries. It requires no SMTP connection. Without these credentials, no real Resend delivery can be tested or enabled. SMTP remains the default locally when no HTTPS provider is configured.
+
+Run `npm run test:email` and `npm run test:planned-visits` in the sibling server. Email tests mock external providers and verify real queue persistence, retry timing, worker locking, and delivery status in a disposable local PostgreSQL schema; no real recipients are contacted.
 
 SMS notifications, visitor accounts, GPS storage, member conversion, and public cancellation links remain outside this version.

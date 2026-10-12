@@ -3,11 +3,13 @@ import { API_BASE_URL } from '../../services/api';
 import { CHURCH_INFO } from '../../data/churchInfo';
 
 interface VisitReceipt {
+  managementUrl?: string;
   id: string;
   email: string;
   emailStatus: 'queued' | 'sent' | 'failed' | 'not_requested' | 'unavailable';
   followUp: string;
   visitDate: string;
+  token: string;
 }
 
 interface VisitNotificationFormProps {
@@ -36,7 +38,29 @@ export function VisitNotificationForm({ hidden, visitDate, party, children, ages
   const confirmationHeading = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     if (receipt) confirmationHeading.current?.focus();
-  }, [receipt]);
+  }, [receipt?.id]);
+  useEffect(() => {
+    if (!receipt || !['queued', 'failed'].includes(receipt.emailStatus)) return;
+    const { id, token } = receipt;
+    const controller = new AbortController();
+    let timer: number;
+    let checks = 0;
+    const check = async () => {
+      checks++;
+      try {
+        const response = await fetch(`${API_BASE_URL}/planned-visits/confirmation-status`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ receipt_id: id, submission_token: token }), signal: controller.signal });
+        const result = await response.json().catch(() => null);
+        if (response.ok && ['sent', 'failed', 'not_requested'].includes(result?.confirmation_email)) {
+          setReceipt(current => current?.id === id && current.emailStatus !== result.confirmation_email ? { ...current, emailStatus: result.confirmation_email } : current);
+          if (result.confirmation_email !== 'failed') return;
+        }
+        if (response.status === 404 || response.status === 429) return;
+      } catch { /* The saved receipt stays visible during connection failures. */ }
+      if (!controller.signal.aborted && checks < 15) timer = window.setTimeout(check, 2000);
+    };
+    timer = window.setTimeout(check, 2000);
+    return () => { controller.abort(); window.clearTimeout(timer); };
+  }, [receipt?.id]);
   const attempt = useRef({ signature: '', token: '' });
   const busy = useRef(false);
   const update = (key: keyof typeof contact, value: string) => setContact(current => ({ ...current, [key]: value }));
@@ -68,7 +92,7 @@ export function VisitNotificationForm({ hidden, visitDate, party, children, ages
       }
       if (typeof result?.receipt_id !== 'string') throw new Error('We couldn’t confirm your visit plan. Please try again.');
       const emailStatus = ['queued', 'sent', 'failed', 'not_requested'].includes(result.confirmation_email) ? result.confirmation_email as VisitReceipt['emailStatus'] : 'unavailable';
-      setReceipt({ id: result.receipt_id, email: contact.email.trim(), emailStatus, followUp: typeof result.follow_up?.message === 'string' ? result.follow_up.message : 'Our welcome team will contact you using the details you provided.', visitDate });
+      setReceipt({ managementUrl:typeof result.management_url==='string'?result.management_url:undefined, id: result.receipt_id, email: contact.email.trim(), emailStatus, followUp: typeof result.follow_up?.message === 'string' ? result.follow_up.message : 'Our welcome team will contact you using the details you provided.', visitDate, token: attempt.current.token });
     } catch (failure) {
       setError(failure instanceof Error && failure.name !== 'AbortError' && failure.name !== 'TypeError' ? failure.message : 'We couldn’t reach the church system. Please try again. Your guide is still available.');
     } finally { clearTimeout(timeout); busy.current = false; setPending(false); }
@@ -83,6 +107,7 @@ export function VisitNotificationForm({ hidden, visitDate, party, children, ages
       </div>
       <div className="visit-confirmation-next"><h4>When to expect a follow-up</h4><p>{receipt.followUp}</p></div>
       <p className="visit-planner-note">Reference: {receipt.id}</p>
+      {receipt.managementUrl&&<p><a className="button button-navy" href={receipt.managementUrl}>Confirm, cancel or reschedule</a><span className="visit-planner-note">Keep this private link to update your visit later.</span></p>}
     </div> : <form onSubmit={submit}>
       <p>Sending your plan is optional. Add your details if you’d like us to expect you or answer a question before your visit.</p>
       <p>Add your email to receive your Sunday visit details. Our welcome team usually follows up with new visitors on the Saturday before their visit.</p>
